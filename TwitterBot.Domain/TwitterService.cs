@@ -9,7 +9,7 @@ namespace TwitterBot.Domain
         {
             _profile = profile;
 
-            Auth.SetUserCredentials(customer.key, customer.secret, access.key, access.secret);
+            Auth.SetUserCredentials(customer.Key, customer.Secret, access.Key, access.Secret);
 
 
 

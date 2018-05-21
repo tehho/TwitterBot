@@ -8,7 +8,7 @@ namespace TwitterBot.Domain
 {
     public class Token
     {
-        public string key { get; set; }
-        public string secret { get; set; }
+        public string Key { get; set; }
+        public string Secret { get; set; }
     }
 }
