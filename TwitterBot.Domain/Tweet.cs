@@ -5,7 +5,7 @@ using Tweetinvi;
 
 namespace TwitterBot.Domain
 {
-    class Tweet
+    public class Tweet : IStatus
     {
         public int Id { get; set; }
 
