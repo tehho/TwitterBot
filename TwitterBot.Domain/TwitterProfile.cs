@@ -14,7 +14,7 @@ namespace TwitterBot.Domain
         [Required]
         public string Name { get; set; }
         [Required]
-        private List<Tweet> _tweets { get; set; }
+        private List<IStatus> _tweets { get; set; }
 
         public TwitterProfile()
         {
