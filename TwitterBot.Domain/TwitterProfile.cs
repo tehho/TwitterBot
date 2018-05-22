@@ -10,12 +10,12 @@ namespace TwitterBot.Domain
     public class TwitterProfile : IProfile, ITrainableFromText
     {
         public string Name { get; set; }
-        public List<Word> Words { get; set; }
+        public Dictionary<Word, int> Words { get; set; }
 
         public TwitterProfile(string name)
         {
             Name = name;
-            Words = new List<Word>();
+            Words = new Dictionary<Word, int>();
         }
 
         public void TrainFromText(TextContent content)
@@ -33,18 +33,20 @@ namespace TwitterBot.Domain
 
                 if (Words.Any(w => w.Equals(word)))
                 {
-                    currentWord = Words.Single(w => w.Equals(word));
-                    currentWord.Occurrance++;
+                    currentWord = Words.Single(w => w.Key.Equals(word)).Key;
+                    Words[currentWord]++;
                 }
 
                 else
                 {
                     currentWord = new Word(word);
-                    Words.Add(currentWord);
+                    Words[currentWord] = 1;
                 }
 
                 if (lastWord != null)
-                    lastWord.NextWord.Add(currentWord);
+                    lastWord.NextWord[currentWord] = 1;
+
+                lastWord = currentWord;
             }
         }
     }

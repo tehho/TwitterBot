@@ -47,7 +47,7 @@ namespace TwitterBot.Domain
         {
             var profile = GetRandomProfile();
 
-            return profile.Words.ElementAt(random.Next(0, profile.Words.Count)).Value;
+            return profile.Words.ElementAt(random.Next(0, profile.Words.Count)).Key.Value;
         }
 
         private IProfile GetRandomProfile()
