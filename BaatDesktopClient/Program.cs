@@ -20,7 +20,7 @@ namespace BaatDesktopClient
 
         static void Main(string[] args)
         {
-            Console.WriteLine("...");
+            Console.WriteLine("Post a tweet \n");
 
             var tweetService = new TwitterService(null
                 , new Token {
