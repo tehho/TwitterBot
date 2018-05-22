@@ -15,6 +15,11 @@ namespace TwitterBot.Domain
 
         }
 
-        
+        public void PublishTweet(Tweet tweet)
+        {
+            Tweetinvi.Tweet.PublishTweet(tweet.Message);
+        }
+
+
     }
 }

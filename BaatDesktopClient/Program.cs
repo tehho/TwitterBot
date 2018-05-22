@@ -1,72 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using static System.Console;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
-using JsonSerializer = Tweetinvi.JsonSerializer;
+using TwitterBot.Domain;
+using static System.Console;
+using Tweet = Tweetinvi.Tweet;
 
 namespace BaatDesktopClient
 {
     class Program
     {
+        public const int smallTweetCount = 10;
+        public const int mediumTweetCount = 200;
+        public const int largeTweetCount = 3200;
+
         static void Main(string[] args)
         {
             Console.WriteLine("...");
 
-            Auth.SetUserCredentials("GjMrzt4a9YJqKXRTNKjLN2CVi", 
-                                    "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD", 
-                                    "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi", 
-                                    "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8");
+            var tweetService = new TwitterService(null
+                , new Token {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                }, 
+                new Token()
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                });
 
-            var smallTweetCount = 10;
-            var mediumTweetCount = 200;
-            var largetweetCount = 3200;
+            Write("Twitter post: ");
 
-            var userHandle = "realdonaldtrump"; //User.GetAuthenticatedUser();
+            var message = ReadLine().Trim();
 
-            var tweeter = Tweetinvi.User.GetUserFromScreenName(userHandle).UserIdentifier.ToString();
+            TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
+            {
+                Message = message,
+            };
 
-            //Write("Vad vill du tweeta? : ");
+            Console.WriteLine(userPost.Message);
 
-            //Tweet.PublishTweet(ReadLine());
+            tweetService.PublishTweet(userPost);
 
-            Console.WriteLine(tweeter);
+            Console.WriteLine("Tweet was published.");
 
+            ReadKey();
+
+        }
+
+        public static void SaveAllTweetsFromProfileToJson(TwitterProfile profile)
+        {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
 
-            // long userId = 25073877;
-
-            var lastTweets = Timeline.GetUserTimeline(tweeter, smallTweetCount).ToArray();
+            var lastTweets = Timeline.GetUserTimeline(profile.Name, smallTweetCount).ToArray();
 
             var allTweets = new List<ITweet>(lastTweets);
-            var beforeLast = allTweets;
 
             while (lastTweets.Length > 0 && allTweets.Count <= smallTweetCount)
             {
                 var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
-                Console.WriteLine($"Oldest Tweet Id = {idOfOldestTweet}");
 
                 var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : smallTweetCount;
                 var timelineRequestParameters = new UserTimelineParameters
                 {
-                    // MaxId ensures that we only get tweets that have been posted 
-                    // BEFORE the oldest tweet we received
-
                     MaxId = idOfOldestTweet - 1,
                     MaximumNumberOfTweetsToRetrieve = numberOfTweetsToRetrieve
                 };
 
-                lastTweets = Timeline.GetUserTimeline(tweeter, timelineRequestParameters).ToArray();
+                lastTweets = Timeline.GetUserTimeline(profile.Name, timelineRequestParameters).ToArray();
                 allTweets.AddRange(lastTweets);
             }
-
-
-
 
             var jsonOfTweets = allTweets.Distinct().ToJson();
             string fileName = "test.json";
@@ -78,7 +85,7 @@ namespace BaatDesktopClient
                 fs = new FileStream(fileName, FileMode.CreateNew);
                 using (StreamWriter writer = new StreamWriter(fs))
                 {
-                        writer.Write(jsonOfTweets);
+                    writer.Write(jsonOfTweets);
 
                 }
             }
@@ -88,9 +95,36 @@ namespace BaatDesktopClient
                     fs.Dispose();
             }
 
-            WriteLine("Filen skrevs till disk");
-            ReadKey();
 
         }
+
+        public static List<ITweet> ListAllTweetsFromProfile(TwitterProfile profile)
+        {
+            RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
+
+            var lastTweets = Timeline.GetUserTimeline(profile.Name, smallTweetCount).ToArray();
+
+            var allTweets = new List<ITweet>(lastTweets);
+
+            while (lastTweets.Length > 0 && allTweets.Count <= smallTweetCount)
+            {
+                var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
+
+                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : smallTweetCount;
+                var timelineRequestParameters = new UserTimelineParameters
+                {
+                    MaxId = idOfOldestTweet - 1,
+                    MaximumNumberOfTweetsToRetrieve = numberOfTweetsToRetrieve
+                };
+
+                lastTweets = Timeline.GetUserTimeline(profile.Name, timelineRequestParameters).ToArray();
+                allTweets.AddRange(lastTweets);
+            }
+
+            return allTweets;
+
+
+        }
+
     }
 }
