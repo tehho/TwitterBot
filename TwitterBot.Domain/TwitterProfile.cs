@@ -12,6 +12,12 @@ namespace TwitterBot.Domain
         public string Name { get; set; }
         public List<Word> Words { get; set; }
 
+        public TwitterProfile()
+        {
+            Name = "";
+            Words = new List<Word>();
+        }
+
         public TwitterProfile(string name)
         {
             Name = name;

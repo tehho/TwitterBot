@@ -24,7 +24,6 @@ namespace TwitterBot.Api.Model
             return new TwitterProfile
             {
                 Name = Name,
-                _tweets = _tweets.ToList()
             };
         }
     }
