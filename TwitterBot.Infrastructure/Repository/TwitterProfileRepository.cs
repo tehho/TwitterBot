@@ -9,7 +9,7 @@ namespace TwitterBot.Infrastructure.Repository
 {
     public class TwitterProfileRepository : IRepository<TwitterProfile>
     {
-        private TwitterContext _context;
+        private readonly TwitterContext _context;
 
         public TwitterProfileRepository(TwitterContext context)
         {
