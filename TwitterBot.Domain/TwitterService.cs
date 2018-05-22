@@ -28,7 +28,7 @@ namespace TwitterBot.Domain
             Tweetinvi.Tweet.PublishTweet(tweet.Text);
         }
 
-        public List<ITweet> ListAllTweetsFromProfile(TwitterProfile profile)
+        public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
 
@@ -51,7 +51,7 @@ namespace TwitterBot.Domain
                 allTweets.AddRange(lastTweets);
             }
 
-            return allTweets;
+            return allTweets.Select(Tweet.Parse);
 
 
         }
