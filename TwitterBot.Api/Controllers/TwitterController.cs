@@ -3,42 +3,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TwitterBot.Api.Model;
 
 namespace TwitterBot.Api.Controllers
 {
     [Route("api/[controller]")]
     public class TwitterController : Controller
     {
-        // GET api/values
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult GetExistingsProfiles()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new [] { "value1", "value2" });
         }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        
+        [HttpPost("tweet")]
+        public IActionResult GetTweet([FromBody]List<TwitterProfileApi> profiles)
         {
-            return "value";
-        }
+            if (profiles == null || profiles.Count == 0)
+                return Ok("Using full list, Not Implimented Exception lol");
 
-        // POST api/values
+            return Ok("Using specificc list, Needs bot to be able to work");
+        }
+        
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]TwitterProfileApi profile)
         {
-        }
+            if (profile == null)
+                return BadRequest();
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+            return Ok();
         }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        
+        [HttpDelete("handle")]
+        public IActionResult Delete([FromBody]List<TwitterProfileApi> profiles)
         {
+            return Ok("test");
         }
     }
 }
