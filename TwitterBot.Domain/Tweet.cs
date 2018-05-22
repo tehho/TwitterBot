@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Tweetinvi;
+using Tweetinvi.Models;
 
 namespace TwitterBot.Domain
 {
@@ -37,6 +38,15 @@ namespace TwitterBot.Domain
             ReplyCount = replyCount;
             RetweetCount = retweetCount;
             FavoriteCount = favoriteCount;
+            
+        }
+
+        public static Tweet Parse(ITweet tweet)
+        {
+            return new Tweet()
+            {
+                Text = tweet.FullText
+            };
         }
     }
 }

@@ -13,10 +13,13 @@ namespace TwitterBot.Api.Controllers
     public class TwitterController : Controller
     {
         private readonly IRepository<TwitterProfile> _repository;
+        private readonly TwitterService twitterService;
 
-        public TwitterController(IRepository<TwitterProfile> repository)
+
+        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService)
         {
             _repository = repository;
+            this.twitterService = twitterService;
         }
         
         [HttpGet]
@@ -58,9 +61,21 @@ namespace TwitterBot.Api.Controllers
 
             var prolife = _repository.Add(profile);
 
+            TrainAsync(prolife);
+
             return Ok(prolife);
         }
-        
+
+        private async Task TrainAsync(TwitterProfile profile)
+        {
+            await Task.Run(() =>
+            {
+                var tweets = twitterService.ListAllTweetsFromProfile(profile).ToList();
+
+                tweets.ForEach(profile.TrainFromText);
+            });
+        }
+
         [HttpDelete("handle")]
         public IActionResult Delete([FromBody]List<TwitterProfileApi> profiles)
         {
