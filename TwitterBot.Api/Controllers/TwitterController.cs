@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Tweetinvi.Core.Extensions;
 using TwitterBot.Api.Model;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure.Repository;
@@ -97,7 +98,11 @@ namespace TwitterBot.Api.Controllers
 
         private string GenerateTweet(IEnumerable<TwitterProfile> profiles)
         {
-            return "Test";
+            var bot = new Bot("test");
+
+            profiles.ForEach(bot.AddProfile);
+
+            return bot.GenerateRandomTweetText();
         }
     }
 }
