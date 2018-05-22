@@ -7,10 +7,16 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class TwitterProfile : IProfile, ITrainableFromText
+    public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
         public Dictionary<Word, int> Words { get; set; }
+
+        public TwitterProfile()
+        {
+            Name = "";
+            Words = new List<Word>();
+        }
 
         public TwitterProfile(string name)
         {

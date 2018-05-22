@@ -19,13 +19,9 @@ namespace TwitterBot.Api.Model
             _tweets = new List<IStatus>();
         }
 
-        public TwitterProfile ToDomain()
+        public static implicit operator TwitterProfile(TwitterProfileApi value)
         {
-            return new TwitterProfile
-            {
-                Name = Name,
-                _tweets = _tweets.ToList()
-            };
+            return new TwitterProfile{Name = value.Name};
         }
     }
 }
