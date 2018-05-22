@@ -10,7 +10,7 @@ namespace TwitterBot.Domain
 {
     public class Bot : Entity
     {
-        private readonly Dictionary<IProfile, int> profiles;
+        private readonly List<IProfile> profiles;
         private readonly Random random;
 
         [Required]
@@ -19,13 +19,13 @@ namespace TwitterBot.Domain
         public Bot(string name)
         {
             Name = name;
-            profiles = new Dictionary<IProfile, int>();
+            profiles = new List<IProfile>();
             random = new Random();
         }
 
         public void AddProfile(IProfile profile)
         {
-            profiles[profile] = 1;
+            profiles.Add(profile);
         }
 
         public string GenerateRandomTweetText()
@@ -63,7 +63,7 @@ namespace TwitterBot.Domain
 
         private IProfile GetRandomProfile()
         {
-            return profiles.ElementAt(random.Next(0, profiles.Count)).Key;
+            return profiles[random.Next(0, profiles.Count)];
         }
     }
 }
