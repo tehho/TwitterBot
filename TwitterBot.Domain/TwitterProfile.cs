@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class TwitterProfile : IProfile, ITrainableFromText
+    public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
         public List<Word> Words { get; set; }

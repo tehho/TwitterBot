@@ -14,11 +14,12 @@ namespace TwitterBot.Infrastructure.Repository
         public TwitterProfileRepository(TwitterContext context)
         {
             _context = context;
+            _context.Database.EnsureCreated();
         }
 
         public TwitterProfile Add(TwitterProfile obj)
         {
-            _context.Add(obj);
+            _context.TwitterProfiles.Add(obj);
             _context.SaveChanges();
 
             return obj;
@@ -67,8 +68,17 @@ namespace TwitterBot.Infrastructure.Repository
         }
 
         public TwitterProfile Remove(TwitterProfile obj)
+
         {
-            return obj;
+            var profile = Get(obj);
+
+            if (profile != null)
+            {
+                _context.TwitterProfiles.Remove(profile);
+                _context.SaveChanges();
+            }
+
+            return profile;
         }
     }
 }

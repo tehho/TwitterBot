@@ -18,12 +18,13 @@ namespace TwitterBot.Api.Controllers
         {
             _repository = repository;
         }
-
-
+        
         [HttpGet]
         public IActionResult GetExistingsProfiles()
         {
-            return Ok(_repository.GetAll());
+            var list = _repository.GetAll();
+
+            return Ok(list);
         }
         
         [HttpPost("tweet")]
@@ -45,17 +46,15 @@ namespace TwitterBot.Api.Controllers
 
             return Ok(GenerateTweet(list));
         }
-
-        private string GenerateTweet(IEnumerable<TwitterProfile> profiles)
-        {
-            return "Test";
-        }
         
         [HttpPost]
         public IActionResult Post([FromBody]TwitterProfileApi profile)
         {
             if (profile == null)
-                return BadRequest();
+                return BadRequest("Sum ting wong");
+
+            if (profile.Name == null)
+                return BadRequest("Name not given");
 
             var prolife = _repository.Add(profile);
 
@@ -79,6 +78,11 @@ namespace TwitterBot.Api.Controllers
             profiles.ForEach(profile => _repository.Remove(profile));
 
             return Ok("Remove complete");
+        }
+
+        private string GenerateTweet(IEnumerable<TwitterProfile> profiles)
+        {
+            return "Test";
         }
     }
 }
