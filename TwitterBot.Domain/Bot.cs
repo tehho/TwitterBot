@@ -53,12 +53,12 @@ namespace TwitterBot.Domain
 
         private Word GetRandomWord(IProfile profile)
         {
-            return profile.Words.ElementAt(random.Next(0, profile.Words.Count)).Key;
+            return profile.Words[random.Next(0, profile.Words.Count)].Word;
         }
 
         private Word GetRandomNextWord(Word word)
         {
-            return word.NextWord?.ElementAt(random.Next(0, word.NextWord.Count)).Key;
+            return word.NextWord?[random.Next(0, word.NextWord.Count)].Word;
         }
 
         private IProfile GetRandomProfile()

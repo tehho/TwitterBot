@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -10,48 +11,49 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
-        public Dictionary<Word, int> Words { get; set; }
+        //[NotMapped]
+        public List<WordOccurrence> Words { get; set; }
 
         public TwitterProfile()
         {
             Name = "";
-            Words = new Dictionary<Word, int>();
+            Words = new List<WordOccurrence>();
         }
 
         public TwitterProfile(string name)
         {
             Name = name;
-            Words = new Dictionary<Word, int>();
+            Words = new List<WordOccurrence>();
         }
 
         public void TrainFromText(TextContent content)
         {
-            var regex = new Regex(@"(\.| |!|\?)");
+            var regex = new Regex(@"(\.|,| |!|\?)");
             var words = regex.Split(content.Text).ToList();
-            Word lastWord = null;
+            WordOccurrence lastWordOccurrence = null;
 
             foreach (var word in words)
             {
                 if (string.IsNullOrWhiteSpace(word))
                     continue;
 
-                Word currentWord;
+                WordOccurrence currentWordOccurrence;
 
-                if (Words.Any(w => w.Equals(word)))
+                if (Words.Any(w => w.Word.Equals(word)))
                 {
-                    currentWord = Words.Single(w => w.Key.Equals(word)).Key;
-                    Words[currentWord]++;
+                    currentWordOccurrence = Words.Single(w => w.Word.Equals(word));
+                    currentWordOccurrence.Occurrence++;
                 }
 
                 else
                 {
-                    currentWord = new Word(word);
-                    Words[currentWord] = 1;
+                    currentWordOccurrence = new WordOccurrence(new Word(word));
+                    Words.Add(currentWordOccurrence);
                 }
 
-                lastWord?.AddNextWord(currentWord);
+                lastWordOccurrence?.Word.AddNextWordOccurrence(currentWordOccurrence);
 
-                lastWord = currentWord;
+                lastWordOccurrence = currentWordOccurrence;
             }
         }
     }

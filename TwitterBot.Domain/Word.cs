@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace TwitterBot.Domain
 {
     public class Word : Entity, IEquatable<string>, IEquatable<Word>
     {
         public string Value { get; set; }
-        [NotMapped]
-        public Dictionary<Word, int> NextWord { get; set; }
+        public List<WordOccurrence> NextWord { get; set; }
         public Dictionary<string, int> AlternativeSpellings { get; set; }
 
         public Word(string word)
@@ -16,19 +16,19 @@ namespace TwitterBot.Domain
             Value = word.ToLower();
         }
 
-        public void AddNextWord(Word word)
+        public void AddNextWordOccurrence(WordOccurrence wordOccurrence)
         {
             if (NextWord == null)
-                NextWord = new Dictionary<Word, int>();
+                NextWord = new List<WordOccurrence>();
 
-            if (NextWord.ContainsKey(word))
-                NextWord[word]++;
+            if (NextWord.Any(w => w.Equals(wordOccurrence.Word)))
+                NextWord.Single(w => w.Equals(wordOccurrence.Word)).Occurrence++;
 
             else
-                NextWord[word] = 1;
+                NextWord.Add(new WordOccurrence(wordOccurrence.Word));
         }
 
-        public bool Equals(string other) => Value == other;
+        public bool Equals(string other) => Value == other.ToLower();
 
         public bool Equals(Word other) => Value == other.Value.ToLower();
     }
