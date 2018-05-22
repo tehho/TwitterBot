@@ -25,29 +25,40 @@ namespace TwitterBot.Domain
 
         public void AddProfile(IProfile profile)
         {
-            profiles.Add(profile, 1);
+            profiles[profile] = 1;
         }
 
         public string GenerateRandomTweetText()
         {
             var tweetText = "";
+            Word randomWord = null;
 
             while (true)
             {
-                var nextRandomWord = GetRandomWord();
+                if (randomWord == null)
+                    randomWord = GetRandomWord(GetRandomProfile());
 
-                if (tweetText.Length + nextRandomWord.Length > 140)
+                else if (randomWord.NextWord != null)
+                    randomWord = GetRandomNextWord(randomWord);
+
+                else
+                    randomWord = GetRandomWord(GetRandomProfile());
+
+                if (tweetText.Length + randomWord.Value.Length > 140)
                     return tweetText;
 
-                tweetText += nextRandomWord;
+                tweetText += randomWord.Value;
             }
         }
 
-        private string GetRandomWord()
+        private Word GetRandomWord(IProfile profile)
         {
-            var profile = GetRandomProfile();
+            return profile.Words.ElementAt(random.Next(0, profile.Words.Count)).Key;
+        }
 
-            return profile.Words.ElementAt(random.Next(0, profile.Words.Count)).Key.Value;
+        private Word GetRandomNextWord(Word word)
+        {
+            return word.NextWord?.ElementAt(random.Next(0, word.NextWord.Count)).Key;
         }
 
         private IProfile GetRandomProfile()
