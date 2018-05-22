@@ -38,10 +38,10 @@ namespace BaatDesktopClient
 
             TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
             {
-                Message = message,
+                Text = message,
             };
 
-            Console.WriteLine(userPost.Message);
+            Console.WriteLine(userPost.Text);
 
             tweetService.PublishTweet(userPost);
 

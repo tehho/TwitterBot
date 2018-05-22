@@ -25,7 +25,7 @@ namespace TwitterBot.Domain
 
         public void PublishTweet(Tweet tweet)
         {
-            Tweetinvi.Tweet.PublishTweet(tweet.Message);
+            Tweetinvi.Tweet.PublishTweet(tweet.Text);
         }
 
         public List<ITweet> ListAllTweetsFromProfile(TwitterProfile profile)

@@ -18,6 +18,12 @@ namespace TwitterBot.Domain
 
         public Tweet()
         {
+
+        }
+        public Tweet(string text)
+        {
+            Text = text;
+
         }
 
         public Tweet(long twitterId, string text, DateTime createdAt, int userId, TwitterProfile user, int quoteCount, int replyCount, int retweetCount, int favoriteCount)
