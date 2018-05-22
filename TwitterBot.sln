@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterBot.Domain", "TwitterBot.Domain\TwitterBot.Domain.csproj", "{CBF0AE7D-9453-447B-AB6D-445C276E096E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitterBot.Domain", "TwitterBot.Domain\TwitterBot.Domain.csproj", "{CBF0AE7D-9453-447B-AB6D-445C276E096E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaatDesktopClient", "BaatDesktopClient\BaatDesktopClient.csproj", "{8E8F86CC-4E04-4F1E-AD83-4AF6E4DDA862}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CBF0AE7D-9453-447B-AB6D-445C276E096E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBF0AE7D-9453-447B-AB6D-445C276E096E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBF0AE7D-9453-447B-AB6D-445C276E096E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E8F86CC-4E04-4F1E-AD83-4AF6E4DDA862}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E8F86CC-4E04-4F1E-AD83-4AF6E4DDA862}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E8F86CC-4E04-4F1E-AD83-4AF6E4DDA862}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E8F86CC-4E04-4F1E-AD83-4AF6E4DDA862}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
