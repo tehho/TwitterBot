@@ -9,7 +9,7 @@ namespace TwitterBot.Domain
     {
         public string Value { get; set; }
         public List<WordOccurrence> NextWord { get; set; }
-        public Dictionary<string, int> AlternativeSpellings { get; set; }
+        //public Dictionary<string, int> AlternateSpellings { get; set; }
 
         public Word(string word)
         {
