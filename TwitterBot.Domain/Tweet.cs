@@ -11,6 +11,8 @@ namespace TwitterBot.Domain
 
         public string Message { get; set; }
 
+        public DateTime CreateDate { get; set; }
+
         public int UserId { get; set; }
         public TwitterProfile User { get; set; }
 
