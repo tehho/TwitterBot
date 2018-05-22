@@ -1,9 +1,11 @@
-﻿namespace TwitterBot.Domain
+﻿using System.Collections.Generic;
+
+namespace TwitterBot.Domain
 {
-    public class Token
+    public class Word : Entity
     {
-        public string key { get; set; }
-        public string secret { get; set; }
-        
+        public string Value { get; set; }
+        public Dictionary<Word, int> NextWord { get; set; }
+        public Dictionary<string, int> AlternativeSpellings { get; set; }
     }
 }
