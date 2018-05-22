@@ -8,30 +8,9 @@ namespace TwitterBot.Domain
 {
     public class Bot : Entity
     {
+        private List<Word> words;
+        public List<Profile> profiles;
+
         public string Name { get; set; }
-        public Dictionary<string, int> Dictionary
-        {
-            get
-            {
-                Dictionary<string, int> dicReturn = new Dictionary<string, int>();
-
-                profiles.ForEach(p =>
-                {
-                    var dic = p.GenerateMetaData();
-                    var keys = dic.Keys.ToList();
-                    keys.ForEach(k =>
-                    {
-                        if (dicReturn.ContainsKey(k))
-                            dicReturn[k] += dic[k];
-                        else
-                            dicReturn.Add(k, dic[k]);
-                    });
-                });
-
-                return dicReturn;
-            }
-        }
-
-        private List<TwitterProfile> profiles;
     }
 }
