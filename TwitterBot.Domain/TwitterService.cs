@@ -4,8 +4,8 @@ namespace TwitterBot.Domain
 {
     public class TwitterService
     {
-        private readonly TwitterProfile1 _profile;
-        public TwitterService(TwitterProfile1 profile, Token customer, Token access)
+        private readonly TwitterProfile _profile;
+        public TwitterService(TwitterProfile profile, Token customer, Token access)
         {
             _profile = profile;
 
