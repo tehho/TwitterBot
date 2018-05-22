@@ -26,7 +26,7 @@ namespace TwitterBot.Domain
 
         public void TrainFromText(TextContent content)
         {
-            var regex = new Regex(@"(.| |!|\?)");
+            var regex = new Regex(@"(\.| |!|\?)");
             var words = regex.Split(content.Text).ToList();
             Word lastWord = null;
 
@@ -49,8 +49,7 @@ namespace TwitterBot.Domain
                     Words[currentWord] = 1;
                 }
 
-                if (lastWord != null)
-                    lastWord.NextWord[currentWord] = 1;
+                lastWord?.AddNextWord(currentWord);
 
                 lastWord = currentWord;
             }

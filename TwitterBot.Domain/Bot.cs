@@ -47,7 +47,7 @@ namespace TwitterBot.Domain
                 if (tweetText.Length + randomWord.Value.Length > 140)
                     return tweetText;
 
-                tweetText += randomWord.Value;
+                tweetText += randomWord.Value + " ";
             }
         }
 

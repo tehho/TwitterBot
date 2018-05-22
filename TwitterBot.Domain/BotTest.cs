@@ -8,7 +8,7 @@ namespace TwitterBot.Domain
 {
     public class BotTest
     {
-        public string Test()
+        public static string Test()
         {
             var bot = new Bot("bot");
             var profile = new TwitterProfile("profile");

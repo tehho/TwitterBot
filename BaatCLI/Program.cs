@@ -18,36 +18,38 @@ namespace BaatDesktopClient
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Post a tweet \n");
+            Console.WriteLine(BotTest.Test());
 
-            var tweetService = new TwitterService(null
-                , new Token
-                {
-                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-                },
-                new Token()
-                {
-                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-                });
+            //Console.WriteLine("Post a tweet \n");
 
-            Write("Twitter post: ");
+            //var tweetService = new TwitterService(null
+            //    , new Token
+            //    {
+            //        Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+            //        Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+            //    },
+            //    new Token()
+            //    {
+            //        Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+            //        Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+            //    });
 
-            var message = ReadLine().Trim();
+            //Write("Twitter post: ");
 
-            TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
-            {
-                Text = message,
-            };
+            //var message = ReadLine().Trim();
 
-            Console.WriteLine(userPost.Text);
+            //TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
+            //{
+            //    Text = message,
+            //};
 
-            tweetService.PublishTweet(userPost);
+            //Console.WriteLine(userPost.Text);
 
-            Console.WriteLine("Tweet was published.");
+            //tweetService.PublishTweet(userPost);
 
-            ReadKey();
+            //Console.WriteLine("Tweet was published.");
+
+            //ReadKey();
 
         }
 
