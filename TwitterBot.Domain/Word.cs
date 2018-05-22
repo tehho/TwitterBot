@@ -4,24 +4,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TwitterBot.Domain
 {
-    public class Word : Entity, IEquatable<string>
+    public class Word : Entity, IEquatable<string>, IEquatable<Word>
     {
         public string Value { get; set; }
-        public int Occurrance { get; set; }
         [NotMapped]
         public Dictionary<Word, int> NextWord { get; set; }
-        [NotMapped]
         public Dictionary<string, int> AlternativeSpellings { get; set; }
 
         public Word(string word)
         {
             Value = word.ToLower();
-            Occurrance = 1;
         }
 
-        public bool Equals(string other)
+        public void AddNextWord(Word word)
         {
-            return Value == other;
+            if (NextWord == null)
+                NextWord = new Dictionary<Word, int>();
+
+            if (NextWord.ContainsKey(word))
+                NextWord[word]++;
+
+            else
+                NextWord[word] = 1;
         }
+
+        public bool Equals(string other) => Value == other;
+
+        public bool Equals(Word other) => Value == other.Value.ToLower();
     }
 }

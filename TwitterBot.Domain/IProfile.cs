@@ -11,6 +11,6 @@ namespace TwitterBot.Domain
     {
         [Required]
         string Name { get; set; }
-        List<Word> Words { get; set; }
+        Dictionary<Word, int> Words { get; set; }
     }
 }

@@ -10,36 +10,49 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
-        public List<Word> Words { get; set; }
+        public Dictionary<Word, int> Words { get; set; }
 
         public TwitterProfile()
         {
             Name = "";
-            Words = new List<Word>();
+            Words = new Dictionary<Word, int>();
         }
 
         public TwitterProfile(string name)
         {
             Name = name;
-            Words = new List<Word>();
+            Words = new Dictionary<Word, int>();
         }
 
         public void TrainFromText(TextContent content)
         {
             var regex = new Regex(@"(.| |!|\?)");
-
             var words = regex.Split(content.Text).ToList();
+            Word lastWord = null;
 
             foreach (var word in words)
             {
                 if (string.IsNullOrWhiteSpace(word))
                     continue;
 
+                Word currentWord;
+
                 if (Words.Any(w => w.Equals(word)))
-                    Words.SingleOrDefault(w => w.Equals(word)).Occurrance++;
+                {
+                    currentWord = Words.Single(w => w.Key.Equals(word)).Key;
+                    Words[currentWord]++;
+                }
 
                 else
-                    Words.Add(new Word(word));
+                {
+                    currentWord = new Word(word);
+                    Words[currentWord] = 1;
+                }
+
+                if (lastWord != null)
+                    lastWord.NextWord[currentWord] = 1;
+
+                lastWord = currentWord;
             }
         }
     }
