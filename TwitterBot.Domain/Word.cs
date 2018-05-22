@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TwitterBot.Domain
 {
@@ -7,6 +8,7 @@ namespace TwitterBot.Domain
     {
         public string Value { get; set; }
         public int Occurrance { get; set; }
+        [NotMapped]
         public Dictionary<Word, int> NextWord { get; set; }
         public Dictionary<string, int> AlternativeSpellings { get; set; }
 

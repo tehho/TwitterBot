@@ -46,9 +46,19 @@ namespace TwitterBot.Infrastructure.Repository
                 : GetAll();
         }
 
+        public IEnumerable<TwitterProfile> SearchList(Predicate<TwitterProfile> predicate)
+        {
+            return _context.TwitterProfiles.Where(profile => predicate(profile)).ToList();
+        }
+
         public TwitterProfile Search(TwitterProfile obj)
         {
             return obj?.Name != null ? _context.TwitterProfiles.FirstOrDefault(profile => profile.Name == obj.Name) : null;
+        }
+
+        public bool Exists(TwitterProfile obj)
+        {
+            return _context.TwitterProfiles.Any(profile => profile.Name == obj.Name);
         }
 
         public TwitterProfile Update(TwitterProfile obj)
