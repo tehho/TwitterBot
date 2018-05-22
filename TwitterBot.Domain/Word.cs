@@ -10,6 +10,7 @@ namespace TwitterBot.Domain
         public int Occurrance { get; set; }
         [NotMapped]
         public Dictionary<Word, int> NextWord { get; set; }
+        [NotMapped]
         public Dictionary<string, int> AlternativeSpellings { get; set; }
 
         public Word(string word)
