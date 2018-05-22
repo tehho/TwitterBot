@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public abstract class Profile : Entity, ITrainableFromText
+    public abstract class Profile : Entity
     {
         [Required]
         public string Name { get; set; }
@@ -17,11 +17,6 @@ namespace TwitterBot.Domain
         {
             Name = name;
             Words = new List<Word>();
-        }
-
-        public void TrainFromText(TextContent text)
-        {
-            throw new NotImplementedException();
         }
     }
 }
