@@ -23,38 +23,45 @@ namespace BaatDesktopClient
                                     "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi", 
                                     "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8");
 
-            var tweetCount = 200;
+            var smallTweetCount = 10;
+            var mediumTweetCount = 200;
+            var largetweetCount = 3200;
 
-            var user = new UserIdentifier("realdonaldtrump").ToString(); //User.GetAuthenticatedUser();
+            var userHandle = "realdonaldtrump"; //User.GetAuthenticatedUser();
+
+            var tweeter = Tweetinvi.User.GetUserFromScreenName(userHandle).UserIdentifier.ToString();
 
             //Write("Vad vill du tweeta? : ");
 
             //Tweet.PublishTweet(ReadLine());
 
+            Console.WriteLine(tweeter);
+
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
 
+            // long userId = 25073877;
 
-            long userId = 25073877;
-            var lastTweets = Timeline.GetUserTimeline(userId, 10).ToArray();
+            var lastTweets = Timeline.GetUserTimeline(tweeter, smallTweetCount).ToArray();
 
             var allTweets = new List<ITweet>(lastTweets);
             var beforeLast = allTweets;
 
-            while (lastTweets.Length > 0 && allTweets.Count <= 10)
+            while (lastTweets.Length > 0 && allTweets.Count <= smallTweetCount)
             {
                 var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
                 Console.WriteLine($"Oldest Tweet Id = {idOfOldestTweet}");
 
-                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : 10;
+                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : smallTweetCount;
                 var timelineRequestParameters = new UserTimelineParameters
                 {
                     // MaxId ensures that we only get tweets that have been posted 
                     // BEFORE the oldest tweet we received
+
                     MaxId = idOfOldestTweet - 1,
                     MaximumNumberOfTweetsToRetrieve = numberOfTweetsToRetrieve
                 };
 
-                lastTweets = Timeline.GetUserTimeline(userId, timelineRequestParameters).ToArray();
+                lastTweets = Timeline.GetUserTimeline(tweeter, timelineRequestParameters).ToArray();
                 allTweets.AddRange(lastTweets);
             }
 
@@ -82,6 +89,7 @@ namespace BaatDesktopClient
             }
 
             WriteLine("Filen skrevs till disk");
+            ReadKey();
 
         }
     }
