@@ -15,7 +15,7 @@ namespace TwitterBot.Domain
         public TwitterProfile()
         {
             Name = "";
-            Words = new List<Word>();
+            Words = new Dictionary<Word, int>();
         }
 
         public TwitterProfile(string name)
