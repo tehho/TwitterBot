@@ -40,23 +40,29 @@ namespace BaatDesktopClient
             //model.Entity<WordOccurrence>().HasKey(w => new {w.WordId, w.ParentId});
             opt.UseModel(model.Model);
 
-            var context = new TwitterContext(opt.Options);
+            using (var context = new TwitterContext(opt.Options))
+            {
+                var repo = new TwitterProfileRepository(context);
 
-            var repo = new TwitterProfileRepository(context);
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+                repo.Add(profile);
+                repo.Add(profileP);
+            }
 
-            repo.Add(profile);
-            repo.Add(profileP);
+            using (var context = new TwitterContext(opt.Options))
+            {
+                var repo = new TwitterProfileRepository(context);
 
-            var profile2 = repo.Get(new TwitterProfile { Name = "profile" });
-            var profile22 = repo.Get(new TwitterProfile { Name = "profileP" });
+                var profile2 = repo.Get(new TwitterProfile {Name = "profile"});
+                var profile22 = repo.Get(new TwitterProfile {Name = "profileP"});
 
-            bot.AddProfile(profile2);
-            bot.AddProfile(profile22);
+                bot.AddProfile(profile2);
+                bot.AddProfile(profile22);
 
-            return bot.GenerateRandomTweetText();
+                return bot.GenerateRandomTweetText();
+            }
         }
     }
 }
