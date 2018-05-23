@@ -11,7 +11,6 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
-        //[NotMapped]
         public List<WordOccurrence> Words { get; set; }
 
         public TwitterProfile()
@@ -29,29 +28,27 @@ namespace TwitterBot.Domain
         public void TrainFromText(TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
-            var words = regex.Split(content.Text).ToList();
+            var words = regex.Split(content.Text).Select(word => new Word(word)).ToList();
             WordOccurrence lastWordOccurrence = null;
 
             foreach (var word in words)
             {
-                if (string.IsNullOrWhiteSpace(word))
+                if (string.IsNullOrWhiteSpace(word.Value))
                     continue;
 
-                WordOccurrence currentWordOccurrence;
+                WordOccurrence currentWordOccurrence = Words.SingleOrDefault(w => w.Word.Equals(word));
 
-                if (Words.Any(w => w.Word.Equals(word)))
+                if (currentWordOccurrence == null)
                 {
-                    currentWordOccurrence = Words.Single(w => w.Word.Equals(word));
+                    currentWordOccurrence = new WordOccurrence(word);
+                    Words.Add(currentWordOccurrence);
+                }
+                else
+                {
                     currentWordOccurrence.Occurrence++;
                 }
 
-                else
-                {
-                    currentWordOccurrence = new WordOccurrence(new Word(word));
-                    Words.Add(currentWordOccurrence);
-                }
-
-                lastWordOccurrence?.Word.AddNextWordOccurrence(currentWordOccurrence);
+                lastWordOccurrence?.Word.AddNextWord(word);
 
                 lastWordOccurrence = currentWordOccurrence;
             }

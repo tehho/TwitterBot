@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TwitterBot.Domain;
 
 namespace TwitterBot.Infrastructure.Repository
@@ -19,6 +20,9 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Add(TwitterProfile obj)
         {
+            if (obj?.Name == null)
+                return null;
+
             _context.TwitterProfiles.Add(obj);
             _context.SaveChanges();
 
@@ -27,34 +31,49 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Get(TwitterProfile obj)
         {
-            return obj?.Name != null ? _context.TwitterProfiles.FirstOrDefault(profile => profile.Name == obj.Name) : null;
+            if (obj == null)
+                return null;
+
+            if (obj.Id != null)
+            {
+                return Search(profile => profile.Id == obj.Id.Value);
+            }
+
+            if (obj.Name != null)
+            {
+                return Search(profile => profile.Name == obj.Name);
+            }
+
+            return null;
+        }
+
+        public IEnumerable<TwitterProfile> GetList(TwitterProfile obj)
+        {
+            if (obj == null)
+                return SearchList(profile => true);
+
+            if (obj.Id != null)
+                return SearchList(profile => profile.Id == obj.Id);
+
+            if (obj.Name != null)
+                return SearchList(profile => profile.Name == obj.Name);
+
+            return GetAll();
         }
 
         public IEnumerable<TwitterProfile> GetAll()
         {
-            return _context.TwitterProfiles.ToList();
-        }
-
-        public IEnumerable<TwitterProfile> SearchList(TwitterProfile obj)
-        {
-            if (obj == null)
-                return GetAll();
-
-            return obj?.Name != null ? 
-                _context.TwitterProfiles
-                .Where(profile => profile.Name.Contains(obj.Name))
-                .ToList() 
-                : GetAll();
+            return GetList(null);
         }
 
         public IEnumerable<TwitterProfile> SearchList(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Where(profile => predicate(profile)).ToList();
+            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).Where(profile => predicate(profile)).ToList();
         }
 
-        public TwitterProfile Search(TwitterProfile obj)
+        public TwitterProfile Search(Predicate<TwitterProfile> predicate)
         {
-            return obj?.Name != null ? _context.TwitterProfiles.FirstOrDefault(profile => profile.Name == obj.Name) : null;
+            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).SingleOrDefault(profile => predicate(profile));
         }
 
         public bool Exists(TwitterProfile obj)
@@ -64,7 +83,20 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Update(TwitterProfile obj)
         {
-            return obj;
+            if (obj?.Words == null)
+                return null;
+
+            var profile = Get(obj);
+
+            if (profile == null)
+            {
+                return Add(obj);
+            }
+
+            profile.Words = obj.Words;
+            _context.SaveChanges();
+
+            return profile;
         }
 
         public TwitterProfile Remove(TwitterProfile obj)

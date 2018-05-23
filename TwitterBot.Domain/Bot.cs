@@ -15,7 +15,7 @@ namespace TwitterBot.Domain
 
         [Required]
         public string Name { get; set; }
-        
+
         public Bot(string name)
         {
             Name = name;
@@ -35,13 +35,13 @@ namespace TwitterBot.Domain
 
             while (true)
             {
-                if (randomWord == null)
-                    randomWord = GetRandomWord(GetRandomProfile());
+                //if (randomWord == null)
+                //    randomWord = GetRandomWord(GetRandomProfile());
 
-                else if (randomWord.NextWord != null)
-                    randomWord = GetRandomNextWord(randomWord);
+                //else if (randomWord.NextWord != null)
+                //    randomWord = GetRandomNextWord(randomWord);
 
-                else
+                //else
                     randomWord = GetRandomWord(GetRandomProfile());
 
                 if (tweetText.Length + randomWord.Value.Length > 140)
@@ -53,12 +53,24 @@ namespace TwitterBot.Domain
 
         private Word GetRandomWord(IProfile profile)
         {
-            return profile.Words[random.Next(0, profile.Words.Count)].Word;
+            var index = random.Next(0, profile.Words.Count);
+            var word = profile.Words[index].Word;
+
+            return word;
+        }
+
+        private Word GetRandomWord(List<WordOccurrence> words)
+        {
+            var sum = words.Sum(word => word.Occurrence);
+            return null;
         }
 
         private Word GetRandomNextWord(Word word)
         {
-            return word.NextWord?[random.Next(0, word.NextWord.Count)].Word;
+            var index = random.Next(0, word.NextWord.Count);
+            var retWord = word.NextWord?[index].Word;
+
+            return retWord;
         }
 
         private IProfile GetRandomProfile()
