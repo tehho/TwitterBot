@@ -28,6 +28,11 @@ namespace TwitterBot.Domain
             Tweetinvi.Tweet.PublishTweet(tweet.Text);
         }
 
+        public void UpdateProfileImage(byte[] image)
+        {
+            Tweetinvi.Account.UpdateProfileImage(image);
+        }
+
         public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;

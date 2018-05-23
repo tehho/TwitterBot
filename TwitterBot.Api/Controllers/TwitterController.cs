@@ -24,7 +24,7 @@ namespace TwitterBot.Api.Controllers
         }
         
         [HttpGet]
-        public IActionResult GetExistingsProfiles()
+        public IActionResult GetExistingsProfiles() 
         {
             var list = _repository.GetAll();
 
@@ -52,7 +52,7 @@ namespace TwitterBot.Api.Controllers
         }
         
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile)
+        public IActionResult Post([FromBody]TwitterProfileApi profile) // TODO: Validera att namnet finns/är en giltig profil
         {
             if (profile == null)
                 return BadRequest("Sum ting wong");
