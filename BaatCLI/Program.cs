@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using HtmlAgilityPack;
-using Microsoft.AspNetCore.Http;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -37,9 +35,16 @@ namespace BaatDesktopClient
                     Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
                 });
 
-            Write("Update image: ");
 
-            UpdateProfileImage();
+            Write("Update image from handle: ");
+
+            string input = Console.ReadLine();
+
+            TwitterProfile profile = new TwitterProfile()
+            {
+                Name = input
+            };
+            UpdateProfileImage(profile);
 
             Console.WriteLine("Image was updated.");
 
@@ -81,7 +86,6 @@ namespace BaatDesktopClient
 
         public static void UpdateProfileImage(TwitterProfile profile)
         {
-            Console.WriteLine("Post a tweet \n");
 
             var tweetService = new TwitterService(null
                 , new Token
@@ -95,24 +99,9 @@ namespace BaatDesktopClient
                     Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
                 });
 
-            string userHandle = "realdonaltrump";
-
-            string twitterProfilePath = "https://twitter.com/" + userHandle + "/profile_image?size=original";
-            var web = new HtmlWeb();
-            var doc = web.Load(url);
-
-            using (WebClient client = new WebClient())
-            {
-                client.DownloadFile(new Uri(url), twitterProfilePath ;
-            }
-
             Write("Uploading image...");
 
-            string path = @"test.jpg";
-
-            byte[] image = System.IO.File.ReadAllBytes(path);
-
-            tweetService.UpdateProfileImage(image);
+            tweetService.UpdateProfileImage(tweetService.SaveProfileImageToServer(profile));
 
             Console.WriteLine("Image was updated.");
         }

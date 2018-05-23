@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -26,6 +29,21 @@ namespace TwitterBot.Domain
         public void PublishTweet(Tweet tweet)
         {
             Tweetinvi.Tweet.PublishTweet(tweet.Text);
+        }
+
+        public byte[] SaveProfileImageToServer(TwitterProfile profile)
+        {
+            var profileImage = "https://twitter.com/" + profile.Name + "/profile_image?size=original";
+
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(new Uri(profileImage), @"profile.jpg");
+            }
+
+            string path = @"profile.jpg";
+
+            return File.ReadAllBytes(path);
+
         }
 
         public void UpdateProfileImage(byte[] image)
