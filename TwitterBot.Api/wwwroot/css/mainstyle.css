@@ -16,6 +16,8 @@
 .content {
     width: auto;
     height: auto;
-    flex: 1 0 auto;
+    min-width: 200px;
+    min-height: 200px; 
+    flex: 1 1 auto;
     margin: auto;
 }

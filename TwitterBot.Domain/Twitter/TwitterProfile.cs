@@ -8,10 +8,13 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class TwitterProfile : Entity, IProfile , ITrainableFromText
+    public class TwitterProfile : Entity, IProfile, ITrainableFromText
     {
         public string Name { get; set; }
+
         //[NotMapped]
+        public IReadOnlyList<Word> Vocabulary => Words.Select(w => w.Word).ToList();
+
         public List<WordOccurrence> Words { get; set; }
 
         public TwitterProfile()
@@ -29,12 +32,15 @@ namespace TwitterBot.Domain
         public void TrainFromText(TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
-            var words = regex.Split(content.Text).ToList();
+            var words = regex.Split(content.Text).Select(word => new Word(word)).ToList();
+
             WordOccurrence lastWordOccurrence = null;
+
+            Word lastWord = null;
 
             foreach (var word in words)
             {
-                if (string.IsNullOrWhiteSpace(word))
+                if (string.IsNullOrWhiteSpace(word.Value))
                     continue;
 
                 WordOccurrence currentWordOccurrence;
@@ -54,7 +60,31 @@ namespace TwitterBot.Domain
                 lastWordOccurrence?.Word.AddNextWordOccurrence(currentWordOccurrence);
 
                 lastWordOccurrence = currentWordOccurrence;
+
+                var test = Words.SingleOrDefault(wc => wc.Word.Equals(word));
+
+
+                if (test == null)
+                {
+                    currentWordOccurrence = new WordOccurrence(word);
+                }
             }
+        }
+
+        public void AddWord(Word word)
+        {
+            if (word == null)
+                throw new NullReferenceException();
+
+            if (Words == null)
+                Words = new List<WordOccurrence>();
+
+            var nextWord = Words.SingleOrDefault(w => w.Word.Equals(word));
+
+            if (nextWord == null)
+                Words.Add(new ProfileWordOccurrence(word, this));
+            else
+                nextWord.Occurrence++;
         }
     }
 }

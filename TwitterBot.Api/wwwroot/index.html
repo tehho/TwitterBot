@@ -14,18 +14,31 @@
         </div>
 
         <div id="content" class="content">
-            TwitterHandle: <input id="twitterhandle-name" type="text" /><button id="twitterhandle-submit" class="button">Add</button>
-            <br />
+            <h2>Create Bot</h2>
+            Name:
+            <br /><input id="bot-name" />
+
             <h2>Existing Handles</h2>
-            <select id="twitterhandle-existing-names" size="10" multiple="multiple" style="width: 200px; height: 200px;">
-            </select>
-            <br /><button id="twitter-generate-submit">Generate</button>
-            <button id="twitter-remove-submit">Remove</button>
+
+            <select id="twitterhandle-existing-names" size="10" multiple="multiple" style="width: 200px; height: 200px;"></select>
+
+            <br /><button id="twitter-remove-submit">Remove</button>
             <button id="twitterhandle-train-submit">Train</button>
+            <br />TwitterHandle: <input id="twitterhandle-name" type="text" /><button id="twitterhandle-submit" class="button">Add</button>
 
+            <div id="bot-settings-container">
+
+            </div>
+            <br /><button id="bot-submit">Save</button>
         </div>
-        <div id="tweet-content" class="content"></div>
+        <div id="twitter-generator">
+            <div id="tweet-content" class="content">
 
+            </div>
+
+            <br /><button id="twitter-generate-submit">Generate</button>
+            <button id="twitter-post-submit">Post</button>
+        </div>
         <div id="footer" class="footer">
             <h2>Footer</h2>
         </div>

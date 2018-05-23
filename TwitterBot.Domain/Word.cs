@@ -35,26 +35,26 @@ namespace TwitterBot.Domain
             var nextWord = NextWord.SingleOrDefault(w => w.Word.Equals(word));
 
             if (nextWord == null)
-                NextWord.Add(new WordOccurrence(word));
+                NextWord.Add(new WordWordOccurrence(word, this));
             else
                 nextWord.Occurrence++;
         }
 
-        public void AddNextWordOccurrence(WordOccurrence wordOccurrence)
-        {
-            if (wordOccurrence == null)
-                throw new NullReferenceException();
-            
-            if (NextWord == null)
-                NextWord = new List<WordOccurrence>();
+        //public void AddNextWordOccurrence(WordOccurrence wordOccurrence)
+        //{
+        //    if (wordOccurrence == null)
+        //        throw new NullReferenceException();
 
-            var nextWord = NextWord.SingleOrDefault(w => w.Equals(wordOccurrence.Word));
+        //    if (NextWord == null)
+        //        NextWord = new List<WordOccurrence>();
 
-            if(nextWord == null)
-                NextWord.Add(new WordOccurrence(wordOccurrence.Word, this));
-            else 
-                nextWord.Occurrence++;
-        }
+        //    var nextWord = NextWord.SingleOrDefault(w => w.Equals(wordOccurrence.Word));
+
+        //    if (nextWord == null)
+        //        NextWord.Add(new WordOccurrence(wordOccurrence.Word, this));
+        //    else
+        //        nextWord.Occurrence++;
+        //}
 
         public bool Equals(string other) => Value == other.ToLower();
 
