@@ -5,11 +5,11 @@ namespace TwitterBot.Infrastructure.Repository
 {
     public interface ISearchable<T>
     {
-        T Get(T obj);
+        IEnumerable<T> GetList(T obj);
         IEnumerable<T> GetAll();
-        IEnumerable<T> SearchList(T obj);
         IEnumerable<T> SearchList(Predicate<T> predicate);
-        T Search(T obj);
+        T Search(Predicate<T> predicate);
+        
 
         bool Exists(T obj);
     }

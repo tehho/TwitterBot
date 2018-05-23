@@ -32,18 +32,24 @@ namespace TwitterBot.Api
 
 
             //TODO Fixa inläsning från appsettings;
-            var customerToken = new Token
+
+            TwitterServiceOptions twitterServiceOptions = new TwitterServiceOptions()
             {
-                Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-            };
-            var accessToken = new Token
-            {
-                Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                TweetCount = 20,
+                Customer = new Token
+                {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                },
+
+                Access = new Token
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                }
             };
 
-            services.AddScoped(x => new TwitterService(new TwitterProfile("rowboat2018"), customerToken, accessToken));
+            services.AddScoped(x => new TwitterService(twitterServiceOptions));
             services.AddTransient<IRepository<TwitterProfile>, TwitterProfileRepository>();
 
             services.AddMvc();

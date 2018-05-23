@@ -8,18 +8,23 @@ namespace TwitterBot.Domain
 {
     public class TwitterService
     {
-        public const int smallTweetCount = 10;
-        public const int mediumTweetCount = 200;
-        public const int largeTweetCount = 3200;
+
+        public int tweetCount;
 
         private readonly TwitterProfile _profile;
-        public TwitterService(TwitterProfile profile, Token customer, Token access)
+        //public TwitterService(TwitterProfile profile, Token customer, Token access)
+        //{
+        //    _profile = profile;
+        //    tweetCount = 20;
+        //    Auth.SetUserCredentials(customer.Key, customer.Secret, access.Key, access.Secret);
+        //}
+
+        public TwitterService(TwitterServiceOptions options)
         {
-            _profile = profile;
+            tweetCount = options.TweetCount;
 
-            Auth.SetUserCredentials(customer.Key, customer.Secret, access.Key, access.Secret);
-
-
+            Auth.SetUserCredentials(options.Customer.Key, options.Customer.Secret, 
+                options.Access.Key, options.Access.Secret);
 
         }
 
@@ -32,15 +37,15 @@ namespace TwitterBot.Domain
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
 
-            var lastTweets = Timeline.GetUserTimeline(profile.Name, smallTweetCount).ToArray();
+            var lastTweets = Timeline.GetUserTimeline(profile.Name, tweetCount).ToArray();
 
             var allTweets = new List<ITweet>(lastTweets);
 
-            while (lastTweets.Length > 0 && allTweets.Count <= smallTweetCount)
+            while (lastTweets.Length > 0 && allTweets.Count <= tweetCount)
             {
                 var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
 
-                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : smallTweetCount;
+                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : tweetCount;
                 var timelineRequestParameters = new UserTimelineParameters
                 {
                     MaxId = idOfOldestTweet - 1,

@@ -29,6 +29,37 @@ document.getElementById("twitter-remove-submit").addEventListener("click", funct
     removeHandle();
 });
 
+document.getElementById("twitterhandle-train-submit").addEventListener("click", function () {
+    trainHandle();
+});
+
+function trainHandle() {
+    let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
+        .select(option => {
+            return { name: option.value };
+        });
+
+    fetch("api/twitter/train/",
+        {
+            body: JSON.stringify(profiles),
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        }).then(result => {
+            if (result.status === 200)
+                return result;
+            throw result;
+
+        }).catch(errorLogger)
+        .then(result => {
+            if (result !== null && result !== undefined) {
+                alert("Training complete");
+            }
+        });
+}
+
 function postTwitterHandle(name) {
     let profile = {};
     profile.name = name;
@@ -70,7 +101,7 @@ function removeHandle() {
             if (result.status === 200) {
                 return result.json();
             }
-                
+
             throw result;
         }).catch(errorLogger)
         .then(result => {
@@ -101,7 +132,7 @@ function generateTweet() {
             throw result;
         }).catch(errorLogger)
         .then(result => {
-
+            console.log(result);
             let content = document.getElementById("tweet-content");
             content.innerHTML = "";
             if (result !== null && result !== undefined) {
@@ -116,7 +147,7 @@ function getAllSelectedOptions(select) {
 
 function getTwitterHandles() {
 
-    fetch("api/twitter/").then(result => {
+    fetch("api/twitter/").catch(errorLogger).then(result => {
         if (result.status === 200) {
             result.json().catch(errorLogger).then(setTwitterHandleExistingNames);
         }
@@ -129,14 +160,17 @@ function getTwitterHandles() {
 function setTwitterHandleExistingNames(list) {
     var content = document.getElementById("twitterhandle-existing-names");
     content.innerHTML = "";
-    if (list.length > 0) {
 
-        for (var obj of list) {
-            let name = obj.name;
-            let element = document.createElement("option");
-            element.value = name;
-            element.innerText = name;
-            content.append(element);
+    if (list !== null && list !== undefined) {
+        if (list.length > 0) {
+
+            for (var obj of list) {
+                let name = obj.name;
+                let element = document.createElement("option");
+                element.value = name;
+                element.innerText = name;
+                content.append(element);
+            }
         }
     }
 }

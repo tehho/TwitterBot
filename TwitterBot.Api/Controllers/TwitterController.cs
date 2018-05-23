@@ -22,17 +22,19 @@ namespace TwitterBot.Api.Controllers
             _repository = repository;
             this.twitterService = twitterService;
         }
-        
+
         [HttpGet]
         public IActionResult GetExistingsProfiles()
         {
             var list = _repository.GetAll();
 
+            list.ForEach(p => p.Words = null);
+
             return Ok(list);
         }
-        
+
         [HttpPost("tweet")]
-        public IActionResult GetTweet([FromBody]List<TwitterProfileApi> profiles)
+        public IActionResult GetTweet([FromBody] List<TwitterProfileApi> profiles)
         {
             List<TwitterProfile> list = null;
             if (profiles == null || profiles.Count == 0)
@@ -45,14 +47,15 @@ namespace TwitterBot.Api.Controllers
                         if (p.Name == profile.Name)
                             return true;
                     }
+
                     return false;
                 }).ToList();
 
             return Ok(GenerateTweet(list));
         }
-        
+
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile)
+        public IActionResult Post([FromBody] TwitterProfileApi profile)
         {
             if (profile == null)
                 return BadRequest("Sum ting wong");
@@ -62,23 +65,31 @@ namespace TwitterBot.Api.Controllers
 
             var prolife = _repository.Add(profile);
 
-            TrainAsync(prolife);
-
             return Ok(prolife);
         }
 
-        private async Task TrainAsync(TwitterProfile profile)
+        [HttpPost("train")]
+        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profile)
         {
-            await Task.Run(() =>
-            {
-                var tweets = twitterService.ListAllTweetsFromProfile(profile).ToList();
+            if (profile?.Count == 0)
+                return BadRequest("Sum ting wong");
 
-                tweets.ForEach(profile.TrainFromText);
-            });
+            profile.Select(p => (TwitterProfile)p).ForEach(Train);
+
+            return Ok();
+        }
+
+        private void Train(TwitterProfile profile)
+        {
+            var tweets = twitterService.ListAllTweetsFromProfile(profile).ToList();
+
+            tweets.ForEach(profile.TrainFromText);
+
+            _repository.Update(profile);
         }
 
         [HttpDelete("handle")]
-        public IActionResult Delete([FromBody]List<TwitterProfileApi> profiles)
+        public IActionResult Delete([FromBody] List<TwitterProfileApi> profiles)
         {
             if (profiles == null || profiles.Count == 0)
             {
