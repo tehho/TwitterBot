@@ -31,18 +31,9 @@ namespace TwitterBot.Infrastructure
 
             foreach (var word in words)
             {
-                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Value == word.Value);
+                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Value == word.Value) ?? (_wordRepository.Get(word) ?? _wordRepository.Add(word));
 
-                if (tempWord == null)
-                {
-                    tempWord = _wordRepository.Get(word) ?? _wordRepository.Add(word);
-
-                    profile.AddWord(tempWord);
-                }
-                else
-                {
-
-                }
+                profile.AddWord(tempWord);
 
                 parent?.AddNextWord(tempWord);
                 
