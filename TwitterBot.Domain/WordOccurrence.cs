@@ -10,11 +10,14 @@ namespace TwitterBot.Domain
     {
         public int WordId { get; set; }
         public Word Word { get; set; }
+        public int ParentId { get; set; }
+        public Word Parent { get; set; }
         public int Occurrence { get; set; }
 
-        public WordOccurrence(Word word)
+        public WordOccurrence(Word word, Word parent)
         {
             Word = word;
+            Parent = parent;
             Occurrence = 1;
         }
     }

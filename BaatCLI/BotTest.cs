@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using TwitterBot.Domain;
+using TwitterBot.Infrastructure;
+using TwitterBot.Infrastructure.Repository;
 
-namespace TwitterBot.Domain
+namespace BaatDesktopClient
 {
     public class BotTest
     {
@@ -20,7 +25,28 @@ namespace TwitterBot.Domain
             profile.TrainFromText(tweet2);
             profile.TrainFromText(tweet3);
 
-            bot.AddProfile(profile);
+            var opt = new  DbContextOptionsBuilder<TwitterContext>();
+            opt.UseSqlite("Filename=TwitterBot.db");
+            opt.EnableSensitiveDataLogging();
+
+            var conv = SqliteConventionSetBuilder.Build();
+            var model = new ModelBuilder(conv);
+            model.Entity<TwitterProfile>();
+            //model.Entity<WordOccurrence>().HasKey(w => new {w.WordId, w.ParentId});
+            opt.UseModel(model.Model);
+
+            var context = new TwitterContext(opt.Options);
+
+            var repo = new TwitterProfileRepository(context);
+
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            repo.Add(profile);
+
+            var profile2 = repo.Get(new TwitterProfile {Name = "profile"});
+
+            bot.AddProfile(profile2);
 
             return bot.GenerateRandomTweetText();
         }

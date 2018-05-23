@@ -47,7 +47,7 @@ namespace TwitterBot.Domain
 
                 else
                 {
-                    currentWordOccurrence = new WordOccurrence(new Word(word));
+                    currentWordOccurrence = new WordOccurrence(new Word(word), null);
                     Words.Add(currentWordOccurrence);
                 }
 

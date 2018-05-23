@@ -25,7 +25,7 @@ namespace TwitterBot.Domain
                 NextWord.Single(w => w.Equals(wordOccurrence.Word)).Occurrence++;
 
             else
-                NextWord.Add(new WordOccurrence(wordOccurrence.Word));
+                NextWord.Add(new WordOccurrence(wordOccurrence.Word, this));
         }
 
         public bool Equals(string other) => Value == other.ToLower();
