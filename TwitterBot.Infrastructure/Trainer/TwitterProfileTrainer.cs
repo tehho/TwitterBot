@@ -14,8 +14,6 @@ namespace TwitterBot.Infrastructure
         private readonly IRepository<TwitterProfile> _profileRepository;
         private readonly IRepository<Word> _wordRepository;
 
-        private readonly TwitterService trainer;
-
         public TwitterProfileTrainer(IRepository<TwitterProfile> profileRepository, IRepository<Word> wordRepository)
         {
             _profileRepository = profileRepository;

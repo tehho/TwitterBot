@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tweetinvi.Core.Extensions;
 using TwitterBot.Api.Model;
 using TwitterBot.Domain;
+using TwitterBot.Infrastructure;
 using TwitterBot.Infrastructure.Repository;
 
 namespace TwitterBot.Api.Controllers
@@ -14,13 +15,14 @@ namespace TwitterBot.Api.Controllers
     public class TwitterController : Controller
     {
         private readonly IRepository<TwitterProfile> _repository;
-        private readonly TwitterService twitterService;
+        private readonly TwitterService _twitterService;
+        private readonly TwitterProfileTrainer _trainer;
 
-
-        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService)
+        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService, TwitterProfileTrainer trainer)
         {
             _repository = repository;
-            this.twitterService = twitterService;
+            _twitterService = twitterService;
+            _trainer = trainer;
         }
 
         [HttpGet]
@@ -81,11 +83,9 @@ namespace TwitterBot.Api.Controllers
 
         private void Train(TwitterProfile profile)
         {
-            var tweets = twitterService.ListAllTweetsFromProfile(profile).ToList();
+            var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            tweets.ForEach(profile.TrainFromText);
-
-            _repository.Update(profile);
+            tweets.ForEach(tweet => _trainer.Train(profile, tweet));
         }
 
         [HttpDelete("handle")]

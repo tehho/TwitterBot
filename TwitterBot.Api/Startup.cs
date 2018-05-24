@@ -51,6 +51,8 @@ namespace TwitterBot.Api
 
             services.AddScoped(x => new TwitterService(twitterServiceOptions));
             services.AddTransient<IRepository<TwitterProfile>, TwitterProfileRepository>();
+            services.AddTransient<IRepository<Word>, WordRepository>();
+            services.AddTransient<TwitterProfileTrainer>();
 
             services.AddMvc();
         }
