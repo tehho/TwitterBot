@@ -31,44 +31,38 @@ namespace TwitterBot.Domain
         public string GenerateRandomTweetText()
         {
             var tweetText = "";
-            Word randomWord = null;
+            WordOccurrence randomWord = null;
 
             while (true)
             {
-                //if (randomWord == null)
-                //    randomWord = GetRandomWord(GetRandomProfile());
+                if (randomWord == null)
+                    randomWord = GetRandomWordOccurrence(GetRandomProfile());
 
-                //else if (randomWord.NextWord != null)
-                //    randomWord = GetRandomNextWord(randomWord);
+                else if (randomWord.NextWords != null)
+                    randomWord = GetRandomNextWordOccurrence(randomWord);
 
-                //else
-                    randomWord = GetRandomWord(GetRandomProfile());
+                else
+                    randomWord = GetRandomWordOccurrence(GetRandomProfile());
 
-                if (tweetText.Length + randomWord.Value.Length > 140)
+                if (tweetText.Length + randomWord.Word.Value.Length > 140)
                     return tweetText;
 
-                tweetText += randomWord.Value + " ";
+                tweetText += randomWord.Word.Value + " ";
             }
         }
 
-        private Word GetRandomWord(IProfile profile)
+        private WordOccurrence GetRandomWordOccurrence(IProfile profile)
         {
             var index = random.Next(0, profile.Words.Count);
-            var word = profile.Words[index].Word;
+            var word = profile.Words[index];
 
             return word;
         }
 
-        private Word GetRandomWord(List<WordOccurrence> words)
+        private WordOccurrence GetRandomNextWordOccurrence(WordOccurrence word)
         {
-            var sum = words.Sum(word => word.Occurrence);
-            return null;
-        }
-
-        private Word GetRandomNextWord(Word word)
-        {
-            var index = random.Next(0, word.NextWord.Count);
-            var retWord = word.NextWord?[index].Word;
+            var index = random.Next(0, word.NextWords.Count);
+            var retWord = word.NextWords[index].Word;
 
             return retWord;
         }

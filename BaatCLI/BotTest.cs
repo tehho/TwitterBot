@@ -31,31 +31,37 @@ namespace BaatDesktopClient
             profileP.TrainFromText(tweet3);
 
             var opt = new DbContextOptionsBuilder<TwitterContext>();
-            opt.UseSqlite("Filename=TwitterBot.db");
+            opt.UseSqlite(@"Filename=C:\Project\TwitterBot\TwitterBot.Infrastructure\DbManager\TwitterBot.db");
             opt.EnableSensitiveDataLogging();
 
             var conv = SqliteConventionSetBuilder.Build();
             var model = new ModelBuilder(conv);
             model.Entity<TwitterProfile>();
-            //model.Entity<WordOccurrence>().HasKey(w => new {w.WordId, w.ParentId});
+            model.Entity<NextWordOccurrence>().HasKey(w => new { w.WordId, w.FollowedById });
             opt.UseModel(model.Model);
 
-            var context = new TwitterContext(opt.Options);
+            using (var context = new TwitterContext(opt.Options))
+            {
+                var repo = new TwitterProfileRepository(context);
 
-            var repo = new TwitterProfileRepository(context);
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+                repo.Add(profile);
+                repo.Add(profileP);
+            }
 
-            repo.Add(profile);
-            repo.Add(profileP);
+            using (var context = new TwitterContext(opt.Options))
+            {
+                var repo = new TwitterProfileRepository(context);
 
-            var profile2 = repo.Get(new TwitterProfile { Name = "profile" });
-            var profile22 = repo.Get(new TwitterProfile { Name = "profileP" });
+                var profile2 = repo.Get(new TwitterProfile {Name = "profile"});
+                var profile22 = repo.Get(new TwitterProfile {Name = "profileP"});
 
-            bot.AddProfile(profile22);
+                bot.AddProfile(profile22);
 
-            return bot.GenerateRandomTweetText();
+                return bot.GenerateRandomTweetText();
+            }
         }
     }
 }
