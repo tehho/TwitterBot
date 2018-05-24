@@ -11,34 +11,39 @@ namespace TwitterBot.Infrastructure
 {
     public class TwitterProfileTrainer
     {
-        private readonly IRepository<TwitterProfile> _profileRepository;
         private readonly IRepository<Word> _wordRepository;
+        private readonly IRepository<WordContainer> _containerRepository;
 
-        public TwitterProfileTrainer(IRepository<TwitterProfile> profileRepository, IRepository<Word> wordRepository)
+        public TwitterProfileTrainer(IRepository<Word> wordRepository, IRepository<WordContainer> containerRepository)
         {
-            _profileRepository = profileRepository;
             _wordRepository = wordRepository;
+            _containerRepository = containerRepository;
         }
 
-        public void Train(TwitterProfile profile, TextContent content)
+        public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
-            var words = regex.Split(content.Text).Select(word => new Word(word)).ToList();
+            var words = regex.Split(content.Text).Where(word => !string.IsNullOrWhiteSpace(word)).Select(word => new Word(word)).ToList();
 
-            Word parent = null;
+            WordContainer parent = null;
 
             foreach (var word in words)
             {
-                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Value == word.Value) ?? (_wordRepository.Get(word) ?? _wordRepository.Add(word));
+                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) 
+                               ?? (_wordRepository.Get(word) ?? _wordRepository.Add(word));
 
-                profile.AddWord(tempWord);
+                var tempContainer = profile.Containers.SingleOrDefault(wc => wc.Word.Equals(word)) 
+                                    ?? _containerRepository.Add(new WordContainer(word));
 
-                parent?.AddNextWord(tempWord);
-                
-                parent = tempWord;
+                profile.AddWordContainer(tempContainer);
+
+                parent?.AddWord(tempWord);
+
+                parent = tempContainer;
+
             }
 
-            _profileRepository.Update(profile);
+            return profile;
         }
     }
 }

@@ -66,12 +66,12 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<Word> SearchList(Predicate<Word> predicate)
         {
-            return _context.Words.Include(word => word.NextWord).ThenInclude(word => word.Word).Where(word => predicate(word)).ToList();
+            return _context.Words.Where(word => predicate(word)).ToList();
         }
 
         public Word Search(Predicate<Word> predicate)
         {
-            return _context.Words.Include(word => word.NextWord).ThenInclude(word => word.Word).SingleOrDefault(word => predicate(word));
+            return _context.Words.SingleOrDefault(word => predicate(word));
         }
 
         public bool Exists(Word obj)

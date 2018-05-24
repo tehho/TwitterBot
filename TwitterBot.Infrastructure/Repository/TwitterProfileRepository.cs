@@ -68,12 +68,12 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<TwitterProfile> SearchList(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).Where(profile => predicate(profile)).ToList();
+            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).Where(profile => predicate(profile)).ToList();
         }
 
         public TwitterProfile Search(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).SingleOrDefault(profile => predicate(profile));
+            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).SingleOrDefault(profile => predicate(profile));
         }
 
         public bool Exists(TwitterProfile obj)
@@ -83,7 +83,7 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Update(TwitterProfile obj)
         {
-            if (obj?.Words == null)
+            if (obj?.WordList == null)
                 return null;
 
             var profile = Get(obj);
@@ -93,7 +93,7 @@ namespace TwitterBot.Infrastructure.Repository
                 return Add(obj);
             }
 
-            profile.Words = obj.Words;
+            profile.WordList = obj.WordList;
             _context.SaveChanges();
 
             return profile;

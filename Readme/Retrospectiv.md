@@ -16,5 +16,5 @@ Userstories - Skrivandet: Skriva granulära userstories.
 Fördelning av arbete: Förhoppningsvis ger granulära userstories mer uppdelning så man kan ta tag i det som är på en bra nivå och mest akut.
 Tester - Skriva tester för funktionalitet och validering.
 
-# ! Vad har varit gynsamt av det vi har gjort
+# ! Vad har varit gynnsamt av det vi har gjort
 Refinements - Har gett en bra överblick över vart vi är på väg och vad vi behöver göra för att gå vidare.

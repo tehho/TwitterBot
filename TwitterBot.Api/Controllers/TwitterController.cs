@@ -30,7 +30,7 @@ namespace TwitterBot.Api.Controllers
         {
             var list = _repository.GetAll();
 
-            list.ForEach(p => p.Words = null);
+            list.ForEach(p => p.WordList = null);
 
             return Ok(list);
         }
@@ -53,7 +53,9 @@ namespace TwitterBot.Api.Controllers
                     return false;
                 }).ToList();
 
-            return Ok(GenerateTweet(list));
+            //TODO GenerateTweet()
+
+            return Ok();
         }
 
         [HttpPost]
@@ -85,7 +87,9 @@ namespace TwitterBot.Api.Controllers
         {
             var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            tweets.ForEach(tweet => _trainer.Train(profile, tweet));
+            tweets.ForEach(tweet => profile = _trainer.Train(profile, tweet));
+
+            _repository.Add(profile);
         }
 
         [HttpDelete("handle")]
@@ -107,11 +111,9 @@ namespace TwitterBot.Api.Controllers
             return Ok("Remove complete");
         }
 
-        private string GenerateTweet(IEnumerable<TwitterProfile> profiles)
+        private Tweet GenerateTweet(BotOption options)
         {
-            var bot = new Bot("test");
-
-            profiles.ForEach(bot.AddProfile);
+            var bot = new Bot(options);
 
             return bot.GenerateRandomTweetText();
         }

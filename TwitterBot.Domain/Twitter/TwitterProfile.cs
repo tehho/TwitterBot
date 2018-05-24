@@ -11,38 +11,51 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity, IProfile
     {
         public string Name { get; set; }
+        
+        public IReadOnlyList<Word> Vocabulary => WordList?.Where(occurrence => occurrence.ProfileId == Id).Select(w => w.WordContainer.Word).ToList();
+        public IReadOnlyList<WordContainer> Containers => WordList.Select(wco => wco.WordContainer).ToList();
 
-        //[NotMapped]
-        public IReadOnlyList<Word> Vocabulary => Words?.Select(w => w.Word).ToList();
-
-        public List<WordOccurrence> Words { get; set; }
+        public List<WordContainerOccurrence> WordList { get; set; }
 
         public TwitterProfile()
         {
             Name = "";
-            Words = new List<WordOccurrence>();
+            WordList = new List<WordContainerOccurrence>();
         }
 
         public TwitterProfile(string name)
         {
             Name = name;
-            Words = new List<WordOccurrence>();
+            WordList = new List<WordContainerOccurrence>();
         }
 
-        public void AddWord(Word word)
+        public WordContainer AddWordContainer(WordContainer word)
         {
             if (word == null)
                 throw new NullReferenceException();
 
-            if (Words == null)
-                Words = new List<WordOccurrence>();
+            if (word.Word == null)
+                throw new ArgumentNullException();
 
-            var nextWord = Words.SingleOrDefault(w => w.Word.Equals(word));
+            if (word.Word.Value == null)
+                throw new ArgumentNullException();
 
-            if (nextWord == null)
-                Words.Add(new ProfileWordOccurrence(word, this));
+            if (WordList == null)
+                WordList = new List<WordContainerOccurrence>();
+
+            var container = WordList.SingleOrDefault(wco => wco.WordContainer.Word.Equals(word.Word));
+
+            if (container == null)
+            {
+                container = new WordContainerOccurrence(word, this);
+                WordList.Add(container);
+            }
             else
-                nextWord.Occurrence++;
+            {
+                container.Occurrence++;
+            }
+
+            return container.WordContainer;
         }
     }
 }

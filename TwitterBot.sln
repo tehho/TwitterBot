@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitterBot.Api", "TwitterBo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TwitterBot.Infrastructure", "TwitterBot.Infrastructure\TwitterBot.Infrastructure.csproj", "{08379EAB-AF38-4D20-8A20-1BDC167575D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaatCLI", "BaatCLI\BaatCLI.csproj", "{6D2A3A56-679F-4448-AA3C-88ED7DB5ACDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaatCLI", "BaatCLI\BaatCLI.csproj", "{6D2A3A56-679F-4448-AA3C-88ED7DB5ACDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterBot.Test", "TwitterBot.Test\TwitterBot.Test.csproj", "{6899141E-B8ED-4369-8D64-B29E9A5DCC22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6D2A3A56-679F-4448-AA3C-88ED7DB5ACDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D2A3A56-679F-4448-AA3C-88ED7DB5ACDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D2A3A56-679F-4448-AA3C-88ED7DB5ACDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6899141E-B8ED-4369-8D64-B29E9A5DCC22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6899141E-B8ED-4369-8D64-B29E9A5DCC22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6899141E-B8ED-4369-8D64-B29E9A5DCC22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6899141E-B8ED-4369-8D64-B29E9A5DCC22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
