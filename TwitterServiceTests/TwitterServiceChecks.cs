@@ -11,34 +11,64 @@ namespace TwitterServiceTests
         public void CheckIfUserExists()
         {
 
-            var tweetService = new TwitterService(null
-                , new Token
-                {
-                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-                },
-                new Token()
-                {
-                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-                });
-
             TwitterProfile profileThatExists = new TwitterProfile()
             {
                 Name = "VP"
             };
+
+
+            var result = TestData.NewTwitterService().DoesTwitterUserExist(profileThatExists);
+
+
+            Assert.IsTrue(result);
+
+        }
+
+        [TestMethod]
+        public void CheckIfUserDoesntExists()
+        {
 
             TwitterProfile profileThatDoesntExist = new TwitterProfile()
             {
                 Name = "INJsdfmsfomswfm11111"
             };
 
-            var shouldBeTrue = tweetService.DoesTwitterUserExist(profileThatExists);
 
-            var shouldBeFalse = tweetService.DoesTwitterUserExist(profileThatDoesntExist);
+            var result = TestData.NewTwitterService().DoesTwitterUserExist(profileThatDoesntExist);
 
-            Assert.IsTrue(shouldBeTrue);
-            Assert.IsFalse(shouldBeFalse);
+            Assert.IsFalse(result);
+
+        }
+
+        [TestMethod]
+        public void CheckIfUserHasTweets()
+        {
+
+            TwitterProfile profileThatHasTweets = new TwitterProfile()
+            {
+                Name = "1d11fxhn1xfgh51fxh51fxh51fgh51"
+            };
+
+
+            var result = TestData.NewTwitterService().ProfileTimeLineHasTweets(profileThatHasTweets);
+
+            Assert.IsTrue(result);
+
+        }
+
+        [TestMethod]
+        public void CheckIfUserDoesntHaveTweets()
+        {
+
+            TwitterProfile profileThatDoesntExist = new TwitterProfile()
+            {
+                Name = "VP"
+            };
+
+
+            var result = TestData.NewTwitterService().DoesTwitterUserExist(profileThatDoesntExist);
+
+            Assert.IsTrue(result);
 
         }
     }

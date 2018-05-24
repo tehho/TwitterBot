@@ -39,9 +39,24 @@ namespace TwitterBot.Domain
             return false;
         }
 
-        public bool IsTwitterTimeLineEmpty(TwitterProfile profile)
+        public bool ProfileTimeLineHasTweets(TwitterProfile profile)
+
         {
+            var user = User.GetUserFromScreenName(profile.Name);
+
+            var timelineParameter = Timeline.CreateHomeTimelineParameter();
+            timelineParameter.ExcludeReplies = true;
+            timelineParameter.TrimUser = true;
+            timelineParameter.IncludeEntities = false;
+
+            var timeLine = Timeline.GetUserTimeline(user);
+
+            if(timeLine == null)
+            { return false;}
+
             return true;
+
+
         }
 
         public byte[] SaveProfileImageToServer(TwitterProfile profile)

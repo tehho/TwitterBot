@@ -60,6 +60,29 @@ namespace TwitterBot.Api.Controllers
             if (profile.Name == null)
                 return BadRequest("Name not given");
 
+            var tweetService = new TwitterService(null
+                , new Token
+                {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                },
+                new Token()
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                });
+
+            if (tweetService.DoesTwitterUserExist(profile) == false)
+            {
+                return BadRequest("Twitter user does not exist");
+            }
+
+            if (tweetService.ProfileTimeLineHasTweets(profile) == false)
+            {
+                return BadRequest("Twitter user does not have any tweets.");
+            }
+
+
             var prolife = _repository.Add(profile);
 
             TrainAsync(prolife);
