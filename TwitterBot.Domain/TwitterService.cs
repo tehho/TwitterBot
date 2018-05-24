@@ -22,13 +22,26 @@ namespace TwitterBot.Domain
 
             Auth.SetUserCredentials(customer.Key, customer.Secret, access.Key, access.Secret);
 
-
-
         }
 
         public void PublishTweet(Tweet tweet)
         {
             Tweetinvi.Tweet.PublishTweet(tweet.Text);
+        }
+
+        public bool DoesTwitterUserExist(TwitterProfile profile)
+        {
+            if (Tweetinvi.User.GetUserFromScreenName(profile.Name) != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IsTwitterTimeLineEmpty(TwitterProfile profile)
+        {
+            return true;
         }
 
         public byte[] SaveProfileImageToServer(TwitterProfile profile)

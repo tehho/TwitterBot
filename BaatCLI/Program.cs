@@ -36,7 +36,7 @@ namespace BaatDesktopClient
                 });
 
 
-            Write("Update image from handle: ");
+            Write("Check user name: ");
 
             string input = Console.ReadLine();
 
@@ -44,9 +44,12 @@ namespace BaatDesktopClient
             {
                 Name = input
             };
-            UpdateProfileImage(profile);
 
-            Console.WriteLine("Image was updated.");
+            var result = tweetService.DoesTwitterUserExist(profile);
+
+            Console.WriteLine(result);
+
+  
 
             ReadKey();
 
