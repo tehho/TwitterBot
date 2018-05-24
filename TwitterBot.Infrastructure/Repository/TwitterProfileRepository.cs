@@ -36,7 +36,7 @@ namespace TwitterBot.Infrastructure.Repository
 
             if (obj.Id != null)
             {
-                return Search(profile => profile.Id == obj.Id.Value);
+                return Search(profile => profile.Id == obj.Id);
             }
 
             if (obj.Name != null)

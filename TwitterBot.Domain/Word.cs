@@ -8,19 +8,17 @@ namespace TwitterBot.Domain
     public class Word : Entity, IEquatable<string>, IEquatable<Word>
     {
         public string Value { get; set; }
-        public List<WordOccurrence> NextWord { get; set; }
+        //public List<WordOccurrence> NextWord { get; set; }
         //public Dictionary<string, int> AlternateSpellings { get; set; }
 
         public Word()
         {
             Value = "";
-            NextWord = new List<WordOccurrence>();
         }
 
         public Word(string word)
         {
             Value = word.ToLower();
-            NextWord = new List<WordOccurrence>();
         }
 
         public void AddNextWordOccurrence(WordOccurrence wordOccurrence)
