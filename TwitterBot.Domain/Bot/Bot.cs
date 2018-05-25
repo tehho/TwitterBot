@@ -21,7 +21,7 @@ namespace TwitterBot.Domain
         
         public string Name { get; set; }
 
-        public Tweet GenerateRandomTweetText()
+        public Tweet GenerateTweet()
         {
             var tweetText = "";
             Word prevWord = null;

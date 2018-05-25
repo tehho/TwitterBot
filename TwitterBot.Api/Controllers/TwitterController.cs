@@ -115,7 +115,7 @@ namespace TwitterBot.Api.Controllers
         {
             var bot = new Bot(options);
 
-            return bot.GenerateRandomTweetText();
+            return bot.GenerateTweet();
         }
     }
 }
