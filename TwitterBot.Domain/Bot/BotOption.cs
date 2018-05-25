@@ -14,5 +14,13 @@ namespace TwitterBot.Domain
         public AlgorithmList ProfileAlgorithms;
 
         public AlgorithmList WordAlgorithms;
+
+        public BotOption()
+        {
+            Name = "";
+            ProfileOccurances = new List<ProfileOccurrance>();
+            ProfileAlgorithms = new AlgorithmList();
+            WordAlgorithms = new AlgorithmList();
+        }
     }
 }

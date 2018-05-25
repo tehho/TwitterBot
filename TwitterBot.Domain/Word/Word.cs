@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -7,6 +8,7 @@ namespace TwitterBot.Domain
 {
     public class Word : Entity, IEquatable<string>, IEquatable<Word>
     {
+        [Required]
         public string Value { get; set; }
 
         public Word()

@@ -44,9 +44,12 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetProfiles([FromBody] List<TwitterProfile> profiles)
+        public IActionResult SetProfiles([FromBody] BotOption option)
         {
+            var optionReturn = _options.Add(option);
 
+            if (optionReturn == null)
+                return BadRequest();
 
             return Ok();
         }

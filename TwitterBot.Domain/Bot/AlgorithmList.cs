@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TwitterBot.Domain
 {
-    public class AlgorithmList
+    public class AlgorithmList : Entity
     {
         public int BotOptionsId { get; set; }
         public BotOption botOption { get; set; }

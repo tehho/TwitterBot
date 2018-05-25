@@ -29,7 +29,7 @@ namespace TwitterBot.Infrastructure
 
             foreach (var word in words)
             {
-                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word))
+                var tempWord = profile.Vocabulary.SingleOrDefault(w => w != null && w.Equals(word))
                                ?? (_wordRepository.Get(word) ?? _wordRepository.Add(word));
 
                 var tempContainer = profile.Containers.SingleOrDefault(wc => wc.Word.Equals(word))

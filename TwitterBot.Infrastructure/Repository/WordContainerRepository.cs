@@ -23,7 +23,11 @@ namespace TwitterBot.Infrastructure.Repository
             if (obj.Word == null)
                 return null;
 
+            if (Exists(obj))
+                return Get(obj);
+
             _context.Containers.Add(obj);
+            _context.SaveChanges();
 
             return obj;
         }

@@ -99,8 +99,10 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<BotOption> SearchList(Predicate<BotOption> predicate)
         {
-            return _context.BotOptions.Include(option => option.ProfileAlgorithms)
-                .Include(option => option.WordAlgorithms)
+            //.Include(option => option.ProfileAlgorithms)
+            //.Include(option => option.WordAlgorithms)
+
+            return _context.BotOptions
                 .Include(option => option.ProfileOccurances)
                 .ThenInclude(occ => occ.Profile)
                 .Where(option => predicate(option)).ToList();

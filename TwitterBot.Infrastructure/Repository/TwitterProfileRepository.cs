@@ -24,7 +24,7 @@ namespace TwitterBot.Infrastructure.Repository
                 return null;
 
             if (Exists(obj))
-                return null;
+                return Get(obj);
 
             _context.TwitterProfiles.Add(obj);
             _context.SaveChanges();
@@ -82,7 +82,7 @@ namespace TwitterBot.Infrastructure.Repository
 
         public bool Exists(TwitterProfile obj)
         {
-            return _context.TwitterProfiles.Any(profile => profile.Name == obj.Name);
+            return Get(obj) != null;
         }
 
         public TwitterProfile Update(TwitterProfile obj)
