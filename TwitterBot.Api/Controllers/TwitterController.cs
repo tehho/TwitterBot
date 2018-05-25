@@ -67,29 +67,15 @@ namespace TwitterBot.Api.Controllers
             if (profile.Name == null)
                 return BadRequest("Name not given");
 
-            // TODO: Flytta tokens till ett bättre ställe
+            if (_twitterService.DoesTwitterUserExist(profile) == false)
+            {
+                return BadRequest("Twitter user does not exist");
+            }
 
-            //var tweetService = new TwitterService(null,
-            //    new Token
-            //    {
-            //        Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-            //        Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-            //    },
-            //    new Token()
-            //    {
-            //        Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-            //        Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-            //    });
-
-            //if (tweetService.DoesTwitterUserExist(profile) == false)
-            //{
-            //    return BadRequest("Twitter user does not exist");
-            //}
-
-            //if (tweetService.ProfileTimeLineHasTweets(profile) == false)
-            //{
-            //    return BadRequest("Twitter user does not have any tweets.");
-            //}
+            if (_twitterService.ProfileTimeLineHasTweets(profile) == false)
+            {
+                return BadRequest("Twitter user does not have any tweets.");
+            }
 
 
             var prolife = _repository.Add(profile);
@@ -136,11 +122,29 @@ namespace TwitterBot.Api.Controllers
             return Ok("Remove complete");
         }
 
+        [HttpPost("GenerateTweet")]
         private Tweet GenerateTweet(BotOption options)
         {
             var bot = new Bot(options);
 
             return bot.GenerateTweet();
+        }
+
+        [HttpPost("PostToTwitter")]
+        public IActionResult PostToTwitter([FromBody] Tweet tweet)
+        {
+            if (tweet == null)
+                return BadRequest("Sum ting wong");
+
+            if (tweet.Text == null)
+                return BadRequest("No body in tweet");
+
+            if (!_twitterService.PublishTweet(tweet))
+            {
+                return StatusCode(500);
+            }
+
+            return Ok();
         }
     }
 }

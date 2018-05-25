@@ -208,9 +208,12 @@ function generateTweet() {
 
 function postTweet() {
     let tweet = {};
-    fetch("twitter/post",
+    tweet.text = document.getElementById("tweet-content").innerHTML;
+
+
+    fetch("api/twitter/PostToTwitter",
         {
-            body: tweet,
+            body: JSON.stringify(tweet),
             method: "POST",
             headers: {
                 'Accept': 'application/json',
