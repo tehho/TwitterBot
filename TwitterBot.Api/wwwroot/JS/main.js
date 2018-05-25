@@ -52,27 +52,38 @@ document.getElementById("twitter-generate-submit").addEventListener("click",
         generateTweet();
     });
 
-document.getElementById("twitter-post-submit").addEventListener("click", function () {
-    postTweet();
-});
+document.getElementById("twitter-post-submit").addEventListener("click",
+    function () {
+        postTweet();
+    });
 
-function postTweet() {
-    let tweet = {};
-    fetch("twitter/post",
+
+function removeHandle() {
+    let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names")).select(option => {
+        return { name: option.value };
+    });
+
+    fetch("api/twitter/handle",
         {
-            body: tweet,
-            method: "POST",
+            body: JSON.stringify(profiles),
+            method: "DELETE",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-        })
-}
 
-function getSelectedProfiles() {
-    return getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
-        .select(option => {
-            return { name: option.value };
+        }).then(result => {
+            if (result.status === 200) {
+                return result.json();
+            }
+
+            throw result;
+        }).catch(errorLogger)
+        .then(result => {
+            if (result !== null && result !== undefined) {
+                getTwitterHandles();
+                alert("Remove complete");
+            }
         });
 }
 
@@ -123,41 +134,57 @@ function postTwitterHandle(name) {
         });
 }
 
-function removeHandle() {
-    let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names")).select(option => {
-        return { name: option.value };
-    });
+function getTwitterHandles() {
 
-    fetch("api/twitter/handle",
+    fetch("api/twitter/").catch(errorLogger).then(result => {
+        if (result.status === 200) {
+            result.json().catch(errorLogger).then(setTwitterHandleExistingNames);
+        } else {
+            errorLogger(result);
+        }
+    }).catch(errorLogger);
+}
+
+
+function postTweet() {
+    let tweet = {};
+    fetch("twitter/post",
         {
-            body: JSON.stringify(profiles),
-            method: "DELETE",
+            body: tweet,
+            method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
-
-        }).then(result => {
-            if (result.status === 200) {
-                return result.json();
-            }
-
-            throw result;
-        }).catch(errorLogger)
-        .then(result => {
-            if (result !== null && result !== undefined) {
-                getTwitterHandles();
-                alert("Remove complete");
-            }
         });
+}
+
+function getSelectedProfiles() {
+    return getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
+        .select(option => {
+            return { name: option.value };
+        });
+}
+
+function getBotOptions() {
+
+    let bot = {};
+
+    let e = document.getElementById("bot-settings-container");
+
+    bot.id = e.options[e.selectedIndex].value;
+
+    return bot;
 }
 
 function generateTweet() {
     let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names")).select(option => {
         return { name: option.value };
     });
-    console.log(JSON.stringify(profiles));
-    fetch("api/twitter/tweet",
+
+    var bot =
+        console.log(JSON.stringify(profiles));
+    fetch("api/bot/",
         {
             query: JSON.stringify(profiles),
             method: "POST",
@@ -193,7 +220,7 @@ function getBotHandels() {
             } else {
                 errorLogger(result);
             }
-        })
+        });
 }
 
 function setBotHandles(list) {
@@ -214,17 +241,6 @@ function setBotHandles(list) {
         }
 
     }
-}
-
-function getTwitterHandles() {
-
-    fetch("api/twitter/").catch(errorLogger).then(result => {
-        if (result.status === 200) {
-            result.json().catch(errorLogger).then(setTwitterHandleExistingNames);
-        } else {
-            errorLogger(result);
-        }
-    }).catch(errorLogger);
 }
 
 function setTwitterHandleExistingNames(list) {

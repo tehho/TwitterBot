@@ -17,12 +17,18 @@ namespace TwitterBot.Api.Controllers
         {
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult GetTweet(int? id)
         {
-            var option = _options.Get(new BotOption() {Id : id});
+            var option = _options.Get(new BotOption() {Id = id});
 
-            var tweet = GenerateTweet();
+            if (option == null)
+                return NotFound("BotOption");
+
+            var bot = new Bot(option);
+
+            var tweet = bot.GenerateTweet();
+
             return Ok(tweet.Text);
         }
 
