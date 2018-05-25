@@ -48,8 +48,8 @@ document.getElementById("bot-submit").addEventListener("click",
 
         postBotOptions(bot).then(result => {
             if (result)
-                getBotHandels();
-        })
+                getBotHandles();
+        });
     });
 
 document.getElementById("twitter-generate-submit").addEventListener("click",
@@ -245,7 +245,7 @@ function getAllSelectedOptions(select) {
     return [].slice.call(select.options).filter(option => option.selected);
 }
 
-function getBotHandels() {
+function getBotHandles() {
     fetch("api/bot/").catch(errorLogger)
         .then(result => {
             if (result.status === 200) {
@@ -295,4 +295,4 @@ function setTwitterHandleExistingNames(list) {
 }
 
 getTwitterHandles();
-getBotHandles();
+//getBotHandles();

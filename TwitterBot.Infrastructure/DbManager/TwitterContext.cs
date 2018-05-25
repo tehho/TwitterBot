@@ -7,8 +7,8 @@ namespace TwitterBot.Infrastructure
     {
         public DbSet<TwitterProfile> TwitterProfiles { get; set; }
         public DbSet<Word> Words { get; set; }
-
         public DbSet<WordContainer> Containers { get; set; }
+        public DbSet<BotOption> BotOptions { get; set; }
 
         public TwitterContext(DbContextOptions<TwitterContext> context) : base(context)
         {
@@ -44,7 +44,9 @@ namespace TwitterBot.Infrastructure
                 .WithMany(wc => wc.Occurrances)
                 .HasForeignKey(w => w.WordId);
 
-
+            modelBuilder.Entity<BotOption>()
+                .HasMany(option => option.ProfileOccurances)
+                .WithOne(bot => bot.BotOption);
 
             base.OnModelCreating(modelBuilder);
         }
