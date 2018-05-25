@@ -43,8 +43,13 @@ document.getElementById("bot-submit").addEventListener("click",
             return;
         }
 
-        bot.profiles = [];
+        bot.profiles = getSelectedProfiles();
+        console.log(bot);
 
+        postBotOptions(bot).then(result => {
+            if (result)
+                getBotHandels();
+        })
     });
 
 document.getElementById("twitter-generate-submit").addEventListener("click",
@@ -145,36 +150,29 @@ function getTwitterHandles() {
     }).catch(errorLogger);
 }
 
+function postBotOptions(botOptions) {
+    let bot = {};
+    bot.name = botOptions.name;
+    bot.profiles = botOptions.profiles;
 
-function postTweet() {
-    let tweet = {};
-    fetch("twitter/post",
+    return fetch("api/bot",
         {
-            body: tweet,
+            body: JSON.stringify(bot),
             method: "POST",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
+        }).then(result => {
+            if (result === 200) {
+                alert("Successfuly added");
+                return true;
+            } else {
+                errorLogger(result);
+            }
+            return false;
         });
-}
 
-function getSelectedProfiles() {
-    return getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
-        .select(option => {
-            return { name: option.value };
-        });
-}
-
-function getBotOptions() {
-
-    let bot = {};
-
-    let e = document.getElementById("bot-settings-container");
-
-    bot.id = e.options[e.selectedIndex].value;
-
-    return bot;
 }
 
 function generateTweet() {
@@ -206,6 +204,38 @@ function generateTweet() {
                 content.innerHTML = result;
             }
         });
+}
+
+function postTweet() {
+    let tweet = {};
+    fetch("twitter/post",
+        {
+            body: tweet,
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+}
+
+
+function getSelectedProfiles() {
+    return getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
+        .select(option => {
+            return { name: option.value };
+        });
+}
+
+function getBotOptions() {
+
+    let bot = {};
+
+    let e = document.getElementById("bot-settings-container");
+
+    bot.id = e.options[e.selectedIndex].value;
+
+    return bot;
 }
 
 function getAllSelectedOptions(select) {

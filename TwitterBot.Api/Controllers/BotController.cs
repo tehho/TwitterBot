@@ -13,8 +13,19 @@ namespace TwitterBot.Api.Controllers
     public class BotController : Controller
     {
         private IRepository<BotOption> _options;
-        public BotController()
+        public BotController(IRepository<BotOption> options)
         {
+            _options = options;
+        }
+
+        [HttpGet]
+        public IActionResult GetBotOptions()
+        {
+            var list = _options.GetAll().ToList();
+
+            list.ForEach(option => option.ProfileOccurances = null);
+
+            return Ok(list);
         }
 
         [HttpGet("{id}")]
