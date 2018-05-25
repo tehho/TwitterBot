@@ -32,36 +32,52 @@ namespace BaatDesktopClient
 
             var opt = new DbContextOptionsBuilder<TwitterContext>();
             opt.UseSqlite(@"Filename=C:\Project\TwitterBot\TwitterBot.Infrastructure\DbManager\TwitterBot.db");
+            //opt.UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = TwitterBot; Trusted_Connection = True;");
             opt.EnableSensitiveDataLogging();
 
             var conv = SqliteConventionSetBuilder.Build();
+            //var conv = SqlServerConventionSetBuilder.Build();
+
             var model = new ModelBuilder(conv);
             model.Entity<TwitterProfile>();
-            model.Entity<NextWordOccurrence>().HasKey(w => new { w.WordId, w.FollowedById });
+            //model.Entity<Word>();
+            model.Entity<WordOccurrence>().HasOne(w => w.Word);
+            model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word).OnDelete(DeleteBehavior.Restrict);
+            //model.Entity<NextWordOccurrence>().HasOne(w => w.Word);
+            model.Entity<NextWordOccurrence>().HasOne(w => w.FollowedBy);
+            //model.Entity<WordOccurrence>().HasMany(w => w.NextWords);
+            //model.Entity<NextWordOccurrence>().HasKey(w => new { w.WordId, w.FollowedById });
+            //model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word);
+            //model.Entity<NextWordOccurrence>().HasOne("WordOccurrence", "WordId").WithMany("WordOccurrence");
+
             opt.UseModel(model.Model);
 
+            //using (var context = new TwitterContext(opt.Options))
+            //{
+            //    var repo = new TwitterProfileRepository(context);
+
+            //    context.Database.EnsureDeleted();
+            //    context.Database.EnsureCreated();
+
+            //    repo.Add(profile);
+            //    repo.Add(profileP);
+            //}
+
             using (var context = new TwitterContext(opt.Options))
             {
                 var repo = new TwitterProfileRepository(context);
 
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
-                repo.Add(profile);
-                repo.Add(profileP);
-            }
-
-            using (var context = new TwitterContext(opt.Options))
-            {
-                var repo = new TwitterProfileRepository(context);
-
-                var profile2 = repo.Get(new TwitterProfile {Name = "profile"});
-                var profile22 = repo.Get(new TwitterProfile {Name = "profileP"});
+                var profile2 = repo.Get(new TwitterProfile { Name = "profile" });
+                var profile22 = repo.Get(new TwitterProfile { Name = "profileP" });
 
                 bot.AddProfile(profile22);
 
                 return bot.GenerateRandomTweetText();
             }
+
+            bot.AddProfile(profile);
+
+            return bot.GenerateRandomTweetText();
         }
     }
 }

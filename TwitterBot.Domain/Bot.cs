@@ -38,7 +38,7 @@ namespace TwitterBot.Domain
                 if (randomWord == null)
                     randomWord = GetRandomWordOccurrence(GetRandomProfile());
 
-                else if (randomWord.NextWords != null)
+                else if (randomWord.NextWords.Count > 0)
                     randomWord = GetRandomNextWordOccurrence(randomWord);
 
                 else
@@ -62,7 +62,7 @@ namespace TwitterBot.Domain
         private WordOccurrence GetRandomNextWordOccurrence(WordOccurrence word)
         {
             var index = random.Next(0, word.NextWords.Count);
-            var retWord = word.NextWords[index].Word;
+            var retWord = word.NextWords[index].FollowedBy;
 
             return retWord;
         }
