@@ -41,19 +41,20 @@ namespace BaatDesktopClient
             var conv = SqliteConventionSetBuilder.Build();
             //var conv = SqlServerConventionSetBuilder.Build();
 
-            var model = new ModelBuilder(conv);
-            model.Entity<TwitterProfile>();
+            //var model = new ModelBuilder(conv);
+            //model.Entity<TwitterProfile>();
+            //model.Entity<WordOccurrence>().HasOne(w => w.Word);
+            //model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word);
+            //model.Entity<NextWordOccurrence>().HasOne(w => w.FollowedBy);
+
             //model.Entity<Word>();
-            model.Entity<WordOccurrence>().HasOne(w => w.Word);
-            model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word);
             //model.Entity<NextWordOccurrence>().HasOne(w => w.Word);
-            model.Entity<NextWordOccurrence>().HasOne(w => w.FollowedBy);
             //model.Entity<WordOccurrence>().HasMany(w => w.NextWords);
             //model.Entity<NextWordOccurrence>().HasKey(w => new { w.WordId, w.FollowedById });
             //model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word);
             //model.Entity<NextWordOccurrence>().HasOne("WordOccurrence", "WordId").WithMany("WordOccurrence");
 
-            opt.UseModel(model.Model);
+            //opt.UseModel(model.Model);
 
             using (var context = new TwitterContext(opt.Options))
             {
