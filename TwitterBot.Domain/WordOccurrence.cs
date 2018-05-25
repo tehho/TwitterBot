@@ -22,7 +22,7 @@ namespace TwitterBot.Domain
         public WordOccurrence(Word word)
         {
             Word = word;
-            NextWords = new List<NextWordOccurrence>();
+            //NextWords = new List<NextWordOccurrence>();  // Here or training?
             Occurrence = 1;
         }
     }

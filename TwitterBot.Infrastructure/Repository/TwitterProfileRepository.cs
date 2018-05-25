@@ -75,7 +75,13 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Search(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).SingleOrDefault(profile => predicate(profile));
+            return _context.TwitterProfiles
+                .Include(p => p.Words)
+                .ThenInclude(w => w.Word)
+                .Include(p => p.Words)
+                .ThenInclude(w => w.NextWords)
+                .ThenInclude(n => n.Word)
+                .SingleOrDefault(profile => predicate(profile));
         }
 
         public bool Exists(TwitterProfile obj)

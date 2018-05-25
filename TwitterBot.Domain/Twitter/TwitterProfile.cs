@@ -52,11 +52,16 @@ namespace TwitterBot.Domain
 
                 if (lastWordOccurrence != null)
                 {
-                    if (currentWordOccurrence.NextWords.Any(w => w.Word.Equals(word)))
-                        currentWordOccurrence.NextWords.Single(n => n.Word.Word.Equals(word)).Occurrence++;
+                    if (lastWordOccurrence.NextWords != null && lastWordOccurrence.NextWords.Any(w => w.Word.Equals(word)))
+                        lastWordOccurrence.NextWords.Single(n => n.Word.Word.Equals(word)).Occurrence++;
 
                     else
-                        currentWordOccurrence.NextWords.Add(new NextWordOccurrence(lastWordOccurrence, currentWordOccurrence));
+                    {
+                        if (lastWordOccurrence.NextWords == null)
+                            lastWordOccurrence.NextWords = new List<NextWordOccurrence>();
+
+                        lastWordOccurrence.NextWords.Add(new NextWordOccurrence(lastWordOccurrence, currentWordOccurrence));
+                    }
                 }
 
                 lastWordOccurrence = currentWordOccurrence;
