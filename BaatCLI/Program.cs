@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -18,40 +19,96 @@ namespace BaatDesktopClient
 
         static void Main(string[] args)
         {
-            Console.WriteLine(BotTest.Test());
+            //Console.WriteLine(BotTest.Test());
 
-            //Console.WriteLine("Post a tweet \n");
+            Console.WriteLine("Post a tweet \n");
 
-            //var tweetService = new TwitterService(null
-            //    , new Token
-            //    {
-            //        Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-            //        Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-            //    },
-            //    new Token()
-            //    {
-            //        Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-            //        Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-            //    });
+            var tweetService = new TwitterService(null
+                , new Token
+                {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                },
+                new Token()
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                });
 
-            //Write("Twitter post: ");
 
-            //var message = ReadLine().Trim();
+            Write("Check user name: ");
 
-            //TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
-            //{
-            //    Text = message,
-            //};
+            string input = Console.ReadLine();
 
-            //Console.WriteLine(userPost.Text);
+            TwitterProfile profile = new TwitterProfile()
+            {
+                Name = input
+            };
 
-            //tweetService.PublishTweet(userPost);
+            var result = tweetService.DoesTwitterUserExist(profile);
 
-            //Console.WriteLine("Tweet was published.");
+            Console.WriteLine(result);
 
-            //ReadKey();
+  
+
+            ReadKey();
 
         }
+
+        public static void PostATweet()
+        {
+            Console.WriteLine("Post a tweet \n");
+
+            var tweetService = new TwitterService(null
+                , new Token
+                {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                },
+                new Token()
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                });
+
+            Write("Twitter post: ");
+
+            var message = ReadLine().Trim();
+
+            TwitterBot.Domain.Tweet userPost = new TwitterBot.Domain.Tweet
+            {
+                Text = message,
+            };
+
+            Console.WriteLine(userPost.Text);
+
+            tweetService.PublishTweet(userPost);
+
+            Console.WriteLine("Tweet was published.");
+        }
+
+        public static void UpdateProfileImage(TwitterProfile profile)
+        {
+
+            var tweetService = new TwitterService(null
+                , new Token
+                {
+                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
+                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
+                },
+                new Token()
+                {
+                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
+                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
+                });
+
+            Write("Uploading image...");
+
+            tweetService.UpdateProfileImage(tweetService.SaveProfileImageToServer(profile));
+
+            Console.WriteLine("Image was updated.");
+        }
+
 
         public static void SaveAllTweetsFromProfileToJson(TwitterProfile profile)
         {
