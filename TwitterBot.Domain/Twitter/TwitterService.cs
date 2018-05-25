@@ -31,9 +31,19 @@ namespace TwitterBot.Domain
 
         }
 
-        public void PublishTweet(Tweet tweet)
+        public bool PublishTweet(Tweet tweet)
         {
-            Tweetinvi.Tweet.PublishTweet(tweet.Text);
+            try
+            {
+                Tweetinvi.Tweet.PublishTweet(tweet.Text);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
         }
 
 

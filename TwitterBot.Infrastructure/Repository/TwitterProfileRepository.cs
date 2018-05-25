@@ -30,7 +30,6 @@ namespace TwitterBot.Infrastructure.Repository
             _context.SaveChanges();
 
             return obj;
-
         }
 
         public TwitterProfile Get(TwitterProfile obj)
@@ -38,15 +37,17 @@ namespace TwitterBot.Infrastructure.Repository
             if (obj == null)
                 return null;
 
-            if (obj.Id != null)
-            {
-                return Search(profile => profile.Id == obj.Id.Value);
-            }
-
             if (obj.Name != null)
             {
                 return Search(profile => profile.Name == obj.Name);
             }
+
+            //if (obj.Id != null)
+            //{
+            //    return Search(profile => profile.Id == obj.Id);
+            //}
+
+            
 
             return null;
         }
@@ -72,12 +73,18 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<TwitterProfile> SearchList(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).Where(profile => predicate(profile)).ToList();
+            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).Where(profile => predicate(profile)).ToList();
         }
 
         public TwitterProfile Search(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).ThenInclude(wc => wc.Word).SingleOrDefault(profile => predicate(profile));
+            return _context.TwitterProfiles
+                .Include(p => p.Words)
+                .ThenInclude(w => w.Word)
+                .Include(p => p.Words)
+                .ThenInclude(w => w.NextWords)
+                .ThenInclude(n => n.Word)
+                .SingleOrDefault(profile => predicate(profile));
         }
 
         public bool Exists(TwitterProfile obj)
@@ -87,7 +94,7 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Update(TwitterProfile obj)
         {
-            if (obj?.WordList == null)
+            if (obj?.Words == null)
                 return null;
 
             var profile = Get(obj);
@@ -97,7 +104,7 @@ namespace TwitterBot.Infrastructure.Repository
                 return Add(obj);
             }
 
-            profile.WordList = obj.WordList;
+            profile.Words = obj.Words;
             _context.SaveChanges();
 
             return profile;
