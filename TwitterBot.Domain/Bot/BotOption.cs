@@ -22,5 +22,13 @@ namespace TwitterBot.Domain
             ProfileAlgorithms = new AlgorithmList();
             WordAlgorithms = new AlgorithmList();
         }
+
+        public void AddProfile(TwitterProfile profile)
+        {
+            if (Profiles.Any(p => p.Name == profile.Name))
+                return;
+
+            ProfileOccurances.Add(new ProfileOccurrance());
+        }
     }
 }

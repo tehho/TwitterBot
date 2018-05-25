@@ -13,5 +13,22 @@ namespace TwitterBot.Domain
         public virtual BotOption BotOption { get; set; }
 
         public int Occurrance { get; set; }
+
+
+        public ProfileOccurrance()
+        {
+            
+        }
+
+        public ProfileOccurrance(TwitterProfile profile, BotOption option)
+        {
+            Profile = profile;
+            ProfileId = profile.Id.Value;
+
+            BotOption = option;
+            BotOptionId = option.Id.Value;
+            
+            Occurrance = 1;
+        }
     }
 }

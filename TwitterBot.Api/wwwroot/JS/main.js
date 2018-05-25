@@ -176,15 +176,12 @@ function postBotOptions(botOptions) {
 }
 
 function generateTweet() {
-    let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names")).select(option => {
-        return { name: option.value };
-    });
+    
+    var bot = getSelectedBot();
 
-    var bot =
-        console.log(JSON.stringify(profiles));
     fetch("api/bot/",
         {
-            query: JSON.stringify(profiles),
+            query: JSON.stringify(bot),
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -227,7 +224,7 @@ function getSelectedProfiles() {
         });
 }
 
-function getBotOptions() {
+function getSelectedBot() {
 
     let bot = {};
 
@@ -292,4 +289,4 @@ function setTwitterHandleExistingNames(list) {
 }
 
 getTwitterHandles();
-//getBotHandles();
+getBotHandles();

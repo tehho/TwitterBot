@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TwitterBot.Api.Model;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure.Repository;
 
@@ -13,9 +14,11 @@ namespace TwitterBot.Api.Controllers
     public class BotController : Controller
     {
         private IRepository<BotOption> _options;
-        public BotController(IRepository<BotOption> options)
+        private IRepository<TwitterProfile> _profiles;
+        public BotController(IRepository<BotOption> options, IRepository<TwitterProfile> profiles)
         {
             _options = options;
+            _profiles = profiles;
         }
 
         [HttpGet]
@@ -23,7 +26,7 @@ namespace TwitterBot.Api.Controllers
         {
             var list = _options.GetAll().ToList();
 
-            list.ForEach(option => option.ProfileOccurances = null);
+            list.ForEach(option => option.ProfileOccurances = new List<ProfileOccurrance>());
 
             return Ok(list);
         }
@@ -44,12 +47,22 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetProfiles([FromBody] BotOption option)
+        public IActionResult SetProfiles([FromBody] BotOptionApi option)
         {
-            var optionReturn = _options.Add(option);
-
-            if (optionReturn == null)
+            if (option == null)
                 return BadRequest();
+
+            var tempOption = _options.Add(option);
+
+            option.Profiles.ForEach(profile =>
+            {
+                var p = _profiles.Get(profile);
+
+                if (p != null)
+                    tempOption.AddProfile(profile);
+            });
+
+            _options.Update(tempOption);
 
             return Ok();
         }
