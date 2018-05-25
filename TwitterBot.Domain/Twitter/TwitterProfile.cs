@@ -8,54 +8,64 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class TwitterProfile : Entity, IProfile
+    public class TwitterProfile : Entity, IProfile , ITrainableFromText
     {
         public string Name { get; set; }
-        
-        public IReadOnlyList<Word> Vocabulary => WordList?.Where(occurrence => occurrence.ProfileId == Id).Select(w => w.WordContainer.Word).ToList();
-        public IReadOnlyList<WordContainer> Containers => WordList?.Select(wco => wco.WordContainer).ToList();
-
-        public List<WordContainerOccurrence> WordList { get; set; }
+        public List<WordOccurrence> Words { get; set; }
 
         public TwitterProfile()
         {
             Name = "";
-            WordList = new List<WordContainerOccurrence>();
+            Words = new List<WordOccurrence>();
         }
 
         public TwitterProfile(string name)
         {
             Name = name;
-            WordList = new List<WordContainerOccurrence>();
+            Words = new List<WordOccurrence>();
         }
 
-        public WordContainer AddWordContainer(WordContainer word)
+        public void TrainFromText(TextContent content)
         {
-            if (word == null)
-                throw new NullReferenceException();
+            var regex = new Regex(@"(\.|,| |!|\?)");
+            var words = regex.Split(content.Text).ToList();
+            WordOccurrence lastWordOccurrence = null;
 
-            if (word.Word == null)
-                throw new ArgumentNullException();
-
-            if (word.Word.Value == null)
-                throw new ArgumentNullException();
-
-            if (WordList == null)
-                WordList = new List<WordContainerOccurrence>();
-
-            var container = WordList.SingleOrDefault(wco => wco.WordContainer.Word.Equals(word.Word));
-
-            if (container == null)
+            foreach (var word in words)
             {
-                container = new WordContainerOccurrence(word, this);
-                WordList.Add(container);
-            }
-            else
-            {
-                container.Occurrence++;
-            }
+                if (string.IsNullOrWhiteSpace(word))
+                    continue;
 
-            return container.WordContainer;
+                WordOccurrence currentWordOccurrence;
+
+                if (Words.Any(w => w.Word.Equals(word)))
+                {
+                    currentWordOccurrence = Words.Single(w => w.Word.Equals(word));
+                    currentWordOccurrence.Occurrence++;
+                }
+
+                else
+                {
+                    currentWordOccurrence = new WordOccurrence(new Word(word));
+                    Words.Add(currentWordOccurrence);
+                }
+
+                if (lastWordOccurrence != null)
+                {
+                    if (lastWordOccurrence.NextWords != null && lastWordOccurrence.NextWords.Any(w => w.Word.Equals(word)))
+                        lastWordOccurrence.NextWords.Single(n => n.Word.Word.Equals(word)).Occurrence++;
+
+                    else
+                    {
+                        if (lastWordOccurrence.NextWords == null)
+                            lastWordOccurrence.NextWords = new List<NextWordOccurrence>();
+
+                        lastWordOccurrence.NextWords.Add(new NextWordOccurrence(lastWordOccurrence, currentWordOccurrence));
+                    }
+                }
+
+                lastWordOccurrence = currentWordOccurrence;
+            }
         }
     }
 }

@@ -14,4 +14,10 @@
     <ProjectReference Include="..\TwitterBot.Domain\TwitterBot.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="DbManager\TwitterBot.db">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
