@@ -14,7 +14,7 @@ namespace TwitterBot.Domain
 
         public int tweetCount;
 
-        private readonly TwitterProfile _profile;
+        // private readonly TwitterProfile _profile;
         //public TwitterService(TwitterProfile profile, Token customer, Token access)
         //{
         //    _profile = profile;

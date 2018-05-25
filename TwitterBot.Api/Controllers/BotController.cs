@@ -15,6 +15,7 @@ namespace TwitterBot.Api.Controllers
         private IRepository<BotOption> _options;
         public BotController()
         {
+
         }
 
         [HttpGet("{id}")]
