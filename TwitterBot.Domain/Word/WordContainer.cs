@@ -20,6 +20,7 @@ namespace TwitterBot.Domain
 
         public WordContainer()
         {
+            Occurrances = new List<WordOccurrance>();
         }
 
         public WordContainer(Word word)

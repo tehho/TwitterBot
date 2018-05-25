@@ -98,12 +98,14 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("train")]
-        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profile)
+        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profiles)
         {
-            if (profile?.Count == 0)
+            if (profiles?.Count == 0)
                 return BadRequest("Sum ting wong");
+            
+            var targetProfiles = _repository.SearchList((p => profiles.Any(profile => profile.Name == p.Name ))).ToList();
 
-            profile.Select(p => (TwitterProfile)p).ForEach(Train);
+            targetProfiles.ForEach(Train);
 
             return Ok();
         }
@@ -112,9 +114,11 @@ namespace TwitterBot.Api.Controllers
         {
             var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            tweets.ForEach(tweet => profile = _trainer.Train(profile, tweet));
+            var targetProfile = _repository.Get(profile);
 
-            _repository.Add(profile);
+            tweets.ForEach(tweet => targetProfile = _trainer.Train(targetProfile, tweet));
+
+            _repository.Update(targetProfile);
         }
 
         [HttpDelete("handle")]

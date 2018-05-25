@@ -13,7 +13,7 @@ namespace TwitterBot.Domain
         public string Name { get; set; }
         
         public IReadOnlyList<Word> Vocabulary => WordList?.Where(occurrence => occurrence.ProfileId == Id).Select(w => w.WordContainer.Word).ToList();
-        public IReadOnlyList<WordContainer> Containers => WordList.Select(wco => wco.WordContainer).ToList();
+        public IReadOnlyList<WordContainer> Containers => WordList?.Select(wco => wco.WordContainer).ToList();
 
         public List<WordContainerOccurrence> WordList { get; set; }
 

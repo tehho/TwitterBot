@@ -23,10 +23,14 @@ namespace TwitterBot.Infrastructure.Repository
             if (obj?.Name == null)
                 return null;
 
+            if (Exists(obj))
+                return null;
+
             _context.TwitterProfiles.Add(obj);
             _context.SaveChanges();
 
             return obj;
+
         }
 
         public TwitterProfile Get(TwitterProfile obj)
@@ -73,7 +77,7 @@ namespace TwitterBot.Infrastructure.Repository
 
         public TwitterProfile Search(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).SingleOrDefault(profile => predicate(profile));
+            return _context.TwitterProfiles.Include(p => p.WordList).ThenInclude(list => list.WordContainer).ThenInclude(wc => wc.Word).SingleOrDefault(profile => predicate(profile));
         }
 
         public bool Exists(TwitterProfile obj)

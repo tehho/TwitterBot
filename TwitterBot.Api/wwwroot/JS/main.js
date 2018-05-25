@@ -48,8 +48,8 @@ document.getElementById("bot-submit").addEventListener("click",
 
         postBotOptions(bot).then(result => {
             if (result)
-                getBotHandels();
-        })
+                getBotHandles();
+        });
     });
 
 document.getElementById("twitter-generate-submit").addEventListener("click",
@@ -292,4 +292,4 @@ function setTwitterHandleExistingNames(list) {
 }
 
 getTwitterHandles();
-getBotHandles();
+//getBotHandles();
