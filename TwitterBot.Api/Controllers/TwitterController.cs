@@ -59,7 +59,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile) // TODO: Validera att namnet finns/är en giltig profil
+        public IActionResult Post([FromBody]TwitterProfileApi profile) 
         {
             if (profile == null)
                 return BadRequest("Sum ting wong");
@@ -67,7 +67,7 @@ namespace TwitterBot.Api.Controllers
             if (profile.Name == null)
                 return BadRequest("Name not given");
 
-            var tweetService = new TwitterService(null
+            var tweetService = new TwitterService(null // TODO: Flytta tokens till ett bättre ställe
                 , new Token
                 {
                     Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
