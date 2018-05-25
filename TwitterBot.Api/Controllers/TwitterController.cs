@@ -114,11 +114,9 @@ namespace TwitterBot.Api.Controllers
         {
             var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            var targetProfile = _repository.Get(profile);
+            tweets.ForEach(tweet => profile = _trainer.Train(profile, tweet));
 
-            tweets.ForEach(tweet => targetProfile = _trainer.Train(targetProfile, tweet));
-
-            _repository.Update(targetProfile);
+            _repository.Update(profile);
         }
 
         [HttpDelete("handle")]
