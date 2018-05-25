@@ -36,7 +36,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("tweet")]
-        public IActionResult GetTweet([FromBody] List<TwitterProfileApi> profiles)
+        public IActionResult GetTweet([FromQuery] List<TwitterProfileApi> profiles)
         {
             List<TwitterProfile> list = null;
             if (profiles == null || profiles.Count == 0)

@@ -10,36 +10,76 @@ Array.prototype.select = function (method) {
     return arr;
 };
 
-document.getElementById("twitterhandle-submit").addEventListener("click", function () {
-    let name = document.getElementById("twitterhandle-name").value;
-    if (name === "") {
-        alert("Name not set?");
-        return;
-    }
-    postTwitterHandle(name);
+document.getElementById("twitter-remove-submit").addEventListener("click",
+    function () {
+        removeHandle();
+    });
 
-    getTwitterHandles();
+document.getElementById("twitterhandle-train-submit").addEventListener("click",
+    function () {
+        trainHandle();
+    });
+
+document.getElementById("twitterhandle-submit").addEventListener("click",
+    function () {
+        let name = document.getElementById("twitterhandle-name").value;
+        if (name === "") {
+            alert("Twittername not set?");
+            return;
+        }
+        postTwitterHandle(name).then(result => {
+            if (result)
+                getTwitterHandles();
+        });
+    });
+
+document.getElementById("bot-submit").addEventListener("click",
+    function () {
+        let bot = {};
+
+        bot.name = document.getElementById("bot-name").value;
+        if (bot.name === "") {
+            alert("No name of bot?");
+            return;
+        }
+
+        bot.profiles = [];
+
+    });
+
+document.getElementById("twitter-generate-submit").addEventListener("click",
+    function () {
+        generateTweet();
+    });
+
+document.getElementById("twitter-post-submit").addEventListener("click", function () {
+    postTweet();
 });
 
-document.getElementById("twitter-generate-submit").addEventListener("click", function () {
-    generateTweet();
-});
+function postTweet() {
+    let tweet = {};
+    fetch("twitter/post",
+        {
+            body: tweet,
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+}
 
-document.getElementById("twitter-remove-submit").addEventListener("click", function () {
-    removeHandle();
-});
-
-document.getElementById("twitterhandle-train-submit").addEventListener("click", function () {
-    trainHandle();
-});
-
-function trainHandle() {
-    let profiles = getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
+function getSelectedProfiles() {
+    return getAllSelectedOptions(document.getElementById("twitterhandle-existing-names"))
         .select(option => {
             return { name: option.value };
         });
+}
 
-    fetch("api/twitter/train/",
+function trainHandle() {
+    let profiles = getSelectedProfiles();
+
+    return fetch("api/twitter/train/",
         {
             body: JSON.stringify(profiles),
             method: "POST",
@@ -63,7 +103,7 @@ function trainHandle() {
 function postTwitterHandle(name) {
     let profile = {};
     profile.name = name;
-    fetch("api/twitter",
+    return fetch("api/twitter",
         {
             body: JSON.stringify(profile),
             method: "POST",
@@ -76,11 +116,11 @@ function postTwitterHandle(name) {
         .then(result => {
             if (result.status === 200) {
                 alert("Successfuly added");
-                getTwitterHandles();
-                return;
-            }
-            throw (result);
-        }).catch(errorLogger);
+                return true;
+            } else
+                errorLogger(result);
+            return false;
+        });
 }
 
 function removeHandle() {
@@ -119,7 +159,7 @@ function generateTweet() {
     console.log(JSON.stringify(profiles));
     fetch("api/twitter/tweet",
         {
-            body: JSON.stringify(profiles),
+            query: JSON.stringify(profiles),
             method: "POST",
             headers: {
                 'Accept': 'application/json',
@@ -145,13 +185,43 @@ function getAllSelectedOptions(select) {
     return [].slice.call(select.options).filter(option => option.selected);
 }
 
+function getBotHandels() {
+    fetch("api/bot/").catch(errorLogger)
+        .then(result => {
+            if (result.status === 200) {
+                result.json().catch(errorLogger).then(setBotHandles);
+            } else {
+                errorLogger(result);
+            }
+        })
+}
+
+function setBotHandles(list) {
+    var content = document.getElementById("twitter-bots");
+    content.innerHTML = "";
+
+    if (list !== null && list !== undefined) {
+        if (list.length > 0) {
+            for (let bot of list) {
+                let name = bot.name;
+                let id = bot.id;
+
+                let element = document.createElement("option");
+                element.value = id;
+                element.innerText = name;
+                content.append(element);
+            }
+        }
+
+    }
+}
+
 function getTwitterHandles() {
 
     fetch("api/twitter/").catch(errorLogger).then(result => {
         if (result.status === 200) {
             result.json().catch(errorLogger).then(setTwitterHandleExistingNames);
-        }
-        else {
+        } else {
             errorLogger(result);
         }
     }).catch(errorLogger);
@@ -164,7 +234,7 @@ function setTwitterHandleExistingNames(list) {
     if (list !== null && list !== undefined) {
         if (list.length > 0) {
 
-            for (var obj of list) {
+            for (let obj of list) {
                 let name = obj.name;
                 let element = document.createElement("option");
                 element.value = name;
@@ -176,3 +246,4 @@ function setTwitterHandleExistingNames(list) {
 }
 
 getTwitterHandles();
+getBotHandles();
