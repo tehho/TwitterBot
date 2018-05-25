@@ -242,7 +242,7 @@ function getAllSelectedOptions(select) {
     return [].slice.call(select.options).filter(option => option.selected);
 }
 
-function getBotHandels() {
+function getBotHandles() {
     fetch("api/bot/").catch(errorLogger)
         .then(result => {
             if (result.status === 200) {

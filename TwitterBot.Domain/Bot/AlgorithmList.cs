@@ -6,9 +6,12 @@ namespace TwitterBot.Domain
 {
     public class AlgorithmList
     {
-        public int TrueRandom;
-        public int WeightedRandom;
-        public int WeightedPrediction;
+        public int BotOptionsId { get; set; }
+        public BotOption botOption { get; set; }
+
+        public int TrueRandom { get; set; }
+        public int WeightedRandom { get; set; }
+        public int WeightedPrediction { get; set; }
 
         public int Sum => TrueRandom + WeightedPrediction + WeightedRandom;
 
