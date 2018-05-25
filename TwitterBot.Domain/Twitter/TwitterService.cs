@@ -33,6 +33,58 @@ namespace TwitterBot.Domain
             Tweetinvi.Tweet.PublishTweet(tweet.Text);
         }
 
+
+        public void UpdateProfileImage(byte[] image)
+        {
+            Tweetinvi.Account.UpdateProfileImage(image);
+        }
+
+
+        public byte[] SaveProfileImageToServer(TwitterProfile profile)
+        {
+            var profileImage = "https://twitter.com/" + profile.Name + "/profile_image?size=original";
+
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(new Uri(profileImage), @"profile.jpg");
+            }
+
+            string path = @"profile.jpg";
+
+            return File.ReadAllBytes(path);
+
+        }
+
+        public bool DoesTwitterUserExist(TwitterProfile profile)
+        {
+            if (Tweetinvi.User.GetUserFromScreenName(profile.Name) != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool ProfileTimeLineHasTweets(TwitterProfile profile)
+
+        {
+            var user = User.GetUserFromScreenName(profile.Name);
+
+            var timelineParameter = Timeline.CreateHomeTimelineParameter();
+            timelineParameter.ExcludeReplies = true;
+            timelineParameter.TrimUser = true;
+            timelineParameter.IncludeEntities = false;
+
+            var timeLine = Timeline.GetUserTimeline(user);
+
+            if (timeLine == null)
+            { return false; }
+
+            return true;
+
+
+        }
+
         public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
