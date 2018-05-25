@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -11,7 +14,7 @@ namespace TwitterBot.Domain
 
         public int tweetCount;
 
-        private readonly TwitterProfile _profile;
+        // private readonly TwitterProfile _profile;
         //public TwitterService(TwitterProfile profile, Token customer, Token access)
         //{
         //    _profile = profile;

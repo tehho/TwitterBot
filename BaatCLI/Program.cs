@@ -23,17 +23,6 @@ namespace BaatDesktopClient
 
             Console.WriteLine("Post a tweet \n");
 
-            var tweetService = new TwitterService(null
-                , new Token
-                {
-                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-                },
-                new Token()
-                {
-                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-                });
 
 
             Write("Check user name: ");
@@ -44,6 +33,8 @@ namespace BaatDesktopClient
             {
                 Name = input
             };
+
+            var tweetService = new TwitterService(new TwitterServiceOptions());
 
             var result = tweetService.DoesTwitterUserExist(profile);
 
@@ -59,17 +50,6 @@ namespace BaatDesktopClient
         {
             Console.WriteLine("Post a tweet \n");
 
-            var tweetService = new TwitterService(null
-                , new Token
-                {
-                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-                },
-                new Token()
-                {
-                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-                });
 
             Write("Twitter post: ");
 
@@ -82,6 +62,8 @@ namespace BaatDesktopClient
 
             Console.WriteLine(userPost.Text);
 
+            var tweetService = new TwitterService(new TwitterServiceOptions());
+
             tweetService.PublishTweet(userPost);
 
             Console.WriteLine("Tweet was published.");
@@ -90,17 +72,7 @@ namespace BaatDesktopClient
         public static void UpdateProfileImage(TwitterProfile profile)
         {
 
-            var tweetService = new TwitterService(null
-                , new Token
-                {
-                    Key = "GjMrzt4a9YJqKXRTNKjLN2CVi",
-                    Secret = "w3koS8pDXMxDscBZnT7VFgGFeoNgv0qxgUa5YYcvrv2WoysfRD"
-                },
-                new Token()
-                {
-                    Key = "998554298735845382-cHyJyzufzzSUzceD79y8zb0IkbfrPxi",
-                    Secret = "B72OlpxIme0yz3ZHRVw0mCMDxKukXTcNuOvhD9d0ySCX8"
-                });
+            var tweetService = new TwitterService(new TwitterServiceOptions());
 
             Write("Uploading image...");
 
