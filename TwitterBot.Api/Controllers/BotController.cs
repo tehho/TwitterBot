@@ -5,23 +5,41 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TwitterBot.Domain;
+using TwitterBot.Infrastructure.Repository;
 
 namespace TwitterBot.Api.Controllers
 {
     [Route("api/[controller]")]
     public class BotController : Controller
     {
-        private Bot _bot;
-
-        public BotController(Bot bot)
+        private IRepository<BotOption> _options;
+        public BotController(IRepository<BotOption> options)
         {
-            _bot = bot;
+            _options = options;
         }
 
         [HttpGet]
-        public IActionResult GetTweet()
+        public IActionResult GetBotOptions()
         {
-            var tweet = GenerateTweet();
+            var list = _options.GetAll().ToList();
+
+            list.ForEach(option => option.ProfileOccurances = null);
+
+            return Ok(list);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetTweet(int? id)
+        {
+            var option = _options.Get(new BotOption() {Id = id});
+
+            if (option == null)
+                return NotFound("BotOption");
+
+            var bot = new Bot(option);
+
+            var tweet = bot.GenerateTweet();
+
             return Ok(tweet.Text);
         }
 

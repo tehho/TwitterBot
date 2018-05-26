@@ -11,12 +11,12 @@ namespace TwitterBot.Api.Model
     public class TwitterProfileApi
     {
         public string Name { get; set; }
-        public List<IStatus> _tweets { get; set; }
+        public List<TextContent> _tweets { get; set; }
 
         public TwitterProfileApi()
         {
             Name = "";
-            _tweets = new List<IStatus>();
+            _tweets = new List<TextContent>();
         }
 
         public static implicit operator TwitterProfile(TwitterProfileApi value)

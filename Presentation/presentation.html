@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TwitterBoat Presentation 23-05-18</title>
+    <meta charset="utf-8">
+    <style>
+	
+@import url('https://fonts.googleapis.com/css?family=Roboto|Roboto+Slab');  
+
+      body { font-family: 'Roboto Slab', sans-serif; }
+      h1, h2, h3 {
+        font-family: 'Roboto Slab';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+#TwitterBåt 2018 Ultimate
+
+---
+class: center,middle
+#Idé     
+En tjänst som analyserar ett eller flera twitterkonton och skapar en ny fiktiv twitteranvändare som kan skriva egna tweets och svara på tweets
+
+###USP
+Skapar enkelt en persona utifrån befintliga twitterkonton
+
+
+---
+(MVP)
+
+Twitter :
+- App som hämtar tweets från ett konto
+- Den ska även posta tweets till ett befintligt konto
+        
+Båt :
+- Ska kunna generera tweets baserat på sannolikhet som är kontrollerade för grammatik
+    
+<center><img src="New%20Mockup%201.png"></center>
+---
+class: middle
+### Vision:
+ - kunna skapa fiktiv användare baserat inte bara på twitterkonton utan även andra källor
+ - att små egenheter kommer med från de inspirerande källorna
+ - att ha en intelligent bot som kan misstas för en riktig människa
+<center><p>
+    <img width="40%" height="40%" style="margin-right: 3em;" src="New%20Mockup%201%20copy.png"><img  width="40%" height="40%" src="New%20Mockup%201%20copy%202.png"></p></center>
+---
+class: middle
+### WIP:
+ - Binder vi front-end till controller(s) på servern
+ - Hjälper vi boten ge bättre förutsägningar med en databas
+ - Bygger ut funktion att generera bots, så man kan skräddarsy nya tweets
+ 
+---
+class: middle
+### Planerat
+ - Flytt till Azure
+ - Front-end ska piffas till
+ - Boten ska svara på mentions
+ 
+---
+class: center, middle
+#Frågor?
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>

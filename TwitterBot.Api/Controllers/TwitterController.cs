@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Tweetinvi.Core.Extensions;
 using TwitterBot.Api.Model;
 using TwitterBot.Domain;
+using TwitterBot.Infrastructure;
 using TwitterBot.Infrastructure.Repository;
 
 namespace TwitterBot.Api.Controllers
@@ -14,27 +15,28 @@ namespace TwitterBot.Api.Controllers
     public class TwitterController : Controller
     {
         private readonly IRepository<TwitterProfile> _repository;
-        private readonly TwitterService twitterService;
+        private readonly TwitterService _twitterService;
+        private readonly TwitterProfileTrainer _trainer;
 
-
-        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService)
+        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService, TwitterProfileTrainer trainer)
         {
             _repository = repository;
-            this.twitterService = twitterService;
+            _twitterService = twitterService;
+            _trainer = trainer;
         }
 
         [HttpGet]
-        public IActionResult GetExistingsProfiles()
+        public IActionResult GetExistingsProfiles() 
         {
             var list = _repository.GetAll();
 
-            list.ForEach(p => p.Words = null);
+            list.ForEach(p => p.WordList = null);
 
             return Ok(list);
         }
 
         [HttpPost("tweet")]
-        public IActionResult GetTweet([FromBody] List<TwitterProfileApi> profiles)
+        public IActionResult GetTweet([FromQuery] List<TwitterProfileApi> profiles)
         {
             List<TwitterProfile> list = null;
             if (profiles == null || profiles.Count == 0)
@@ -51,11 +53,13 @@ namespace TwitterBot.Api.Controllers
                     return false;
                 }).ToList();
 
-            return Ok(GenerateTweet(list));
+            //TODO GenerateTweet()
+
+            return Ok();
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] TwitterProfileApi profile)
+        public IActionResult Post([FromBody]TwitterProfileApi profile) 
         {
             if (profile == null)
                 return BadRequest("Sum ting wong");
@@ -63,29 +67,44 @@ namespace TwitterBot.Api.Controllers
             if (profile.Name == null)
                 return BadRequest("Name not given");
 
+            if (_twitterService.DoesTwitterUserExist(profile) == false)
+            {
+                return BadRequest("Twitter user does not exist");
+            }
+
+            if (_twitterService.ProfileTimeLineHasTweets(profile) == false)
+            {
+                return BadRequest("Twitter user does not have any tweets.");
+            }
+
+
             var prolife = _repository.Add(profile);
 
             return Ok(prolife);
         }
 
         [HttpPost("train")]
-        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profile)
+        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profiles)
         {
-            if (profile?.Count == 0)
+            if (profiles?.Count == 0)
                 return BadRequest("Sum ting wong");
+            
+            var targetProfiles = _repository.SearchList((p => profiles.Any(profile => profile.Name == p.Name ))).ToList();
 
-            profile.Select(p => (TwitterProfile)p).ForEach(Train);
+            targetProfiles.ForEach(Train);
 
             return Ok();
         }
 
         private void Train(TwitterProfile profile)
         {
-            var tweets = twitterService.ListAllTweetsFromProfile(profile).ToList();
+            var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            tweets.ForEach(profile.TrainFromText);
+            var targetProfile = _repository.Get(profile);
 
-            _repository.Update(profile);
+            tweets.ForEach(tweet => targetProfile = _trainer.Train(targetProfile, tweet));
+
+            _repository.Update(targetProfile);
         }
 
         [HttpDelete("handle")]
@@ -107,13 +126,29 @@ namespace TwitterBot.Api.Controllers
             return Ok("Remove complete");
         }
 
-        private string GenerateTweet(IEnumerable<TwitterProfile> profiles)
+        [HttpPost("GenerateTweet")]
+        private Tweet GenerateTweet(BotOption options)
         {
-            var bot = new Bot("test");
+            var bot = new Bot(options);
 
-            profiles.ForEach(bot.AddProfile);
+            return bot.GenerateTweet();
+        }
 
-            return bot.GenerateRandomTweetText();
+        [HttpPost("PostToTwitter")]
+        public IActionResult PostToTwitter([FromBody] Tweet tweet)
+        {
+            if (tweet == null)
+                return BadRequest("Sum ting wong");
+
+            if (tweet.Text == null)
+                return BadRequest("No body in tweet");
+
+            if (!_twitterService.PublishTweet(tweet))
+            {
+                return StatusCode(500);
+            }
+
+            return Ok();
         }
     }
 }

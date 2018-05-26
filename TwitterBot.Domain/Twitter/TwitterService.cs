@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -11,7 +14,7 @@ namespace TwitterBot.Domain
 
         public int tweetCount;
 
-        private readonly TwitterProfile _profile;
+        // private readonly TwitterProfile _profile;
         //public TwitterService(TwitterProfile profile, Token customer, Token access)
         //{
         //    _profile = profile;
@@ -28,9 +31,71 @@ namespace TwitterBot.Domain
 
         }
 
-        public void PublishTweet(Tweet tweet)
+        public bool PublishTweet(Tweet tweet)
         {
-            Tweetinvi.Tweet.PublishTweet(tweet.Text);
+            try
+            {
+                Tweetinvi.Tweet.PublishTweet(tweet.Text);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
+
+        public void UpdateProfileImage(byte[] image)
+        {
+            Tweetinvi.Account.UpdateProfileImage(image);
+        }
+
+
+        public byte[] SaveProfileImageToServer(TwitterProfile profile)
+        {
+            var profileImage = "https://twitter.com/" + profile.Name + "/profile_image?size=original";
+
+            using (WebClient client = new WebClient())
+            {
+                client.DownloadFile(new Uri(profileImage), @"profile.jpg");
+            }
+
+            string path = @"profile.jpg";
+
+            return File.ReadAllBytes(path);
+
+        }
+
+        public bool DoesTwitterUserExist(TwitterProfile profile)
+        {
+            if (Tweetinvi.User.GetUserFromScreenName(profile.Name) != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool ProfileTimeLineHasTweets(TwitterProfile profile)
+
+        {
+            var user = User.GetUserFromScreenName(profile.Name);
+
+            var timelineParameter = Timeline.CreateHomeTimelineParameter();
+            timelineParameter.ExcludeReplies = true;
+            timelineParameter.TrimUser = true;
+            timelineParameter.IncludeEntities = false;
+
+            var timeLine = Timeline.GetUserTimeline(user);
+
+            if (timeLine == null)
+            { return false; }
+
+            return true;
+
+
         }
 
         public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
