@@ -53,7 +53,7 @@ namespace TwitterBot.Infrastructure
                         currentWordOccurrence.Occurrence++;
                     }
 
-                    lastWordOccurrence?.AddOccurrance(currentWordOccurrence);
+                    lastWordOccurrence?.AddOccurrence(currentWordOccurrence);
 
                     lastWordOccurrence = currentWordOccurrence;
                 }
