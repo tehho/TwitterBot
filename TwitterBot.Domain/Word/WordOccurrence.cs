@@ -40,6 +40,7 @@ namespace TwitterBot.Domain
             if (occurrance == null)
             {
                 occurrance = new NextWordOccurrence(this, other);
+                NextWordOccurrences.Add(occurrance);
             }
             else
             {
