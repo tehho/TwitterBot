@@ -8,7 +8,7 @@ using TwitterBot.Domain;
 
 namespace TwitterBot.Infrastructure.Repository
 {
-    public class BotOptionRepository : IRepository<BotOption>
+    public class BotOptionRepository : IRepository<BotOptions>
     {
         private TwitterContext _context;
 
@@ -17,7 +17,7 @@ namespace TwitterBot.Infrastructure.Repository
             _context = context;
         }
 
-        public BotOption Add(BotOption obj)
+        public BotOptions Add(BotOptions obj)
         {
             if (obj == null)
                 return null;
@@ -31,7 +31,7 @@ namespace TwitterBot.Infrastructure.Repository
             return obj;
         }
 
-        public BotOption Get(BotOption obj)
+        public BotOptions Get(BotOptions obj)
         {
             if (obj == null)
                 return null;
@@ -45,7 +45,7 @@ namespace TwitterBot.Infrastructure.Repository
             return null;
         }
 
-        public BotOption Update(BotOption obj)
+        public BotOptions Update(BotOptions obj)
         {
             var option = Get(obj);
             try
@@ -76,7 +76,7 @@ namespace TwitterBot.Infrastructure.Repository
 
         }
 
-        public BotOption Remove(BotOption obj)
+        public BotOptions Remove(BotOptions obj)
         {
             var option = Get(obj);
 
@@ -85,7 +85,7 @@ namespace TwitterBot.Infrastructure.Repository
             return option;
         }
 
-        public IEnumerable<BotOption> GetList(BotOption obj)
+        public IEnumerable<BotOptions> GetList(BotOptions obj)
         {
             if (obj == null)
                 return SearchList(option => true);
@@ -96,12 +96,12 @@ namespace TwitterBot.Infrastructure.Repository
             return SearchList(option => true);
         }
 
-        public IEnumerable<BotOption> GetAll()
+        public IEnumerable<BotOptions> GetAll()
         {
             return GetList(null);
         }
 
-        public IEnumerable<BotOption> SearchList(Predicate<BotOption> predicate)
+        public IEnumerable<BotOptions> SearchList(Predicate<BotOptions> predicate)
         {
             //.Include(option => option.ProfileAlgorithms)
             //.Include(option => option.WordAlgorithms)
@@ -112,7 +112,7 @@ namespace TwitterBot.Infrastructure.Repository
                 .Where(option => predicate(option)).ToList();
         }
 
-        public BotOption Search(Predicate<BotOption> predicate)
+        public BotOptions Search(Predicate<BotOptions> predicate)
         {
             //.Include(option => option.ProfileAlgorithms)
             //.Include(option => option.WordAlgorithms)
@@ -131,7 +131,7 @@ namespace TwitterBot.Infrastructure.Repository
                 .SingleOrDefault(option => predicate(option));
         }
 
-        public bool Exists(BotOption obj)
+        public bool Exists(BotOptions obj)
         {
             return Get(obj) != null;
         }

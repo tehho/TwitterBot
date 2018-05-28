@@ -135,7 +135,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("GenerateTweet")]
-        private Tweet GenerateTweet(BotOption options)
+        private Tweet GenerateTweet(BotOptions options)
         {
             var bot = new Bot(options);
 

@@ -19,12 +19,11 @@ namespace TwitterBot.Domain
 
         public Tweet()
         {
-
         }
+
         public Tweet(string text)
         {
             Text = text;
-
         }
 
         public Tweet(long twitterId, string text, DateTime createdAt, int userId, TwitterProfile user, int quoteCount, int replyCount, int retweetCount, int favoriteCount)
@@ -38,12 +37,11 @@ namespace TwitterBot.Domain
             ReplyCount = replyCount;
             RetweetCount = retweetCount;
             FavoriteCount = favoriteCount;
-            
         }
 
         public static Tweet Parse(ITweet tweet)
         {
-            return new Tweet()
+            return new Tweet
             {
                 Text = tweet.FullText
             };

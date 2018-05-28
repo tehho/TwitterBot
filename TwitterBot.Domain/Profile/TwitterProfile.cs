@@ -11,9 +11,8 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity, IProfile
     {
         public string Name { get; set; }
-        public IReadOnlyList<Word> Vocabulary => Words?.Select(wo => wo.Word).ToList();
-
-        public List<WordOccurrence> Words { get; set; }
+        public IReadOnlyList<Word> Vocabulary => Words?.Select(w => w.Word).ToList();
+        public IList<WordOccurrence> Words { get; }
 
         public TwitterProfile()
         {
@@ -27,9 +26,9 @@ namespace TwitterBot.Domain
             Words = new List<WordOccurrence>();
         }
 
-        public void AddOccurrence(Word tempWord)
+        public void AddOccurrence(Word word)
         {
-            Words.Add(new WordOccurrence(tempWord, this));
+            Words.Add(new WordOccurrence(word, this));
         }
     }
 }

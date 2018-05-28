@@ -17,9 +17,9 @@ namespace TwitterBot.Api.Model
             Profiles = new List<TwitterProfile>();
         }
 
-        public static implicit operator BotOption(BotOptionApi value)
+        public static implicit operator BotOptions(BotOptionApi value)
         {
-            return new BotOption { Name = value.Name };
+            return new BotOptions { Name = value.Name };
         }
     }
 }

@@ -10,114 +10,103 @@ namespace TwitterBot.Domain
 {
     public class Bot : Entity
     {
-        private readonly BotOption _options;
+        private readonly BotOptions options;
         private readonly Random random;
 
-        public Bot(BotOption options)
+        public string Name { get; set; }
+
+        public Bot(BotOptions options)
         {
-            _options = options;
+            this.options = options;
             random = new Random();
         }
         
-        public string Name { get; set; }
-
         public Tweet GenerateTweet()
         {
             var tweetText = "";
-            Word prevWord = null;
+            Word previousWord = null;
 
             while (true)
             {
-                var profile = PickProfile(_options);
+                var profile = PickProfile(options);
 
-                var nextWord = PickWord(profile, prevWord, _options);
+                var word = PickWord(profile, previousWord, options);
 
-                if (tweetText.Length + nextWord.Value.Length > 140)
+                if (tweetText.Length + word.Value.Length > 140)
                     return new Tweet(tweetText);
 
-                tweetText += nextWord.Value + " ";
+                tweetText += word.Value + " ";
 
-                prevWord = nextWord;
-
+                previousWord = word;
             }
         }
 
-        private Word PickWord(IProfile profile, Word prevWord, BotOption options)
+        private Word PickWord(IProfile profile, Word previousWord, BotOptions options)
         {
-            var algo = options.WordAlgorithms.PickAlgorithm(random);
+            var algorithm = options.WordAlgorithms.PickAlgorithm(random);
             Word word = null;
-            switch (algo)
+
+            switch (algorithm)
             {
-                case AlgorithmType.TrueRandom:
-                    word = PickWordTrueRandom(profile);
+                case AlgorithmType.Random:
+                    word = PickWordRandom(profile);
                     break;
-                case AlgorithmType.WeightedRandom:
-
-                    word = PickWordWeightedRandom(profile);
-
+                case AlgorithmType.ByProbability:
+                    word = PickWordByProbability(profile);
                     break;
-                case AlgorithmType.WeightedPrediction:
-                    word = PickWordWeightedPrediction(profile, prevWord);
-
+                case AlgorithmType.ByProbabilityWithPrediction:
+                    word = PickWordByProbabilityWithPrediction(profile, previousWord);
                     break;
             }
 
             return word;
         }
 
-        private Word PickWordWeightedPrediction(IProfile profile, Word prevWord)
+        private Word PickWordByProbabilityWithPrediction(IProfile profile, Word previousWord)
         {
-            /*var pword = profile.WordList.SingleOrDefault(wco => wco.WordContainer.Word.Value == prevWord.Value);
+            var word = profile.Words.SingleOrDefault(w => w.Word.Equals(previousWord));
 
-            if (pword == null)
-                return PickWordWeightedRandom(profile);
+            if (word == null)
+                return PickWordByProbability(profile);
 
-            var weights = pword.WordContainer.Occurrances.Select(occ => occ.Occurrance).ToList();
-            var index = AlgorithmList.PickIndexWeighted(weights, random);
+            var weights = word.NextWordOccurrences.Select(n => n.Occurrence).ToList();
+            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
 
-            var word = pword.WordContainer.NextWords[index];
-
-            return word;*/
-            return new Word("");
+            return word.NextWordOccurrences[index].Word.Word;
 
         }
 
-        private Word PickWordWeightedRandom(IProfile profile)
+        private Word PickWordByProbability(IProfile profile)
         {
-            /*var weights = profile.WordList.Select(occ => occ).ToList();
-            var index = AlgorithmList.PickIndexWeighted(weights, random);
+            var weights = profile.Words.Select(w => w.Occurrence).ToList();
 
-            var word = profile.Vocabulary[index];
+            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
 
-            return word;*/
-            return new Word("test");
+            return profile.Words[index].Word;
         }
 
-        private Word PickWordTrueRandom(IProfile profile)
+        private Word PickWordRandom(IProfile profile)
         {
-            var index = random.Next(profile.Vocabulary.Count);
-            var word = profile.Vocabulary[index];
+            var index = random.Next(profile.Words.Count);
 
-            return word;
+            return profile.Words[index].Word;
         }
 
-        private IProfile PickProfile(BotOption options)
+        private IProfile PickProfile(BotOptions options)
         {
-            var rand = options.ProfileAlgorithms.PickAlgorithm(random);
-
+            var algorithm = options.ProfileAlgorithms.PickAlgorithm(random);
             IProfile profile = null;
 
-            switch (rand)
+            switch (algorithm)
             {
-                case AlgorithmType.TrueRandom:
+                case AlgorithmType.Random:
                     profile = PickProfileTrueRandom(options.Profiles);
                     break;
-                case AlgorithmType.WeightedRandom:
+                case AlgorithmType.ByProbability:
                     profile = PickProfileWeighted(options.ProfileOccurances);
                     break;
                 default:
                     profile = PickProfileTrueRandom(options.Profiles);
-                
                     break;
             }
 
@@ -128,7 +117,7 @@ namespace TwitterBot.Domain
         {
             var weights = optionsProfileOccurances.Select(occ => occ.Occurrance).ToList();
 
-            var index = AlgorithmList.PickIndexWeighted(weights, random);
+            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
 
             var profile = optionsProfileOccurances[index].Profile;
 

@@ -8,7 +8,7 @@ namespace TwitterBot.Infrastructure
         public DbSet<TwitterProfile> TwitterProfiles { get; set; }
         public DbSet<Word> Words { get; set; }
         public DbSet<WordOccurrence> WordOccurrences { get; set; }
-        public DbSet<BotOption> BotOptions { get; set; }
+        public DbSet<BotOptions> BotOptions { get; set; }
 
         public TwitterContext(DbContextOptions<TwitterContext> context) : base(context)
         {
@@ -17,7 +17,7 @@ namespace TwitterBot.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ProfileOccurrance>()
-                .HasKey(occ => new {occ.BotOptionId, occ.ProfileId});
+                .HasKey(occ => new {BotOptionId = occ.BotOptionsId, occ.ProfileId});
 
             modelBuilder.Entity<WordOccurrence>()
                 .HasOne(w => w.Word);

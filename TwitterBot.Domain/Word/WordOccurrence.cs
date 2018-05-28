@@ -15,6 +15,7 @@ namespace TwitterBot.Domain
         public TwitterProfile TwitterProfile { get; set; }
         public List<NextWordOccurrence> NextWordOccurrences { get; set; }
         public int Occurrence { get; set; }
+
         public List<WordOccurrence> NextWords => NextWordOccurrences.Select(nwo => nwo.Word).ToList();
 
         public WordOccurrence()
@@ -24,26 +25,25 @@ namespace TwitterBot.Domain
 
         public WordOccurrence(Word word, TwitterProfile profile)
         {
-            Word = word;
-            WordId = word.Id.Value;
+            // TODO: Null-checks
 
+            Word = word;
             TwitterProfile = profile;
-            TwitterProfileId = profile.Id.Value;
 
             NextWordOccurrences = new List<NextWordOccurrence>(); 
             Occurrence = 1;
         }
 
-        public void AddOccurrance(WordOccurrence other)
+        public void AddOccurrence(WordOccurrence other)
         {
-            var occurrance = NextWordOccurrences.SingleOrDefault(nwo => nwo.FollowedById == other.Id);
-            if (occurrance == null)
+            var occurrence = NextWordOccurrences.SingleOrDefault(nwo => nwo.FollowedById == other.Id);
+            if (occurrence == null)
             {
-                occurrance = new NextWordOccurrence(this, other);
+                occurrence = new NextWordOccurrence(this, other);
             }
             else
             {
-                occurrance.Occurrence++;
+                occurrence.Occurrence++;
             }
         }
     }
