@@ -2,6 +2,14 @@
     console.error("Error: ", error);
 }
 
+$body = $("body");
+
+$(document).on({
+    ajaxStart: function () { $body.addClass("loading"); },
+    ajaxStop: function () { $body.removeClass("loading"); }
+
+});
+
 Array.prototype.select = function (method) {
     let arr = [];
     for (let i = 0; i < this.length; i++) {
@@ -30,6 +38,9 @@ document.getElementById("twitterhandle-submit").addEventListener("click",
         postTwitterHandle(name).then(result => {
             if (result)
                 getTwitterHandles();
+            document.getElementById("alert").innerHTML = "<div class=\"alert alert-info my-2\">Allt gick fint <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;<\/a> <\/div>"; 
+            document.getElementById("twitter-generator").scrollIntoView({ behavior: 'smooth'});
+
         });
     });
 

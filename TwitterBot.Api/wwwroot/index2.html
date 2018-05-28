@@ -77,15 +77,21 @@
 
 
 
-                      <h3 class="card-header tweet-box-card-header">Generated tweet <a href="#" class="tweet-box-card-header" data-toggle="tooltip" title="You can edit the text before tweeting">🛈</a></h3>
+                      <h3 class="card-header tweet-box-card-header">Generated tweet <a href="#twitter-generator" class="tweet-box-card-header" data-toggle="tooltip" title="You can edit the text before tweeting">🛈</a></h3>
                       <div class="card-body">
-                          <h4 class="card-title text-info">@RowBoat2018</h4>
-                          <p class="card-text" id="tweet-content" contenteditable="true">I am a test-tweet..</p> <!--Tweet content-->
-                          <div class="input-group">
-
+                          <div class="row">
+                          <div class="col-lg-6">
+                              <div id="profileimg"></div><img src="assets/img/profile.jpg" width="150px" height="150px" class="rounded-circle img-thumbnail"/></div>
+                      </div>
+                          <div class="col-lg-6">
+                              <h4 class="card-title text-info">@RowBoat2018</h4>
+                              <p class="card-text" id="tweet-content" contenteditable="true">I am a test-tweet..</p> <!--Tweet content-->
+                              <div class="input-group">
+                              </div>
+                          </div>
                               <button class="btn btn-primary" id="twitter-post-submit">Tweet this!</button>
                               <button class="btn btn-outline-primary mx-3" id="twitter-generate-submit">New tweet</button>
-                             
+
 
                           </div>
                       </div>
@@ -202,26 +208,6 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-    
-    $body = $("body");
-
-    $(document).on({
-        ajaxStart: function () { $body.addClass("loading"); },
-        ajaxStop: function () { $body.removeClass("loading"); }
-    });
-
-</script>
 <script src="assets/js/main.js" type="text/javascript"></script>
   </body>
 </html>

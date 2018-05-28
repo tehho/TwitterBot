@@ -79,6 +79,8 @@ namespace TwitterBot.Api.Controllers
 
             TwitterProfile prolife;
 
+            _twitterService.UpdateProfileImage(_twitterService.SaveProfileImageToServer(profile));
+
             try
             {
                 prolife = _repository.Add(profile);

@@ -59,10 +59,10 @@ namespace TwitterBot.Domain
 
             using (WebClient client = new WebClient())
             {
-                client.DownloadFile(new Uri(profileImage), @"profile.jpg");
+                client.DownloadFile(new Uri(profileImage), @"wwwroot/assets/img/profile.jpg");
             }
 
-            string path = @"profile.jpg";
+            string path = @"wwwroot/assets/img/profile.jpg";
 
             return File.ReadAllBytes(path);
 
