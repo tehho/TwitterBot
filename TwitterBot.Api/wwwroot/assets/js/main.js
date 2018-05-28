@@ -24,7 +24,7 @@ document.getElementById("twitterhandle-submit").addEventListener("click",
     function () {
         var name = document.getElementById("twitterhandle-name").value;
         if (name === "") {
-            alert("Twittername not set?");
+            document.getElementById("alert").innerHTML = "<div class=\"alert alert-warning my-2\">Twittername not set? <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;<\/a> <\/div>"; 
             return;
         }
         postTwitterHandle(name).then(result => {
@@ -132,6 +132,7 @@ function postTwitterHandle(name) {
         .then(result => {
             if (result.status === 200) {
                 alert("Successfuly added");
+
                 return true;
             } else
                 errorLogger(result);
@@ -294,6 +295,10 @@ function setTwitterHandleExistingNames(list) {
         }
     }
 }
+
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
 
 getTwitterHandles();
 getBotHandles();

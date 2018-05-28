@@ -23,8 +23,8 @@ namespace TwitterBot.Infrastructure.Repository
             if (obj?.Value == null)
                 return null;
 
-            if (Exists(obj))
-                return Get(obj);
+            var temp = obj;
+            temp.Id = 0;
 
             try
             {
