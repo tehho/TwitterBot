@@ -31,16 +31,11 @@ namespace TwitterBot.Infrastructure
             WordOccurrence lastWordOccurrence = null;
             Word tempWord = null;
             WordOccurrence currentWordOccurrence = null;
+
             foreach (var word in words)
             {
-                try
-                {
-                    tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) ??
-                                   (_wordRepository.Get(word) ??
-                                    _wordRepository.Add(word));
-
-                    if (tempWord == null)
-                        continue;
+                    if (!_wordRepository.GetAll().Any(w => w.Equals(word)))
+                        tempWord = _wordRepository.Add(word);
 
                     currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Id == tempWord.Id);
 
@@ -56,11 +51,6 @@ namespace TwitterBot.Infrastructure
                     lastWordOccurrence?.AddOccurrence(currentWordOccurrence);
 
                     lastWordOccurrence = currentWordOccurrence;
-                }
-                catch (Exception e)
-                {
-                    throw (e);
-                }
             }
 
             return profile;

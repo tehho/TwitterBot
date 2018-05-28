@@ -9,15 +9,15 @@ namespace TwitterBot.Test
     public class ProfileTrainerTest
     {
         private IRepository<Word> _words;
-        private IRepository<WordContainer> _container;
+        //private IRepository<WordContainer> _container;
         private TwitterProfileTrainer _trainer;
 
         [SetUp]
         public void Init()
         {
             _words = new WordRepositoryTest();
-            _container = new WordContainerRepositoryTest();
-            _trainer = new TwitterProfileTrainer(_words,_container);
+            //_container = new WordContainerRepositoryTest();
+            //_trainer = new TwitterProfileTrainer(_words,_container);
 
         }
 

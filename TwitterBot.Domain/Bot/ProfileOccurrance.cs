@@ -2,7 +2,7 @@
 
 namespace TwitterBot.Domain
 {
-    public class ProfileOccurrance
+    public class ProfileOccurrance : Entity
     {
         public int ProfileId { get; set; }
         public Profile Profile { get; set; }

@@ -24,7 +24,7 @@ namespace TwitterBot.Infrastructure.Repository
                 return null;
 
             var temp = obj;
-            temp.Id = null;
+            //temp.Id = null;
 
             if (Exists(temp))
                 return Get(temp);
