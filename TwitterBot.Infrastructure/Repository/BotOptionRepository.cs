@@ -52,8 +52,8 @@ namespace TwitterBot.Infrastructure.Repository
             {
                 if (option != null)
                 {
-                    if (obj.ProfileOccurances != null)
-                        option.ProfileOccurances = obj.ProfileOccurances;
+                    if (obj.Profiles != null)
+                        option.Profiles = obj.Profiles;
 
                     if (obj.ProfileAlgorithms != null)
                         option.ProfileAlgorithms = obj.ProfileAlgorithms;
@@ -107,7 +107,7 @@ namespace TwitterBot.Infrastructure.Repository
             //.Include(option => option.WordAlgorithms)
 
             return _context.BotOptions
-                .Include(option => option.ProfileOccurances)
+                .Include(option => option.Profiles)
                 .ThenInclude(occ => occ.Profile)
                 .Where(option => predicate(option)).ToList();
         }
@@ -117,12 +117,12 @@ namespace TwitterBot.Infrastructure.Repository
             //.Include(option => option.ProfileAlgorithms)
             //.Include(option => option.WordAlgorithms)
             return _context.BotOptions
-                .Include(option => option.ProfileOccurances)
+                .Include(option => option.Profiles)
                 .ThenInclude(occ => occ.Profile)
                 .ThenInclude(p => p.Words)
                 .ThenInclude(w => w.Word)
 
-                .Include(option => option.ProfileOccurances)
+                .Include(option => option.Profiles)
                 .ThenInclude(occ => occ.Profile)
                 .ThenInclude(p => p.Words)
                 .ThenInclude(w => w.NextWordOccurrences)

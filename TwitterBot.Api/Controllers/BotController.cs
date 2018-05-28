@@ -26,7 +26,7 @@ namespace TwitterBot.Api.Controllers
         {
             var list = _options.GetAll().ToList();
 
-            list.ForEach(option => option.ProfileOccurances = new List<ProfileOccurrance>());
+            list.ForEach(option => option.Profiles = new List<ProfileOccurrance>());
 
             return Ok(list);
         }

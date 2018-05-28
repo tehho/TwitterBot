@@ -103,7 +103,7 @@ namespace TwitterBot.Domain
                     profile = PickProfileTrueRandom(options.Profiles);
                     break;
                 case AlgorithmType.ByProbability:
-                    profile = PickProfileWeighted(options.ProfileOccurances);
+                    profile = PickProfileWeighted(options.Profiles);
                     break;
                 default:
                     profile = PickProfileTrueRandom(options.Profiles);
@@ -113,21 +113,21 @@ namespace TwitterBot.Domain
             return profile;
         }
 
-        private IProfile PickProfileWeighted(IReadOnlyList<ProfileOccurrance> optionsProfileOccurances)
+        private IProfile PickProfileWeighted(IList<ProfileOccurrance> optionsProfiles)
         {
-            var weights = optionsProfileOccurances.Select(occ => occ.Occurrance).ToList();
+            var weights = optionsProfiles.Select(occ => occ.Occurrance).ToList();
 
             var index = AlgorithmSelector.PickIndexWeighted(weights, random);
 
-            var profile = optionsProfileOccurances[index].Profile;
+            var profile = optionsProfiles[index].Profile;
 
             return profile;
         }
 
-        private IProfile PickProfileTrueRandom(IReadOnlyList<IProfile> profiles)
+        private IProfile PickProfileTrueRandom(IList<ProfileOccurrance> profiles)
         {
             var index = random.Next(profiles.Count);
-            var profile = profiles[index];
+            var profile = profiles[index].Profile;
 
             return profile;
         }
