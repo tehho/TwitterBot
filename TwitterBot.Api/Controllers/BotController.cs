@@ -32,7 +32,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTweet(int? id)
+        public IActionResult GetTweet(int id)
         {
             var option = _options.Get(new BotOptions() {Id = id});
 
