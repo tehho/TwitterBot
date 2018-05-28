@@ -40,7 +40,7 @@ namespace TwitterBot.Api
             services.AddTransient<IRepository<TwitterProfile>, TwitterProfileRepository>();
             services.AddTransient<IRepository<Word>, WordRepository>();
             services.AddTransient<IRepository<WordOccurrence>, WordOccurrenceRepository>();
-            services.AddTransient<IRepository<BotOption>, BotOptionRepository>();
+            services.AddTransient<IRepository<BotOptions>, BotOptionRepository>();
 
             services.AddTransient<TwitterProfileTrainer>();
 
