@@ -1,0 +1,214 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="assets/img/favicon.ico">
+
+    <title>Ultimate TwitterBoat 2018</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+
+<link href="assets/css/custom.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+  <!--<main role="main">
+
+  <div class="jumbotron text-center">
+      <div class="row">
+          <div class="col-lg-2 d-none d-lg-block">
+              <img src="assets/img/svg/birds.svg"/>
+          </div>
+
+          <div class="col-lg-8">
+              <h1 class="display-2">Ultimate<br> Twitterboat <br>2018</h1>
+          </div>
+
+          <div class="col-lg-2 d-none d-lg-block">
+              <img src="assets/img/svg/birds.svg"/>
+          </div>
+      </div>
+
+      <div class="row my-5">
+          <div class="col-lg-4 d-none d-lg-block">
+                           
+          </div>
+
+
+          <div class="col-lg-4 d-none d-lg-block">
+                      
+          </div>
+                
+
+      </div>
+  </div>-->
+
+        <div class="container my-5">
+            <div class="row">
+                
+                <div class="col-lg-6  d-none d-lg-block push-to-start" id="push-to-start">
+                                
+                    <form class="form-inline center-block">
+                                        
+                        <div class="input-group mx-2">
+                                               
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+                            </div>
+                            <input class="form-control" id="twitterhandle-name" type="text" >
+                        </div>
+                        <button class="btn btn-outline-primary"  id="twitterhandle-submit">Go!</button>
+                    </form>
+        
+                </div>
+       
+                <div class="col">
+                        <div class="card generated-tweet-box" id="twitter-generator">
+                                <div class="card-body">
+                                    <div class="card-header tweet-box-card-header"><h3>Generated tweet</h3></div>
+
+                                    <h4 class="card-title text-info">@RowBoat2018</h4>
+
+                                    <p class="card-text" id="tweet-content" >I am a test-tweet..</p> <!--Tweet content-->
+
+                                    <div class="input-group mx-2">
+
+                                        <button class="btn btn-primary mx-3" id="twitter-post-submit">Tweet it!</button>
+
+                                        <button class="btn btn-outline-primary" id="twitter-generate-submit">Try again</button>
+
+                                    </div>
+                        </div>
+                    </div>
+        
+                </div>
+            </div>
+  
+        </div>
+        <!--</div>
+    </div>
+    </div>-->
+            
+        <div class="container my-5">
+            <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card generated-tweet-box">
+                                    <div class="card-body">
+                                        <div class="card-header tweet-box-card-header"><h3>Settings</h3></div>
+
+                                        <div class="col">
+                                            
+                                            <div id="bot-generator" class="content">
+                                                <h2>Create Bot</h2>
+                                                Name:
+                                                <br /><input id="bot-name" />
+
+                                                <h2>Existing Handles</h2>
+
+                                                <select id="twitterhandle-existing-names" size="10" multiple="multiple" style="width: 200px; height: 200px;"></select>
+
+                                                <br /><button id="twitter-remove-submit">Remove</button>
+                                                <button id="twitterhandle-train-submit">Train</button>
+                                                <!--<br />TwitterHandle: <input id="twitterhandle-name" type="text" /><button id="twitterhandle-submit" class="button">Add</button>-->
+
+                                                <div id="bot-settings-container">
+
+                                                </div>
+                                                <br /><button id="bot-submit">Save</button>
+                                            </div>
+
+
+                                            <!--<select id="select-handles" multiple="multiple">
+                                                <option value="cheese">VP</option>
+                                                <option value="tomatoes">POTUS</option>
+                                                <option value="mozarella">Anna Kendrick</option>
+                                    
+                                            </select>
+
+                                            </div>
+
+                                            <div class="col">
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" value="">Remember</label>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" value="">Remember</label>
+                                                </div>
+                                                <div class="checkbox disabled">
+                                                    <label><input type="checkbox" value="" disabled>Forget</label>
+                                                </div> 
+                                      
+
+                                                <div class="radiobutton">
+                                                    <label class="radio-inline"><input type="radio" name="optradio">Option 1</label>
+                                                    <label class="radio-inline"><input type="radio" name="optradio">Option 2</label>
+                                                    <label class="radio-inline"><input type="radio" name="optradio">Option 3</label> 
+                                                </div> 
+
+                                            </div>-->
+
+
+                                        </div>
+                                  </div>
+                                  </div>
+            
+                    </div>
+                </div>
+                </div>
+    
+                <!--</div>
+            </div>
+        </div>-->
+
+  <div class="modal"><!-- Loading screen --></div>
+
+    <!-- <footer class="text-muted">
+      <div class="container">
+        <p class="float-right">
+          <a href="#">Back to top</a>
+      </div>
+    </footer> -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<!--<script type="text/javascript" src="assets/js/multiselect.js"></script>
+<link rel="stylesheet" href="assets/css/multiselect.css" type="text/css"/>
+
+  <script type="text/javascript">
+      $(document).ready(function() {
+          $('#select-handles').multiselect();
+      });
+
+
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+              e.preventDefault();
+
+              document.querySelector(this.getAttribute('href')).scrollIntoView({
+                  behavior: 'smooth'
+              });
+          });
+      });
+      $body = $("body");
+
+      $(document).on({
+          ajaxStart: function() { $body.addClass("loading");    },
+          ajaxStop: function() { $body.removeClass("loading"); }    
+      });
+
+  </script>-->
+  <script src="assets/js/main.js" type="text/javascript"></script>
+
+  </body>
+</html>

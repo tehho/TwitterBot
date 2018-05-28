@@ -1,0 +1,76 @@
+body {
+    background-color: #60D8F4;
+}
+
+.birds {
+    
+}
+
+.jumbotron{
+    height: 5vh;
+    background-image: url("../img/SVG/skyandwater.svg");
+    background-color: #c3e9fc;
+    margin-bottom: 0;
+    min-height: 50%;
+    background-repeat: repeat-x;
+    background-position: center;
+    background-size: cover;
+
+}
+
+.type-to-start {
+    text-transform: uppercase;
+    color: whitesmoke;
+}
+.push-to-start{
+    background-color:none;
+
+}
+
+.generated-tweet-box {
+    box-shadow: 0 3px 5px #4d9dc5;
+}
+
+.tweet-box-card-header {
+    /* background-color: #5fd7f4; */
+    color: #4d9dc5;
+}
+
+.display-2 {
+    color: whitesmoke;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-shadow: 0 3px 10px #4d9dc5;
+}
+
+/* Start by setting display:none to make this hidden.
+   Then we position it in relation to the viewport window
+   with position:fixed. Width, height, top and left speak
+   for themselves. Background we set to 80% white with
+   our animation centered, and no-repeating */
+   .modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('http://toprated.co.uk/walsall/img/loading-gif.gif') 
+                50% 50% 
+                no-repeat;
+}
+
+/* When the body has the loading class, we turn
+   the scrollbar off with overflow:hidden */
+body.loading .modal {
+    overflow: hidden;   
+}
+
+/* Anytime the body has the loading class, our
+   modal element will be visible */
+body.loading .modal {
+    display: block;
+}
