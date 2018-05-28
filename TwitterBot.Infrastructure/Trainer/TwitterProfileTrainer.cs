@@ -22,32 +22,45 @@ namespace TwitterBot.Infrastructure
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
-            var words = regex.Split(content.Text).Where(word => !string.IsNullOrWhiteSpace(word)).Select(word => new Word(word)).ToList();
+            var regexExtended = new Regex("(^@|^ $|^http|^HTTP)");
+            var words = regex.Split(content.Text)
+                .Where(word => !string.IsNullOrWhiteSpace(word))
+                .Where(word => !regexExtended.IsMatch(word))
+                .Select(word => new Word(word)).ToList();
 
             WordOccurrence lastWordOccurrence = null;
-
+            Word tempWord = null;
+            WordOccurrence currentWordOccurrence = null;
             foreach (var word in words)
             {
-                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) ??
-                               (_wordRepository.Get(word) ??
-                               (_wordRepository.Add(word) ??
-                               throw new InvalidOperationException()));
-                
-                var currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Equals(tempWord));
-
-                if (currentWordOccurrence == null)
+                try
                 {
-                    currentWordOccurrence = new WordOccurrence(tempWord, profile);
-                    profile.AddOccurrence(tempWord);
+                    tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) ??
+                                   (_wordRepository.Get(word) ??
+                                    _wordRepository.Add(word));
+
+                    if (tempWord == null)
+                        continue;
+
+                    currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Id == tempWord.Id);
+
+                    if (currentWordOccurrence == null)
+                    {
+                        currentWordOccurrence = profile.AddOccurrence(tempWord);
+                    }
+                    else
+                    {
+                        currentWordOccurrence.Occurrence++;
+                    }
+
+                    lastWordOccurrence?.AddOccurrance(currentWordOccurrence);
+
+                    lastWordOccurrence = currentWordOccurrence;
                 }
-                else
+                catch (Exception e)
                 {
-                    currentWordOccurrence.Occurrence++;
+                    throw (e);
                 }
-
-                lastWordOccurrence?.AddOccurrence(currentWordOccurrence);
-
-                lastWordOccurrence = currentWordOccurrence;
             }
 
             return profile;
