@@ -178,8 +178,10 @@ function postBotOptions(botOptions) {
 function generateTweet() {
     
     var bot = getSelectedBot();
-
-    fetch("api/bot/",
+    let url = "api/bot/" + bot.id;
+    console.log(url);
+    fetch(url
+            /*,
         {
             query: JSON.stringify(bot),
             method: "POST",
@@ -188,7 +190,9 @@ function generateTweet() {
                 'Content-Type': 'application/json'
             }
 
-        }).then(result => {
+        }*/
+        )
+        .then(result => {
             if (result.status === 200)
                 return result.json();
             throw result;
@@ -231,7 +235,7 @@ function getSelectedBot() {
 
     let bot = {};
 
-    let e = document.getElementById("bot-settings-container");
+    let e = document.getElementById("twitter-bots");
 
     bot.id = e.options[e.selectedIndex].value;
 
