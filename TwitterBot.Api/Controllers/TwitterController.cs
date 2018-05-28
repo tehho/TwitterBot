@@ -69,7 +69,7 @@ namespace TwitterBot.Api.Controllers
 
             if (_twitterService.DoesTwitterUserExist(profile) == false)
             {
-                return BadRequest("Twitter user does not exist");
+                return NotFound("Twitter user does not exist");
             }
 
             if (_twitterService.ProfileTimeLineHasTweets(profile) == false)
@@ -77,7 +77,7 @@ namespace TwitterBot.Api.Controllers
                 return BadRequest("Twitter user does not have any tweets.");
             }
 
-            TwitterProfile prolife;
+            TwitterProfile prolife = null;
 
             try
             {
@@ -87,6 +87,9 @@ namespace TwitterBot.Api.Controllers
             }
             catch (Exception e)
             {
+                if (prolife != null)
+                    _repository.Remove(prolife);
+
                 return BadRequest();
             }
 

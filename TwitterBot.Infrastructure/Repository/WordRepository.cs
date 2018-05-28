@@ -23,12 +23,15 @@ namespace TwitterBot.Infrastructure.Repository
             if (obj?.Value == null)
                 return null;
 
-            if (Exists(obj))
-                return Get(obj);
+            var temp = obj;
+            temp.Id = null;
+
+            if (Exists(temp))
+                return Get(temp);
 
             try
             {
-                _context.Words.Add(obj);
+                _context.Words.Add(temp);
                 _context.SaveChanges();
             }
             catch (Exception e)
@@ -36,7 +39,7 @@ namespace TwitterBot.Infrastructure.Repository
                 return null;
             }
 
-            return obj;
+            return temp;
         }
 
         public Word Get(Word obj)

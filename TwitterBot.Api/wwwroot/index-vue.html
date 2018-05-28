@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>index</title>
+    <link rel="stylesheet" type="text/css" href="/css/mainstyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+
+    <div id="flexcontainer" class="container">
+
+        <div id="header" class="header">
+            <h2>Header</h2>
+        </div>
+
+        <div id="botApp" class="content">
+            <h2>Create Bot</h2>
+            Name:
+            <br /><input type="text" v-model="name" />
+
+            <h2>Existing Handles</h2>
+
+            <select v-model="selectedProfiles" size="10" multiple="multiple" style="width: 200px; height: 200px;">
+                <option v-for="profile in profiles" v-bind:value="profile">
+                    {{profile.name}}
+                </option>
+            </select>
+
+            <br />{{selectedProfiles}}
+
+            <br /><button @click="removeProfile">Remove</button>
+            <button @click="trainProfile">Train</button>
+            <br />TwitterHandle: <input type="text" v-model="profileName" />
+            <button @click="addProfile" class="button">Add</button>
+
+            <div id="bot-settings-container">
+
+            </div>
+            <br /><button @click="saveBot">Save</button>
+        </div>
+
+        <div id="tweetApp">
+            <div v-model="tweet" class="content">
+                {{tweet.text}}
+            </div>
+
+            <br /><button @click="generateTweet">Generate</button>
+            <button @click="postTweet">Post</button>
+
+            <br /><select v-model="selectedBot" size="10" style="width: 200px; height: 200px;">
+                <option v-for="bot in bots" v-bind:value="bot">
+                    {{bot.name}}
+                </option>
+            </select>
+
+        </div>
+        <div id="footer" class="footer">
+            <h2>Footer</h2>
+        </div>
+
+    </div>
+    <!--
+        <script src="/JS/main.js"></script>
+    -->
+
+    <script src="/JS/vue.js"></script>
+</body>
+</html>
