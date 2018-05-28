@@ -23,7 +23,7 @@
         <div class="row">
 
             <div class="col-lg-2 d-none d-lg-block">
-                <img src="assets/img/svg/birds.svg" />
+                <img src="assets/img/svg/birdsleft.svg" />
             </div>
 
             <div class="col-lg-8">
@@ -31,14 +31,16 @@
             </div>
 
             <div class="col-lg-2 d-none d-lg-block">
-                <img src="assets/img/svg/birds.svg" />
+                <img src="assets/img/svg/birdsright.svg" />
             </div>
         </div>
         
         <div class="container my-10">
             <div class="row">
-                <div class="col-2 d-inline-block"></div>
 
+                    <div class="col-lg-2 hidden-md my-4">
+                
+                        </div>
                 <div class="col-lg-8">
                     
                     <h4 class="sub-header">Enter a Twitter profile to start:</h4>
@@ -56,8 +58,8 @@
                     </div>     
                     <div id="alert"></div>
                 </div>
-                <div class="col-2 d-inline-block my-4">
-                    <img src="assets/img/SVG/boat.svg"/>
+                <div class="col-lg-2 hidden-md my-4">
+             
                 </div>
 
 
@@ -66,43 +68,105 @@
         </div>
 
     </div>
-
-
+<div class="container">
           <div class="row">
-              <div class="col-4 d-inline-block"></div>
+     
+                <div class="col-lg-2 hidden-md my-4">
+                    
+                    </div>
 
-              <div class="col-lg-4">
+              <div class="col-lg-8 ">
 
                   <div class="card" id="twitter-generator">
 
-
-
                       <h3 class="card-header tweet-box-card-header">Generated tweet <a href="#twitter-generator" class="tweet-box-card-header" data-toggle="tooltip" title="You can edit the text before tweeting">🛈</a></h3>
                       <div class="card-body">
-                          <div class="row">
-                          <div class="col-lg-6">
-                              <div id="profileimg"></div><img src="assets/img/profile.jpg" width="150px" height="150px" class="rounded-circle img-thumbnail"/></div>
-                      </div>
-                          <div class="col-lg-6">
-                              <h4 class="card-title text-info">@RowBoat2018</h4>
-                              <p class="card-text" id="tweet-content" contenteditable="true">I am a test-tweet..</p> <!--Tweet content-->
-                              <div class="input-group">
-                              </div>
-                          </div>
-                              <button class="btn btn-primary" id="twitter-post-submit">Tweet this!</button>
-                              <button class="btn btn-outline-primary mx-3" id="twitter-generate-submit">New tweet</button>
+              
+                        <div class="container">
+                          <div class="row justify-content-end">
+                            <div class="col-4">
+                                <div id="profileimg"><img src="assets/img/profile.jpg" width="150px" height="150px" class="rounded-circle img-thumbnail"/></div>
+                            </div>
+                            <div class="col-8">
+                                    <h4 class="card-title text-info">@RowBoat2018</h4>
+                                    <p class="card-text" id="tweet-content" contenteditable="true">I am a test-tweet..</p> <!--Tweet content-->
+      
+                                </div>
+                        </div>
+                            <div class="row justify-content-end">
+                                <div class="col-8">
+                                    <button class="btn btn-primary" id="twitter-post-submit">Tweet this!</button>
+                                    <button class="btn btn-outline-primary mx-3" id="twitter-generate-submit">New tweet</button>
 
+                                </div>
+                              </div>
 
                           </div>
                       </div>
                   </div>
+                  <div class="col-lg-2 hidden-md my-4">
+                
+                    </div>
 
               </div>
-              <div class="col-4 d-inline-block"></div>
+            </div>
 
+            <div class="container">
+
+                                <div class="row justify-content-end text-center">
+                                        <div class="col-12">
+                                            <label>Select mode</label><br>
+                                                <div class="btn-group" role="group">
+                                                    
+                                                        <button id="twitter-remove-submit" class="btn btn-outline-primary">Simple</button>
+                                                        <button id="twitterhandle-train-submit" class="btn btn-outline-primary">Advanced</button>
+                                                    </div>
+                                        </div>
+                                      </div>
+   
+
+                        </div>
+                        <div class="col-lg-2 hidden-md my-4">
+                     
+                        </div>
+        
+        
+                    </div>
+        
+                </div>
 
           </div>
-
+          <div class="container my-10">
+                <div class="row">
+    
+                        <div class="col-lg-2 hidden-md my-4">
+                    
+                            </div>
+                    <div class="col-lg-8 text-center">
+                        
+                        <h4 class="sub-header">Add more Twitter users</h4>
+                        <div class="input-group-lg">
+    
+                            <div class="input-group-prepend" id="bot-generator">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+                      
+                                <input class="form-control input-lg" id="twitterhandle-name" type="text">
+                                <a class="btn btn-light mx-3" id="twitterhandle-submit">Add</a>
+                            </div>
+                             
+            
+    
+                        </div>     
+                        <div id="alert"></div>
+                    </div>
+                    <div class="col-lg-2 hidden-md my-4">
+                 
+                    </div>
+    
+    
+                </div>
+    
+            </div>
 
 
   <div class="container my-5">
@@ -123,7 +187,7 @@
                           <div class="form-group">
                               <label>Name:</label>
                               <input class="form-control" id="bot-name"/>
-                              <button id="bot-submit" class="btn btn-primary my-3">Save</button>
+                              <button id="bot-submit" class="btn btn-light my-3">Save</button>
                           </div>
 
                       </div>
@@ -138,10 +202,10 @@
 
                       <select id="twitterhandle-existing-names" size="10" multiple="multiple" class="form-control"></select>
                       
-                      <div class="btn-group my-3" role="group">
-                          <button id="twitter-remove-submit" class="btn btn-outline-primary">Remove</button>
-                          <button id="twitterhandle-train-submit" class="btn btn-outline-primary">Train</button>
-                      </div>
+                   
+                          <button id="twitter-remove-submit" class="btn btn-light my-3">Remove</button>
+                          <button id="twitterhandle-train-submit" class="btn btn-light my-3">Train</button>
+               
                       
                   </div>
               </div>
@@ -152,7 +216,7 @@
  
                           <div class="range-slider">
                               <label class="text-info">@Twitterhandle</label><br/>
-                              <input class="input-range" orient="vertical" type="range" step="5" value="5" min="0" max="100">
+                              <input class="input-range" type="range" step="5" value="5" min="0" max="100">
                               <span class="range-value"></span>
                           </div> 
 
