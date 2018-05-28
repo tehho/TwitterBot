@@ -164,7 +164,7 @@ function postBotOptions(botOptions) {
                 'Content-Type': 'application/json'
             }
         }).then(result => {
-            if (result === 200) {
+            if (result.status === 200) {
                 alert("Successfuly added");
                 return true;
             } else {
@@ -202,7 +202,7 @@ function generateTweet() {
             let content = document.getElementById("tweet-content");
             content.innerHTML = "";
             if (result !== null && result !== undefined) {
-                content.innerHTML = result;
+                content.innerHTML = result.text;
             }
         });
 }

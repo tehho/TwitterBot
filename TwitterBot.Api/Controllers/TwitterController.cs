@@ -82,6 +82,8 @@ namespace TwitterBot.Api.Controllers
             try
             {
                 prolife = _repository.Add(profile);
+
+                Train(prolife);
             }
             catch (Exception e)
             {
