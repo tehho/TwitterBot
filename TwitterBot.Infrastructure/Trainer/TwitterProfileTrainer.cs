@@ -12,12 +12,11 @@ namespace TwitterBot.Infrastructure
     public class TwitterProfileTrainer
     {
         private readonly IRepository<Word> _wordRepository;
-        private readonly IRepository<WordContainer> _containerRepository;
-
-        public TwitterProfileTrainer(IRepository<Word> wordRepository, IRepository<WordContainer> containerRepository)
+        private readonly IRepository<WordOccurrence> _wordOccurranceRepository;
+        public TwitterProfileTrainer(IRepository<Word> wordRepository, IRepository<WordOccurrence> wordOccurranceRepository)
         {
             _wordRepository = wordRepository;
-            _containerRepository = containerRepository;
+            _wordOccurranceRepository = wordOccurranceRepository;
         }
 
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
@@ -25,25 +24,34 @@ namespace TwitterBot.Infrastructure
             var regex = new Regex(@"(\.|,| |!|\?)");
             var words = regex.Split(content.Text).Where(word => !string.IsNullOrWhiteSpace(word)).Select(word => new Word(word)).ToList();
 
-            WordContainer parent = null;
+            WordOccurrence lastWordOccurrence = null;
 
             foreach (var word in words)
             {
-                var tempWord = profile.Vocabulary.SingleOrDefault(w => w != null && w.Equals(word))
-                               ?? (_wordRepository.Get(word) ?? _wordRepository.Add(word));
+                var tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) ??
+                               (_wordRepository.Get(word) ??
+                               (_wordRepository.Add(word) ??
+                               throw new InvalidOperationException()));
+                
+                var currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Equals(tempWord));
 
-                var tempContainer = profile.Containers.SingleOrDefault(wc => wc.Word.Equals(word))
-                                    ?? _containerRepository.Add(new WordContainer(word));
+                if (currentWordOccurrence == null)
+                {
+                    currentWordOccurrence = new WordOccurrence(tempWord, profile);
+                    profile.AddOccurrence(tempWord);
+                }
+                else
+                {
+                    currentWordOccurrence.Occurrence++;
+                }
 
-                profile.AddWordContainer(tempContainer);
+                lastWordOccurrence?.AddOccurrance(currentWordOccurrence);
 
-                parent?.AddWord(tempWord);
-
-                parent = tempContainer;
-
+                lastWordOccurrence = currentWordOccurrence;
             }
 
             return profile;
+
         }
     }
 }

@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace TwitterBot.Domain
 {
-    public class Word : Entity, IEquatable<string>, IEquatable<Word>
+    public class Word : Entity, IEquatable<string>
     {
-        [Required]
         public string Value { get; set; }
 
         public Word()
         {
-            Value = "";
         }
 
         public Word(string word)
@@ -23,6 +20,6 @@ namespace TwitterBot.Domain
 
         public bool Equals(string other) => Value == other.ToLower();
 
-        public bool Equals(Word other) => Equals(other.Value);
+        public bool Equals(Word other) => Value == other.Value.ToLower();
     }
 }

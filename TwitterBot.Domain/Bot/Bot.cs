@@ -67,7 +67,7 @@ namespace TwitterBot.Domain
 
         private Word PickWordWeightedPrediction(IProfile profile, Word prevWord)
         {
-            var pword = profile.WordList.SingleOrDefault(wco => wco.WordContainer.Word.Value == prevWord.Value);
+            /*var pword = profile.WordList.SingleOrDefault(wco => wco.WordContainer.Word.Value == prevWord.Value);
 
             if (pword == null)
                 return PickWordWeightedRandom(profile);
@@ -77,18 +77,20 @@ namespace TwitterBot.Domain
 
             var word = pword.WordContainer.NextWords[index];
 
-            return word;
+            return word;*/
+            return new Word("");
 
         }
 
         private Word PickWordWeightedRandom(IProfile profile)
         {
-            var weights = profile.WordList.Select(occ => occ.Occurrence).ToList();
+            /*var weights = profile.WordList.Select(occ => occ).ToList();
             var index = AlgorithmList.PickIndexWeighted(weights, random);
 
             var word = profile.Vocabulary[index];
 
-            return word;
+            return word;*/
+            return new Word("test");
         }
 
         private Word PickWordTrueRandom(IProfile profile)

@@ -28,7 +28,7 @@ namespace TwitterBot.Domain
             if (Profiles.Any(p => p.Name == profile.Name))
                 return;
 
-            ProfileOccurances.Add(new ProfileOccurrance());
+            ProfileOccurances.Add(new ProfileOccurrance(profile, this));
         }
     }
 }

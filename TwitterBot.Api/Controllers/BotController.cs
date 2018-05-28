@@ -43,7 +43,7 @@ namespace TwitterBot.Api.Controllers
 
             var tweet = bot.GenerateTweet();
 
-            return Ok(tweet.Text);
+            return Ok(tweet);
         }
 
         [HttpPost]
@@ -59,7 +59,7 @@ namespace TwitterBot.Api.Controllers
                 var p = _profiles.Get(profile);
 
                 if (p != null)
-                    tempOption.AddProfile(profile);
+                    tempOption.AddProfile(p);
             });
 
             _options.Update(tempOption);

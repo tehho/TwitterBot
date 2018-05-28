@@ -73,7 +73,13 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<TwitterProfile> SearchList(Predicate<TwitterProfile> predicate)
         {
-            return _context.TwitterProfiles.Include(p => p.Words).ThenInclude(list => list.Word).Where(profile => predicate(profile)).ToList();
+            return _context.TwitterProfiles
+                .Include(p => p.Words)
+                .ThenInclude(w => w.Word)
+                .Include(p => p.Words)
+                .ThenInclude(w => w.NextWordOccurrences)
+                .ThenInclude(n => n.Word)
+                .Where(profile => predicate(profile)).ToList();
         }
 
         public TwitterProfile Search(Predicate<TwitterProfile> predicate)
@@ -82,7 +88,7 @@ namespace TwitterBot.Infrastructure.Repository
                 .Include(p => p.Words)
                 .ThenInclude(w => w.Word)
                 .Include(p => p.Words)
-                .ThenInclude(w => w.NextWords)
+                .ThenInclude(w => w.NextWordOccurrences)
                 .ThenInclude(n => n.Word)
                 .SingleOrDefault(profile => predicate(profile));
         }

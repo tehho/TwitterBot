@@ -15,7 +15,11 @@
         public NextWordOccurrence(WordOccurrence word, WordOccurrence followedBy)
         {
             Word = word;
+            WordId = word.Id.Value;
+
             FollowedBy = followedBy;
+            FollowedById = followedBy.Id.Value;
+
             Occurrence = 1;
         }
     }

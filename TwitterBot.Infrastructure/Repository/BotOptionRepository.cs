@@ -48,20 +48,29 @@ namespace TwitterBot.Infrastructure.Repository
         public BotOption Update(BotOption obj)
         {
             var option = Get(obj);
-
-            if (option != null)
+            try
             {
-                if (obj.ProfileOccurances != null)
-                    option.ProfileOccurances = obj.ProfileOccurances;
+                if (option != null)
+                {
+                    if (obj.ProfileOccurances != null)
+                        option.ProfileOccurances = obj.ProfileOccurances;
 
-                if (obj.ProfileAlgorithms != null)
-                    option.ProfileAlgorithms = obj.ProfileAlgorithms;
+                    if (obj.ProfileAlgorithms != null)
+                        option.ProfileAlgorithms = obj.ProfileAlgorithms;
 
-                if (obj.WordAlgorithms != null)
-                    option.WordAlgorithms = obj.WordAlgorithms;
+                    if (obj.WordAlgorithms != null)
+                        option.WordAlgorithms = obj.WordAlgorithms;
 
-                _context.SaveChanges();
+                    _context.SaveChanges();
+                }
+
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
+            
 
             return option;
 

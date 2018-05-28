@@ -89,4 +89,79 @@ namespace TwitterBot.Test
             return Get(obj) != null;
         }
     }
+
+    internal class WordContainerRepositoryTest : IRepository<WordContainer>
+    {
+        private List<WordContainer> _list;
+
+        public WordContainerRepositoryTest()
+        {
+            _list = new List<WordContainer>();
+        }
+
+        public WordContainer Add(WordContainer obj)
+        {
+            if (obj == null)
+                return null;
+
+            _list.Add(obj);
+
+            return obj;
+        }
+
+        public WordContainer Get(WordContainer obj)
+        {
+            if (obj == null)
+                return null;
+
+            return Search(word => word.Word.Value == obj.Word.Value);
+        }
+
+
+        public WordContainer Update(WordContainer obj)
+        {
+            throw new InvalidOperationException();
+        }
+
+        public WordContainer Remove(WordContainer obj)
+        {
+            var word = Get(obj);
+
+            if (word == null)
+                return null;
+
+            _list.Remove(word);
+
+            return word;
+        }
+
+        public IEnumerable<WordContainer> GetList(WordContainer obj)
+        {
+            if (obj == null)
+                return null;
+
+            return SearchList(word => word.Word.Value.Contains(obj.Word.Value));
+        }
+
+        public IEnumerable<WordContainer> GetAll()
+        {
+            return SearchList(word => true);
+        }
+
+        public IEnumerable<WordContainer> SearchList(Predicate<WordContainer> predicate)
+        {
+            return _list.Where(word => predicate(word)).ToList();
+        }
+
+        public WordContainer Search(Predicate<WordContainer> predicate)
+        {
+
+            return _list.SingleOrDefault(word => predicate(word));
+        }
+
+        public bool Exists(WordContainer obj)
+        {
+            return Get(obj) != null;
+        }
+    }
 }

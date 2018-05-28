@@ -30,7 +30,7 @@ namespace TwitterBot.Api.Controllers
         {
             var list = _repository.GetAll();
 
-            list.ForEach(p => p.WordList = null);
+            list.ForEach(p => p.Words = null);
 
             return Ok(list);
         }
@@ -77,8 +77,16 @@ namespace TwitterBot.Api.Controllers
                 return BadRequest("Twitter user does not have any tweets.");
             }
 
+            TwitterProfile prolife;
 
-            var prolife = _repository.Add(profile);
+            try
+            {
+                prolife = _repository.Add(profile);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
 
             return Ok(prolife);
         }
@@ -93,7 +101,7 @@ namespace TwitterBot.Api.Controllers
 
             targetProfiles.ForEach(Train);
 
-            return Ok();
+            return Ok();    
         }
 
         private void Train(TwitterProfile profile)
