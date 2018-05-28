@@ -5,29 +5,19 @@ namespace TwitterBot.Domain
     public class ProfileOccurrance
     {
         public int ProfileId { get; set; }
-        [ForeignKey(nameof(ProfileId))]
-        public virtual TwitterProfile Profile { get; set; }
-
-        public int BotOptionId{ get; set; }
-        [ForeignKey(nameof(BotOptionId))]
-        public virtual BotOption BotOption { get; set; }
-
+        public IProfile Profile { get; set; }
+        public int BotOptionsId{ get; set; }
+        public BotOptions BotOptions { get; set; }
         public int Occurrance { get; set; }
-
-
+        
         public ProfileOccurrance()
         {
-            
         }
 
-        public ProfileOccurrance(TwitterProfile profile, BotOption option)
+        public ProfileOccurrance(IProfile profile, BotOptions options)
         {
             Profile = profile;
-            ProfileId = profile.Id.Value;
-
-            BotOption = option;
-            BotOptionId = option.Id.Value;
-            
+            BotOptions = options;
             Occurrance = 1;
         }
     }

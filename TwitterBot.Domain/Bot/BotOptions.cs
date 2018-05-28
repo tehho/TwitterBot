@@ -3,27 +3,23 @@ using System.Linq;
 
 namespace TwitterBot.Domain
 {
-    public class BotOption : Entity
+    public class BotOptions : Entity
     {
         public string Name { get; set; }
-
         public IReadOnlyList<IProfile> Profiles => ProfileOccurances.Select(occ => occ.Profile).ToList();
-
         public List<ProfileOccurrance> ProfileOccurances { get; set; }
+        public AlgorithmSelector ProfileAlgorithms;
+        public AlgorithmSelector WordAlgorithms;
 
-        public AlgorithmList ProfileAlgorithms;
-
-        public AlgorithmList WordAlgorithms;
-
-        public BotOption()
+        public BotOptions()
         {
             Name = "";
             ProfileOccurances = new List<ProfileOccurrance>();
-            ProfileAlgorithms = new AlgorithmList();
-            WordAlgorithms = new AlgorithmList();
+            ProfileAlgorithms = new AlgorithmSelector();
+            WordAlgorithms = new AlgorithmSelector();
         }
 
-        public void AddProfile(TwitterProfile profile)
+        public void AddProfile(IProfile profile)
         {
             if (Profiles.Any(p => p.Name == profile.Name))
                 return;

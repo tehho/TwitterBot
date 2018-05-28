@@ -98,19 +98,21 @@ namespace TwitterBot.Infrastructure.Repository
             return Get(obj) != null;
         }
 
-        public TwitterProfile Update(TwitterProfile obj)
+        public TwitterProfile Update(TwitterProfile profile)
         {
-            if (obj?.Words == null)
-                return null;
+            //if (obj?.Words == null)
+            //    return null;
 
-            var profile = Get(obj);
+            //var profile = Get(obj);
 
-            if (profile == null)
-            {
-                return Add(obj);
-            }
+            //if (profile == null)
+            //{
+            //    return Add(obj);
+            //}
 
-            profile.Words = obj.Words;
+            //profile.Words = obj.Words;
+
+            _context.Update(profile);
             _context.SaveChanges();
 
             return profile;

@@ -13,9 +13,9 @@ namespace TwitterBot.Api.Controllers
     [Route("api/[controller]")]
     public class BotController : Controller
     {
-        private IRepository<BotOption> _options;
+        private IRepository<BotOptions> _options;
         private IRepository<TwitterProfile> _profiles;
-        public BotController(IRepository<BotOption> options, IRepository<TwitterProfile> profiles)
+        public BotController(IRepository<BotOptions> options, IRepository<TwitterProfile> profiles)
         {
             _options = options;
             _profiles = profiles;
@@ -32,12 +32,12 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetTweet(int? id)
+        public IActionResult GetTweet(int id)
         {
-            var option = _options.Get(new BotOption() {Id = id});
+            var option = _options.Get(new BotOptions() {Id = id});
 
             if (option == null)
-                return NotFound("BotOption");
+                return NotFound("BotOptions");
 
             var bot = new Bot(option);
 
