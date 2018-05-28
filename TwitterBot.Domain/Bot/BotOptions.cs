@@ -19,7 +19,7 @@ namespace TwitterBot.Domain
             WordAlgorithms = new AlgorithmSelector();
         }
 
-        public void AddProfile(IProfile profile)
+        public void AddProfile(Profile profile)
         {
             if (Profiles.Any(p => p.Name == profile.Name))
                 return;
