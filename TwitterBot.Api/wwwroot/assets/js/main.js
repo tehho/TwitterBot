@@ -22,7 +22,7 @@ document.getElementById("twitterhandle-train-submit").addEventListener("click",
 
 document.getElementById("twitterhandle-submit").addEventListener("click",
     function () {
-        let name = document.getElementById("twitterhandle-name").value;
+        var name = document.getElementById("twitterhandle-name").value;
         if (name === "") {
             alert("Twittername not set?");
             return;

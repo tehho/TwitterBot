@@ -32,8 +32,8 @@ body {
 }
 
 .tweet-box-card-header {
-    /* background-color: #5fd7f4; */
-    color: #4d9dc5;
+    background-color: #4d9dc5;
+    color: whitesmoke;
 }
 
 .display-2 {
