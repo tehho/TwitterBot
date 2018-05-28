@@ -34,11 +34,11 @@ namespace BaatDesktopClient
                 Name = input
             };
 
-            var tweetService = new TwitterService(new TwitterServiceOptions());
+            //var tweetService = new TwitterService(new TwitterServiceOptions());
 
-            var result = tweetService.DoesTwitterUserExist(profile);
+            //var result = tweetService.DoesTwitterUserExist(profile);
 
-            Console.WriteLine(result);
+            //Console.WriteLine(result);
 
   
 
@@ -62,9 +62,9 @@ namespace BaatDesktopClient
 
             Console.WriteLine(userPost.Text);
 
-            var tweetService = new TwitterService(new TwitterServiceOptions());
+            //var tweetService = new TwitterService(new TwitterServiceOptions());
 
-            tweetService.PublishTweet(userPost);
+            //tweetService.PublishTweet(userPost);
 
             Console.WriteLine("Tweet was published.");
         }
@@ -72,11 +72,11 @@ namespace BaatDesktopClient
         public static void UpdateProfileImage(TwitterProfile profile)
         {
 
-            var tweetService = new TwitterService(new TwitterServiceOptions());
+            //var tweetService = new TwitterService(new TwitterServiceOptions());
 
             Write("Uploading image...");
 
-            tweetService.UpdateProfileImage(tweetService.SaveProfileImageToServer(profile));
+            //tweetService.UpdateProfileImage(tweetService.SaveProfileImageToServer(profile));
 
             Console.WriteLine("Image was updated.");
         }

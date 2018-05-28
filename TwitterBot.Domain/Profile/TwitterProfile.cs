@@ -12,7 +12,7 @@ namespace TwitterBot.Domain
     {
         public string Name { get; set; }
         public IReadOnlyList<Word> Vocabulary => Words?.Select(w => w.Word).ToList();
-        public IList<WordOccurrence> Words { get; }
+        public IList<WordOccurrence> Words { get; set; }
 
         public TwitterProfile()
         {
