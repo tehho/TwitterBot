@@ -20,12 +20,24 @@ const botApp = new Vue({
         bots: [],
         selectedProfiles: [],
         profiles: [],
-        message: "",
+        message: {
+            expires: new Date(2018,05,30),
+            message: "test",
+        },
         profileName: "",
         tweet: {
             text: ""
         },
     },
+    computed:
+        {
+            errorMessage: function() {
+                return {
+                    showError: (Date.now() < this.message.expires),
+                    message: this.message.message
+                };
+            }
+        },
     methods: {
         addProfile: function () {
             let profile = {};
@@ -146,10 +158,10 @@ const botApp = new Vue({
                 alert("Tweet posted");
         }),
 
-        simpleToggle: function() {
+        simpleToggle: function () {
 
         },
-        advancedToggle: function() {
+        advancedToggle: function () {
 
         },
 
