@@ -16,9 +16,21 @@ namespace TwitterBot.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TwitterProfile>();
+
             modelBuilder.Entity<BotOptions>()
                 .HasMany(b => b.ProfileOccurances)
                 .WithOne(p => p.BotOptions);
+
+            modelBuilder.Entity<ProfileAlgorithmSelector>()
+                .HasOne(a => a.BotOptions)
+                .WithOne(b => b.ProfileAlgorithms)
+                .HasForeignKey<BotOptions>(b => b.ProfileAlgorithmsId);
+
+            modelBuilder.Entity<AlgorithmSelector>()
+                .HasOne(a => a.BotOptions)
+                .WithOne(b => b.WordAlgorithms)
+                .HasForeignKey<BotOptions>(b => b.WordAlgorithmsId);
 
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasKey(occ => new {occ.BotOptionsId, occ.ProfileId});
@@ -26,8 +38,8 @@ namespace TwitterBot.Infrastructure
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasOne(occ => occ.BotOptions)
                 .WithMany(bo => bo.ProfileOccurances)
-                .HasForeignKey(occ => occ.BotOptionsId);
-
+                //.HasForeignKey(occ => occ.BotOptionsId)
+                ;
 
             modelBuilder.Entity<NextWordOccurrence>()
                 .HasKey(nwo => new {nwo.WordId, nwo.ParentId});

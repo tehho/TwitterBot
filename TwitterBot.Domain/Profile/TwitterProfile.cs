@@ -11,6 +11,7 @@ namespace TwitterBot.Domain
     public class TwitterProfile : Entity
     {
         public string Name { get; set; }
+        [NotMapped]
         public IReadOnlyList<Word> Vocabulary => Words?.Select(wo => wo.Word).ToList();
 
         public List<WordOccurrence> Words { get; set; }
