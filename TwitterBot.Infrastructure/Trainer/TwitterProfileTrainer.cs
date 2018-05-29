@@ -21,6 +21,12 @@ namespace TwitterBot.Infrastructure
 
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
+            if (content == null)
+                return null;
+
+            if (content.Text == null)
+                return null;
+
             var regex = new Regex(@"(\.|,| |!|\?)");
 
             var regexExtended = new Regex("(^@|^ $|^http|^HTTP|^#)");
