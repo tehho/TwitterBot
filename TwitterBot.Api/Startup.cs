@@ -7,12 +7,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.Extensions.Options;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure;
+using TwitterBot.Infrastructure.Logging;
 using TwitterBot.Infrastructure.Repository;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace TwitterBot.Api
 {
@@ -35,7 +36,9 @@ namespace TwitterBot.Api
             var appsettings = Configuration.GetSection("Appsettings").Get<Appsettings>();
 
             services.AddTransient(x => appsettings);
-            
+
+            services.AddTransient<Infrastructure.Logging.ILogger>(x => new FileLogger(appsettings.Logfile));
+
             services.AddTransient(x => new TwitterServiceOptions(appsettings));
             services.AddScoped<TwitterService>();
 

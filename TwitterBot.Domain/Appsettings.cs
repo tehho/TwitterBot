@@ -12,5 +12,6 @@ namespace TwitterBot.Domain
         public int TweetCount { get; set; }
         public Token Customer { get; set; }
         public Token Access { get; set; }
+        public string Logfile { get; set; }
     }
 }

@@ -1,0 +1,314 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="assets/img/favicon.ico">
+
+    <title>Ultimate TwitterBoat 2018</title>
+
+    <!-- Bootstrap core CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js" type="text/javascript"></script>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/custom.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+    <div id="botApp" class="container-fluid">
+        <div class="jumbotron text-center">
+            <!--Header-->
+            <div class="row">
+                <div class="col-lg-2 d-none d-lg-block">
+                    <img src="assets/img/svg/birdsleft.svg" />
+                </div>
+
+                <div class="col-lg-8">
+                    <h1 class="display-2">Ultimate<br> Twitterboat <br>2018</h1>
+                </div>
+
+                <div class="col-lg-2 d-none d-lg-block">
+                    <img src="assets/img/svg/birdsright.svg" />
+                </div>
+            </div>
+
+            <!--profileName top input-->
+            <div class="container my-10">
+                <div class="row">
+
+                    <div class="col-lg-2 hidden-md my-4"></div>
+
+                    <div class="col-lg-8">
+
+                        <h4 class="sub-header">Enter a Twitter profile to start:</h4>
+                        <div class="input-group-lg">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+
+                                <input class="form-control input-lg" v-model="profileName" type="text">
+                                <button @click="addProfile" class="btn btn-light mx-3">Go!</button>
+                            </div>
+
+                        </div>
+
+                        <div v-if="errorMessage.showError">
+                            {{errorMessage.message}}
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 hidden-md my-4"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <!--Jumpotron end-->
+
+        <div id="twitter-generator" class="container">
+
+            <div class="row">
+
+                <div class="col-lg-2 hidden-md my-4"></div>
+
+                <div class="col-lg-8 ">
+
+                    <div class="card">
+
+                        <h3 class="card-header tweet-box-card-header">Generated tweet <a href="#twitter-generator" class="tweet-box-card-header" data-toggle="tooltip" title="You can edit the text before tweeting">🛈</a></h3>
+                        <div class="card-body">
+
+                            <div class="container">
+                                <div class="row">
+
+                                    <div class="col-4">
+                                        <div id="profileimg"><img src="assets/img/profile.jpg" class="rounded-circle img-thumbnail" /></div>
+                                    </div>
+                                    <!--Tweet content-->
+                                    <div class="col-8">
+                                        <h4 class="card-title text-info">@RowBoat2018</h4>
+
+                                        <div>
+                                            <div v-model="tweet" class="content">
+                                                {{tweet.text}}
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <!--Tweet content-->
+                                </div>
+                                <div class="row my-3">
+                                    <div class="col-6">
+                                        <select v-model="selectedBot" class="form-control">
+                                            <option value="" disabled selected>Select a bot</option>
+                                            <option v-for="bot in bots" v-bind:value="bot">
+                                                {{bot.name}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-primary mx-3" @click="generateTweet">New tweet</button>
+                                        <button class="btn btn-primary" @click="postTweet">Tweet this!</button>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-2 hidden-md my-4">
+
+            </div>
+        </div>
+        <!-- Twitter generator end-->
+
+        <div id="settingsController" class="container">
+
+            <div class="row justify-content-end text-center">
+                <div class="col-12">
+                    <label>Select mode</label><br>
+                    <div class="btn-group" role="group">
+
+                        <button @click="simpleToggle" class="btn btn-outline-primary">Simple</button>
+                        <button @click="advancedToggle" class="btn btn-outline-primary">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Settingscontroller end -->
+
+        <div id="settings" class="container">
+
+            <div class="col-lg-2 hidden-md my-4"></div>
+
+            <div id="ProfileName" class="container my-10">
+                <div class="row">
+
+                    <div class="col-lg-2 hidden-md my-4"></div>
+
+                    <div class="col-lg-8 text-center">
+
+                        <h4 class="sub-header">Add more Twitter users</h4>
+
+                        <div class="input-group-lg">
+
+                            <div class="input-group-prepend" id="bot-generator">
+                                <span class="input-group-text" id="basic-addon1">@</span>
+
+                                <input class="form-control input-lg" type="text" v-model="profileName">
+                                <a class="btn btn-light mx-3" @click="addProfile">Add</a>
+                            </div>
+
+                        </div>
+
+                        <div v-model="message"></div>
+
+                    </div>
+
+                    <div class="col-lg-2 hidden-md my-4"></div>
+
+                </div>
+
+            </div>
+
+
+            <div id="botSettings" class="container my-5">
+
+                <div class="row d-flex mx-auto">
+
+                    <div class="col-lg-12">
+
+                        <div class="card-columns">
+
+                            <div id="botCreator" class="card">
+
+                                <h3 class="card-header">Create Bot</h3>
+
+                                <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label>Name:</label>
+                                        <input class="form-control" v-model="name" />
+                                        <select class="form-control" v-model="selectedBot" size="10">
+                                            <option v-for="boten in bots" v-bind:value="boten">
+                                                {{boten.name}}
+                                            </option>
+                                        </select><br />
+                                        <label>Selected bot: {{selectedBot.name}}</label><br />
+                                        <button class="btn btn-light my-3" @click="saveBot">Save</button>
+                                        <button class="btn btn-light my-3" @click="removeBot">Remove</button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!-- Botcreator end -->
+
+
+                            <div id="twitterProfiles" class="card">
+
+                                <h3 class="card-header">Twitter handles</h3>
+
+                                <div class="card-body">
+
+                                    <select v-model="selectedProfiles" size="10" multiple="multiple" class="form-control">
+                                        <option v-for="profile in profiles" v-bind:value="profile">
+                                            {{profile.name}}
+                                        </option>
+                                    </select>
+
+                                    <button class="btn btn-light my-3" @click="removeProfile">Remove</button>
+                                    <button class="btn btn-light my-3" @click="trainProfile">Train</button>
+                                    <button class="btn btn-light my-3" @click="updateLists">Update</button>
+
+                                </div>
+                            </div>
+
+                            <div id="botProfilesRatio" class="card">
+                                <h3 class="card-header">User ratio</h3>
+                                <div class="card-body">
+
+                                    <div class="range-slider" v-for="profile in  selectedProfiles">
+
+                                        <label class="text-info">@{{profile.name}}</label><br />
+                                        <input class="input-range" type="range" step="5" value="5" min="0" max="100">
+                                        <span class="range-value"></span>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                            <div class="card">
+                                <h3 class="card-header">Settings</h3>
+                                <div class="card-body">
+
+
+                                    <h4 >Profile</h4>
+                                    <div class="row">
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="weighted" id="weighted" value="weighted" checked>
+                                            <label class="form-check-label" for="weighted">Weighted</label>
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="random" value="weighted">
+                                            <label class="form-check-label" for="exampleRadios1">Random</label>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <h4>Word</h4>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                            <label class="form-check-label" for="exampleRadios1">Setting 1</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--
+            </div>
+        </div>-->
+        <div class="modal"><!-- Loading screen --></div>
+        <!-- <footer class="text-muted">
+          <div class="container">
+            <p class="float-right">
+              <a href="#">Back to top</a>
+          </div>
+        </footer> -->
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+
+        <script src="/JS/vue.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+        <!--<script src="assets/js/main.js" type="text/javascript"></script>-->
+    </div>
+</body>
+</html>

@@ -15,13 +15,29 @@ Array.prototype.Remove = function (obj) {
 const botApp = new Vue({
     el: "#botApp",
     data: {
-        name: "Test",
+        name: "",
         selectedBot: "",
         bots: [],
         selectedProfiles: [],
         profiles: [],
-        profileName: ""
+        message: {
+            expires: new Date(2018,05,30),
+            message: "test",
+        },
+        profileName: "",
+        tweet: {
+            text: ""
+        },
     },
+    computed:
+        {
+            errorMessage: function() {
+                return {
+                    showError: (Date.now() < this.message.expires),
+                    message: this.message.message
+                };
+            }
+        },
     methods: {
         addProfile: function () {
             let profile = {};
@@ -78,6 +94,7 @@ const botApp = new Vue({
             }
         },
         trainProfile: (async function () {
+            this.message = "Training in progress...";
             let result = await fetch("api/twitter/train/",
                 {
                     body: JSON.stringify(this.selectedProfiles),
@@ -89,9 +106,11 @@ const botApp = new Vue({
                 });
 
             if (result.status === 200)
-                alert("Training complete");
-            else
+                this.message = "";
+            else {
+                this.message = "Sum ting went wong";
                 errorLogger(result);
+            }
         }),
 
         saveBot: function () {
@@ -118,43 +137,15 @@ const botApp = new Vue({
                     }
                 });
         },
-        
-        updateLists: function () {
-            this.loadProfiles();
-            this.loadBots();
-        },
 
-        loadProfiles: (async function () {
-            this.profiles = await loadProfiles();
-        }),
-        loadBots: (async function () {
-            this.bots = await loadBots();
-        }),
+        removeBot: function () {},
 
-    },
-    created: function () {
-        this.profiles = loadProfiles();
-        this.bots = loadBots();
-    }
-});
-
-const tweetApp = new Vue({
-    el: "#tweetApp",
-    data: {
-        tweet: {
-            text: "Test"
-        },
-        selectedBot: "",
-        bots: []
-    },
-    methods: {
         generateTweet: (async function () {
             let url = "api/bot/" + this.selectedBot.id;
             let result = await fetch(url);
             if (result.status === 200)
                 this.tweet = await result.json();
         }),
-
         postTweet: (async function () {
             var result = await fetch("api/twitter/PostToTwitter",
                 {
@@ -169,18 +160,38 @@ const tweetApp = new Vue({
                 alert("Tweet posted");
         }),
 
+        simpleToggle: function () {
+
+        },
+        advancedToggle: function () {
+
+        },
+
         updateLists: function () {
+            this.loadProfiles();
             this.loadBots();
         },
+
+        loadProfiles: (async function () {
+            let list = await loadProfiles();
+            this.profiles = list;
+            console.log(list[0].name);
+        }),
         loadBots: (async function () {
             this.bots = await loadBots();
         }),
+
+    },
+    created: function () {
+        this.profiles = loadProfiles();
+        this.bots = loadBots();
     }
-})
+});
 
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");
+    console.log(result);
     if (result.status === 200) {
         return await result.json();
     } else {
@@ -197,5 +208,4 @@ async function loadBots() {
     }
 }
 
-tweetApp.updateLists();
 botApp.updateLists();
