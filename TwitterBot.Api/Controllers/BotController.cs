@@ -52,7 +52,7 @@ namespace TwitterBot.Api.Controllers
             if (option == null)
                 return BadRequest();
 
-            if (option.Name == null)
+            if (string.IsNullOrWhiteSpace(option.Name))
                 return BadRequest();
 
             var tempOption = _options.Add(option);

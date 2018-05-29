@@ -29,7 +29,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetExistingsProfiles() 
+        public IActionResult GetExistingsProfiles()
         {
             _logger.Log("Accessing all profiles");
             try
@@ -48,7 +48,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile) 
+        public IActionResult Post([FromBody]TwitterProfileApi profile)
         {
             _logger.Log("Adding profile to list");
             if (profile == null)
@@ -183,20 +183,20 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpDelete("handle")]
-        public IActionResult Delete([FromBody] List<TwitterProfileApi> profiles)
+        public IActionResult Delete([FromBody] TwitterProfileApi profile)
         {
-            if (profiles == null || profiles.Count == 0)
+            if (profile == null)
             {
                 return BadRequest("No profile was given");
             }
 
-            foreach (var profile in profiles)
-            {
-                if (!_repository.Exists(profile))
-                    return BadRequest($"Profile does not exist: {profile.Name}");
-            }
+            if (!_repository.Exists(profile))
+                return BadRequest($"Profile does not exist: {profile.Name}");
+            
+            var prolife = _repository.Remove(profile);
 
-            profiles.ForEach(profile => _repository.Remove(profile));
+            if (prolife == null)
+                return BadRequest();
 
             return Ok("Remove complete");
         }

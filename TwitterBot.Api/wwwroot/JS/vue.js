@@ -41,22 +41,28 @@ const botApp = new Vue({
 
     },
     computed:
-    {
-        errorMessage: function() {
-            return {
-                showError: (Date.now() < this.message.expires),
-                message: this.message.message
-            };
-        },
-            progressProfileCounter: function () {
-            return (this.progressProfile / this.progressProfileMax) * 100 
+        {
+            errorMessage: function () {
+                return {
+                    showError: (Date.now() < this.message.expires),
+                    message: this.message.message
+                };
             },
-        progressTweetsCounter: function () {
-            return (this.progressTweets / this.progressTweetsMax) * 100 
+            progressProfileCounter: function () {
+                if (this.progressProfileMax == 0)
+                    return 0;
+                return Math.round((this.progressProfile / this.progressProfileMax)
+                    * 100)
+                    + this.progressTweetsCounter;
+            },
+            progressTweetsCounter: function () {
+                if (this.progressTweetsMax == 0)
+                    return 0;
+                return Math.round(this.progressTweets / this.progressTweetsMax) * 100;
+            },
         },
-    },
     methods: {
-        addProfile: function() {
+        addProfile: function () {
             let profile = {};
             profile.name = this.profileName;
 
@@ -69,33 +75,33 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.loadProfiles();
-                } else {
-                    if (result.status === 404) {
-                        alert("Could not find twitterhandle");
+                    if (result.status === 200) {
+                        this.loadProfiles();
                     } else {
-                        console.error("Error: ", result);
+                        if (result.status === 404) {
+                            alert("Could not find twitterhandle");
+                        } else {
+                            console.error("Error: ", result);
+                        }
                     }
-                }
-            });
+                });
 
         },
-        removeProfile: function() {
+        removeProfile: function () {
             for (let profile of this.selectedProfiles) {
 
                 console.log("Remove profile id " + profile.id);
 
                 fetch("api/twitter/handle",
-                        {
-                            body: JSON.stringify(this.profiles),
-                            method: "DELETE",
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
+                    {
+                        body: JSON.stringify(profile),
+                        method: "DELETE",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
 
-                        }).then(result => {
+                    }).then(result => {
                         if (result.status === 200) {
                             return result.json();
                         }
@@ -110,7 +116,7 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProfile: (async function() {
+        trainProfile: (async function () {
             this.message = "Training in progress...";
             let result = await fetch("api/twitter/train/",
                 {
@@ -129,7 +135,7 @@ const botApp = new Vue({
                 errorLogger(result);
             }
         }),
-        trainProgress: (async function() {
+        trainProgress: (async function () {
             let list = this.selectedProfiles;
 
             this.progressProfile = 0;
@@ -181,8 +187,8 @@ const botApp = new Vue({
 
         }),
 
-        saveBot: function() {
-            
+        saveBot: function () {
+
             if (this.botName === "") {
                 console.log("No botname assigned");
                 this.setErrormessage("No botname assigned");
@@ -190,7 +196,7 @@ const botApp = new Vue({
             }
             let bot = {};
 
-            bot.name = this.name;
+            bot.name = this.botName;
             bot.profiles = this.profiles;
 
             if (this.profileAlgorithm === "") {
@@ -214,14 +220,14 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.updateLists();
-                } else {
-                    errorLogger(result);
-                }
-            });
+                    if (result.status === 200) {
+                        this.updateLists();
+                    } else {
+                        errorLogger(result);
+                    }
+                });
         },
-        removeBot: (async function() {
+        removeBot: (async function () {
             let result = await fetch("api/bot",
                 {
                     body: JSON.stringify(this.selectedBot),
@@ -234,7 +240,7 @@ const botApp = new Vue({
             if (result.status === 200) {
                 this.updateLists();
             } else {
-                
+
             }
 
         }),
@@ -272,7 +278,7 @@ const botApp = new Vue({
         },
         setErrormessage: function (message) {
             let time = new Date(Date.now());
-            
+
             time.setSeconds(time.getSeconds() + 10);
             this.message = { message: message, expires: time };
             console.log(this.message);
