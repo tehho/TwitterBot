@@ -67,6 +67,32 @@ namespace TwitterBot.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete]
+        public IActionResult DeleteBot([FromBody] BotOptionApi option)
+        {
+            if (option == null)
+                return BadRequest();
+
+            if (option.Id == null)
+                return BadRequest();
+
+            var dbOption = _options.Get(new BotOptions() {Id = option.Id});
+
+            if (dbOption == null)
+                return NotFound();
+
+            try
+            {
+                _options.Remove(dbOption);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+
+            return Ok();
+        }
+
         private Tweet GenerateTweet()
         {
             return new Tweet();

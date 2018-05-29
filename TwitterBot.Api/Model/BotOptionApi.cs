@@ -9,10 +9,13 @@ namespace TwitterBot.Api.Model
 {
     public class BotOptionApi
     {
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public List<TwitterProfile> Profiles { get; set; }
+
         public BotOptionApi()
         {
+            Id = null;
             Name = "";
             Profiles = new List<TwitterProfile>();
         }
