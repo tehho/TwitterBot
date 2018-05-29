@@ -47,7 +47,13 @@ const botApp = new Vue({
                 showError: (Date.now() < this.message.expires),
                 message: this.message.message
             };
-        }
+        },
+            progressProfileCounter: function () {
+            return (this.progressProfile / this.progressProfileMax) * 100 
+            },
+        progressTweetsCounter: function () {
+            return (this.progressTweets / this.progressTweetsMax) * 100 
+        },
     },
     methods: {
         addProfile: function() {
@@ -145,6 +151,7 @@ const botApp = new Vue({
                 if (result.status === 200) {
                     let tweets = await result.json();
 
+                    this.progressTweets = 0;
                     this.progressTweetsMax = tweets.length;
 
                     for (let j = 0; j < tweets.length; j++) {
@@ -169,6 +176,8 @@ const botApp = new Vue({
                 }
                 this.progressProfile++;
             }
+
+            this.progressProfileMax = 0;
 
         }),
 
