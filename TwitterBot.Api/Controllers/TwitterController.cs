@@ -179,5 +179,37 @@ namespace TwitterBot.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet("CSV")]
+        public IActionResult GetTweetsToCsv(string twitterUser, int numberOfTweets)
+        {
+            _twitterService.tweetCount = numberOfTweets;
+
+            try
+            {
+                var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
+
+                var tweetString = "";
+
+                for (var index = 0; index < tweets.Count; index++)
+                {
+                    var tweet = tweets[index];
+                    tweetString += tweet.TwitterId + ",";
+                    tweetString += $"{tweet.CreatedAt.ToShortDateString()} {tweet.CreatedAt.ToShortTimeString()},";
+                    tweetString += tweet.Text.Replace(",", "") + ",";
+                    tweetString += tweet.FavoriteCount + ",";
+                    tweetString += tweet.RetweetCount;
+
+                    if (index != tweets.Count - 1)
+                        tweetString += Environment.NewLine;
+                }
+
+                return Ok(tweetString);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
