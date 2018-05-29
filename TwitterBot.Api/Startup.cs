@@ -59,9 +59,9 @@ namespace TwitterBot.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc();
             app.UseStaticFiles();
+            app.UseMvc();
+
             app.UseDirectoryBrowser();
             app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = 
                 new List<string> { "index.html" } });
