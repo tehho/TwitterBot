@@ -82,6 +82,8 @@ namespace TwitterBot.Infrastructure.Repository
 
             if (option != null)
                 _context.BotOptions.Remove(option);
+
+            _context.SaveChanges();
             return option;
         }
 
