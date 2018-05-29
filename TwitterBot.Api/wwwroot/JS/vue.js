@@ -20,7 +20,7 @@ const botApp = new Vue({
         bots: [],
         selectedProfiles: [],
         profiles: [],
-        message: ""
+        message: "",
         profileName: "",
         tweet: {
             text: "Test"
