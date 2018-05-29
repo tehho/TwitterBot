@@ -20,7 +20,8 @@ const botApp = new Vue({
         bots: [],
         selectedProfiles: [],
         profiles: [],
-        profileName: ""
+        profileName: "",
+        message: ""
     },
     methods: {
         addProfile: function () {
