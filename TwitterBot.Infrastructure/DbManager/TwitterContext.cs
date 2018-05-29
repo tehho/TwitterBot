@@ -16,8 +16,6 @@ namespace TwitterBot.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TwitterProfile>();
-
             modelBuilder.Entity<BotOptions>()
                 .HasMany(b => b.ProfileOccurances)
                 .WithOne(p => p.BotOptions);
