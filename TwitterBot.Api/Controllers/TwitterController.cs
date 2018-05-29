@@ -226,7 +226,7 @@ namespace TwitterBot.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("CSV")]
+        [HttpGet("TSV")]
         public IActionResult GetTweetsToCsv(string twitterUser, int numberOfTweets)
         {
             _twitterService.tweetCount = numberOfTweets;
@@ -239,12 +239,11 @@ namespace TwitterBot.Api.Controllers
 
                 for (var index = 0; index < tweets.Count; index++)
                 {
-                    var tweet = tweets[index];
-                    tweetString += tweet.TwitterId + ",";
-                    tweetString += $"{tweet.CreatedAt.ToShortDateString()} {tweet.CreatedAt.ToShortTimeString()},";
-                    tweetString += tweet.Text.Replace(",", "") + ",";
-                    tweetString += tweet.FavoriteCount + ",";
-                    tweetString += tweet.RetweetCount;
+                    tweetString += tweets[index].TwitterId + "\t";
+                    tweetString += $"{tweets[index].CreatedAt.ToShortDateString()} {tweets[index].CreatedAt.ToShortTimeString()}\t";
+                    tweetString += tweets[index].Text + "\t";
+                    tweetString += tweets[index].FavoriteCount + "\t";
+                    tweetString += tweets[index].RetweetCount;
 
                     if (index != tweets.Count - 1)
                         tweetString += Environment.NewLine;
