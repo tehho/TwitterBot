@@ -33,6 +33,12 @@ const botApp = new Vue({
             expires: new Date(2018, 05, 28),
             message: "test",
         },
+        progressProfile: "",
+        progressProfileMax: "",
+        progressTweets: "",
+        progressTweetsMax: "",
+
+
     },
     computed:
     {
@@ -116,6 +122,54 @@ const botApp = new Vue({
                 this.message = "Sum ting went wong";
                 errorLogger(result);
             }
+        }),
+        trainProgress: (async function() {
+            let list = this.selectedProfiles;
+
+            this.progressProfile = 0;
+            this.progressProfileMax = list.length;
+
+            for (let i = 0; i < list.length; i++) {
+                profile = list[i];
+
+                let result = await fetch("api/twitter/traindata",
+                    {
+                        body: JSON.stringify(profile),
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                if (result.status === 200) {
+                    let tweets = await result.json();
+
+                    this.progressTweetsMax = tweets.length;
+
+                    for (let j = 0; j < tweets.length; j++) {
+                        tweet = tweets[j];
+                        result = await fetch("api/twitter/trainwithtweet",
+                            {
+                                body: JSON.stringify({
+                                    profile: profile,
+                                    tweet: tweet
+                                }),
+                                method: "POST",
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                        if (result.status === 200) {
+
+                        }
+                        this.progressTweets++;
+                    }
+                }
+                this.progressProfile++;
+            }
+
         }),
 
         saveBot: function() {
