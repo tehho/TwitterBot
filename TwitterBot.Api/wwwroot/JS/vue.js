@@ -51,14 +51,17 @@ const botApp = new Vue({
             progressProfileCounter: function () {
                 if (this.progressProfileMax == 0)
                     return 0;
-                return Math.round((this.progressProfile / this.progressProfileMax)
-                    * 100)
-                    + this.progressTweetsCounter;
+                else
+                    return Math.round((
+                        (this.progressProfile + (this.progressTweetsCounter / 100))
+                        / this.progressProfileMax)
+                        * 100);
             },
             progressTweetsCounter: function () {
                 if (this.progressTweetsMax == 0)
                     return 0;
-                return Math.round(this.progressTweets / this.progressTweetsMax) * 100;
+                else
+                    return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
             },
         },
     methods: {
@@ -144,6 +147,12 @@ const botApp = new Vue({
             for (let i = 0; i < list.length; i++) {
                 profile = list[i];
 
+                //TODO Loading tweets
+
+                this.progressTweetsMax = 0;
+
+                this.setErrormessage("Loading tweets");
+
                 let result = await fetch("api/twitter/traindata",
                     {
                         body: JSON.stringify(profile),
@@ -153,6 +162,8 @@ const botApp = new Vue({
                             'Content-Type': 'application/json'
                         }
                     });
+                
+                this.setErrormessage("Training profile");
 
                 if (result.status === 200) {
                     let tweets = await result.json();
@@ -276,11 +287,12 @@ const botApp = new Vue({
             this.loadProfiles();
             this.loadBots();
         },
-        setErrormessage: function (message) {
+        setErrormessage: function (str) {
             let time = new Date(Date.now());
 
-            time.setSeconds(time.getSeconds() + 10);
-            this.message = { message: message, expires: time };
+            time.setSeconds(time.getSeconds() + 2);
+            this.message.message = str;
+            this.message.expires = time;
             console.log(this.message);
         },
 
