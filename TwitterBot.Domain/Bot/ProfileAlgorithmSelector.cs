@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class AlgorithmSelector : Entity
+    public class ProfileAlgorithmSelector : Entity
     {
         public Guid BotOptionsId { get; set; }
         public BotOptions BotOptions { get; set; }
@@ -14,7 +16,7 @@ namespace TwitterBot.Domain
         public int ByProbabilityWithPrediction { get; set; }
         public int Sum => Random + ByProbabilityWithPrediction + ByProbability;
 
-        public AlgorithmSelector()
+        public ProfileAlgorithmSelector()
         {
             Random = 0;
             ByProbability = 0;
