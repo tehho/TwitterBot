@@ -8,8 +8,8 @@ namespace TwitterBot.Domain
 {
     public class ProfileAlgorithmSelector : Entity
     {
-        public Guid BotOptionsId { get; set; }
-        public BotOptions BotOptions { get; set; }
+        //public Guid BotOptionsId { get; set; }
+        //public BotOptions BotOptions { get; set; }
 
         public int Random { get; set; }
         public int ByProbability { get; set; }

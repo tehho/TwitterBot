@@ -20,24 +20,12 @@ namespace TwitterBot.Infrastructure
                 .HasMany(b => b.ProfileOccurances)
                 .WithOne(p => p.BotOptions);
 
-            modelBuilder.Entity<ProfileAlgorithmSelector>()
-                .HasOne(a => a.BotOptions)
-                .WithOne(b => b.ProfileAlgorithms)
-                .HasForeignKey<BotOptions>(b => b.ProfileAlgorithmsId);
-
-            modelBuilder.Entity<AlgorithmSelector>()
-                .HasOne(a => a.BotOptions)
-                .WithOne(b => b.WordAlgorithms)
-                .HasForeignKey<BotOptions>(b => b.WordAlgorithmsId);
-
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasKey(occ => new {occ.BotOptionsId, occ.ProfileId});
 
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasOne(occ => occ.BotOptions)
-                .WithMany(bo => bo.ProfileOccurances)
-                //.HasForeignKey(occ => occ.BotOptionsId)
-                ;
+                .WithMany(bo => bo.ProfileOccurances);
 
             modelBuilder.Entity<NextWordOccurrence>()
                 .HasKey(nwo => new {nwo.WordId, nwo.ParentId});
