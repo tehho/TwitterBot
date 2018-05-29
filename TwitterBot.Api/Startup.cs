@@ -31,10 +31,12 @@ namespace TwitterBot.Api
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddEntityFrameworkSqlServer().AddDbContext<TwitterContext>(options => options.UseSqlServer(connectionString));
+
+            var appsettings = Configuration.GetSection("Appsettings").Get<Appsettings>();
+
+            services.AddTransient(x => appsettings);
             
-            services.AddTransient(x => Configuration.GetSection("Appsettings").Get<Appsettings>());
-            
-            services.AddTransient<TwitterServiceOptions>();
+            services.AddTransient(x => new TwitterServiceOptions(appsettings));
             services.AddScoped<TwitterService>();
 
             services.AddTransient<IRepository<TwitterProfile>, TwitterProfileRepository>();
@@ -42,7 +44,7 @@ namespace TwitterBot.Api
             services.AddTransient<IRepository<WordOccurrence>, WordOccurrenceRepository>();
             services.AddTransient<IRepository<BotOptions>, BotOptionRepository>();
 
-            services.AddTransient<TwitterProfileTrainer>();
+            services.AddScoped<TwitterProfileTrainer>();
 
             services.AddMvc();
         }

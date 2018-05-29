@@ -35,9 +35,15 @@ namespace TwitterBot.Infrastructure
             {
                 try
                 {
-                    tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) ??
-                                   (_wordRepository.Get(word) ??
-                                    _wordRepository.Add(word));
+                    if (word.Value == "be")
+                        tempWord = null;
+
+                    if (profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) != null)
+                        tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word));
+                    else if (_wordRepository.Get(word) != null)
+                        tempWord = _wordRepository.Get(word);
+                    else
+                        tempWord = _wordRepository.Add(word);
 
                     if (tempWord == null)
                         continue;
@@ -53,7 +59,7 @@ namespace TwitterBot.Infrastructure
                         currentWordOccurrence.Occurrence++;
                     }
 
-                    lastWordOccurrence?.AddOccurrance(currentWordOccurrence);
+                    lastWordOccurrence?.AddOccurrence(currentWordOccurrence.Word);
 
                     lastWordOccurrence = currentWordOccurrence;
                 }

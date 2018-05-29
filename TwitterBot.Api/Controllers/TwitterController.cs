@@ -28,11 +28,18 @@ namespace TwitterBot.Api.Controllers
         [HttpGet]
         public IActionResult GetExistingsProfiles() 
         {
-            var list = _repository.GetAll();
+            try
+            {
+                var list = _repository.GetAll();
 
-            list.ForEach(p => p.Words = null);
+                list.ForEach(p => p.Words = null);
 
-            return Ok(list);
+                return Ok(list);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost("tweet")]
@@ -82,8 +89,6 @@ namespace TwitterBot.Api.Controllers
             try
             {
                 prolife = _repository.Add(profile);
-
-                Train(prolife);
             }
             catch (Exception e)
             {
@@ -101,21 +106,34 @@ namespace TwitterBot.Api.Controllers
         {
             if (profiles?.Count == 0)
                 return BadRequest("Sum ting wong");
-            
-            var targetProfiles = _repository.SearchList((p => profiles.Any(profile => profile.Name == p.Name ))).ToList();
+            try
+            {
 
-            targetProfiles.ForEach(Train);
+                var targetProfiles = _repository.SearchList((p => profiles.Any(profile => profile.Name == p.Name))).ToList();
 
-            return Ok();    
+                targetProfiles.ForEach(Train);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         private void Train(TwitterProfile profile)
         {
             var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
 
-            tweets.ForEach(tweet => profile = _trainer.Train(profile, tweet));
+            tweets.ForEach(tweet =>
+            {
+                profile = _repository.Get(profile);
 
-            _repository.Update(profile);
+                profile = _trainer.Train(profile, tweet);
+
+                _repository.Update(profile);
+            });
+
         }
 
         [HttpDelete("handle")]

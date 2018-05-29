@@ -33,7 +33,7 @@ namespace TwitterBot.Infrastructure.Repository
             {
                 _context.Words.Add(temp);
                 _context.SaveChanges();
-            }
+            } 
             catch (Exception e)
             {
                 return null;

@@ -1,24 +1,27 @@
-﻿namespace TwitterBot.Domain
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace TwitterBot.Domain
 {
-    public class NextWordOccurrence : Entity
+    public class NextWordOccurrence
     {
-        public int WordId { get; set; }
-        public WordOccurrence Word { get; set; }
-        public int FollowedById { get; set; }
-        public WordOccurrence FollowedBy { get; set; }
+        public Guid WordId { get; set; }
+        [Required]
+        public Word Word { get; set; }
+        public Guid ParentId { get; set; }
+        [Required]
+        public WordOccurrence Parent { get; set; }
         public int Occurrence { get; set; }
 
         public NextWordOccurrence()
         {
         }
 
-        public NextWordOccurrence(WordOccurrence word, WordOccurrence followedBy)
+        public NextWordOccurrence(Word word, WordOccurrence parent)
         {
             Word = word;
-            //WordId = word.Id.Value;
 
-            FollowedBy = followedBy;
-            //FollowedById = followedBy.Id.Value;
+            Parent = parent;
 
             Occurrence = 1;
         }

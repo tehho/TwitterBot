@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace TwitterBot.Domain
 {
     public abstract class Entity
     {
-        public virtual int Id { get; set; }
+        [Key]
+        public virtual Guid? Id { get; set; }
     }
 }

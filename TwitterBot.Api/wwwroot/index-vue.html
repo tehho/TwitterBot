@@ -27,10 +27,9 @@
                 </option>
             </select>
 
-            <br />{{selectedProfiles}}
-
             <br /><button @click="removeProfile">Remove</button>
             <button @click="trainProfile">Train</button>
+            <button @click="updateLists">Update</button>
             <br />TwitterHandle: <input type="text" v-model="profileName" />
             <button @click="addProfile" class="button">Add</button>
 
@@ -53,7 +52,8 @@
                     {{bot.name}}
                 </option>
             </select>
-
+            <br/>
+            {{selectedBot}}
         </div>
         <div id="footer" class="footer">
             <h2>Footer</h2>

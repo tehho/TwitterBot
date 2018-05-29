@@ -109,6 +109,15 @@ namespace TwitterBot.Infrastructure.Repository
             return _context.BotOptions
                 .Include(option => option.ProfileOccurances)
                 .ThenInclude(occ => occ.Profile)
+                .ThenInclude(p => p.Words)
+                .ThenInclude(w => w.Word)
+
+                .Include(option => option.ProfileOccurances)
+                .ThenInclude(occ => occ.Profile)
+                .ThenInclude(p => p.Words)
+                .ThenInclude(w => w.NextWordOccurrences)
+                .ThenInclude(wno => wno.Word)
+
                 .Where(option => predicate(option)).ToList();
         }
 

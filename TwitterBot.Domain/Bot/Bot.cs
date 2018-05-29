@@ -41,7 +41,7 @@ namespace TwitterBot.Domain
             }
         }
 
-        private Word PickWord(IProfile profile, Word previousWord, BotOptions options)
+        private Word PickWord(TwitterProfile profile, Word previousWord, BotOptions options)
         {
             var algorithm = options.WordAlgorithms.PickAlgorithm(random);
             Word word = null;
@@ -62,7 +62,7 @@ namespace TwitterBot.Domain
             return word;
         }
 
-        private Word PickWordByProbabilityWithPrediction(IProfile profile, Word previousWord)
+        private Word PickWordByProbabilityWithPrediction(TwitterProfile profile, Word previousWord)
         {
             var word = profile.Words.SingleOrDefault(w => w.Word.Equals(previousWord));
 
@@ -72,11 +72,11 @@ namespace TwitterBot.Domain
             var weights = word.NextWordOccurrences.Select(n => n.Occurrence).ToList();
             var index = AlgorithmSelector.PickIndexWeighted(weights, random);
 
-            return word.NextWordOccurrences[index].Word.Word;
+            return word.NextWordOccurrences[index].Word;
 
         }
 
-        private Word PickWordByProbability(IProfile profile)
+        private Word PickWordByProbability(TwitterProfile profile)
         {
             var weights = profile.Words.Select(w => w.Occurrence).ToList();
 
@@ -85,17 +85,17 @@ namespace TwitterBot.Domain
             return profile.Words[index].Word;
         }
 
-        private Word PickWordRandom(IProfile profile)
+        private Word PickWordRandom(TwitterProfile profile)
         {
             var index = random.Next(profile.Words.Count);
 
             return profile.Words[index].Word;
         }
 
-        private IProfile PickProfile(BotOptions options)
+        private TwitterProfile PickProfile(BotOptions options)
         {
             var algorithm = options.ProfileAlgorithms.PickAlgorithm(random);
-            IProfile profile = null;
+            TwitterProfile profile = null;
 
             switch (algorithm)
             {
@@ -113,7 +113,7 @@ namespace TwitterBot.Domain
             return profile;
         }
 
-        private IProfile PickProfileWeighted(IReadOnlyList<ProfileOccurrance> optionsProfileOccurances)
+        private TwitterProfile PickProfileWeighted(IReadOnlyList<ProfileOccurrance> optionsProfileOccurances)
         {
             var weights = optionsProfileOccurances.Select(occ => occ.Occurrance).ToList();
 
@@ -124,7 +124,7 @@ namespace TwitterBot.Domain
             return profile;
         }
 
-        private IProfile PickProfileTrueRandom(IReadOnlyList<IProfile> profiles)
+        private TwitterProfile PickProfileTrueRandom(IReadOnlyList<TwitterProfile> profiles)
         {
             var index = random.Next(profiles.Count);
             var profile = profiles[index];

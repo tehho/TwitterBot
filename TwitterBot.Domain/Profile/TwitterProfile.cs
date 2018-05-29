@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TwitterBot.Domain
 {
-    public class TwitterProfile : Entity, IProfile
+    public class TwitterProfile : Entity
     {
         public string Name { get; set; }
         public IReadOnlyList<Word> Vocabulary => Words?.Select(wo => wo.Word).ToList();

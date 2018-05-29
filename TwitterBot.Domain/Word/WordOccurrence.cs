@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -9,18 +10,22 @@ namespace TwitterBot.Domain
 {
     public class WordOccurrence : Entity
     {
-        public int WordId { get; set; }
+        [Required]
+        public Guid WordId { get; set; }
+        [Required]
         public Word Word { get; set; }
-        public int TwitterProfileId { get; set; }
+        [Required]
+        public Guid TwitterProfileId { get; set; }
+        [Required]
         public TwitterProfile TwitterProfile { get; set; }
-        public List<NextWordOccurrence> NextWordOccurrences { get; set; }
-        public int Occurrence { get; set; }
 
-        public List<WordOccurrence> NextWords => NextWordOccurrences.Select(nwo => nwo.Word).ToList();
+        public virtual IList<NextWordOccurrence> NextWordOccurrences { get; set; }
+        public int Occurrence { get; set; }
 
         public WordOccurrence()
         {
             NextWordOccurrences = new List<NextWordOccurrence>();
+            Occurrence = 1;
         }
 
         public WordOccurrence(Word word, TwitterProfile profile)
@@ -28,18 +33,21 @@ namespace TwitterBot.Domain
             // TODO: Null-checks
 
             Word = word;
-            TwitterProfile = profile;
+            WordId = word.Id.Value;
 
-            NextWordOccurrences = new List<NextWordOccurrence>(); 
+            TwitterProfile = profile;
+            TwitterProfileId = profile.Id.Value;
+
+            NextWordOccurrences = new List<NextWordOccurrence>();
             Occurrence = 1;
         }
 
-        public void AddOccurrence(WordOccurrence other)
+        public void AddOccurrence(Word other)
         {
-            var occurrence = NextWordOccurrences.SingleOrDefault(nwo => nwo.FollowedById == other.Id);
+            var occurrence = NextWordOccurrences.SingleOrDefault(nwo => nwo.Word.Id == other.Id);
             if (occurrence == null)
             {
-                occurrence = new NextWordOccurrence(this, other);
+                occurrence = new NextWordOccurrence(other, this);
                 NextWordOccurrences.Add(occurrence);
             }
             else

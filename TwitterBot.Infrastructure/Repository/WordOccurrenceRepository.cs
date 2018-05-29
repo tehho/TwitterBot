@@ -96,7 +96,7 @@ namespace TwitterBot.Infrastructure.Repository
                     .Include(occ => occ.TwitterProfile)
                     .Include(occ => occ.Word)
                     .Include(occ => occ.NextWordOccurrences)
-                    .ThenInclude(nwo => nwo.FollowedBy)
+                    .ThenInclude(nwo => nwo.Word)
                     .Where(occ => predicate(occ)).ToList();
         }
 
@@ -106,7 +106,7 @@ namespace TwitterBot.Infrastructure.Repository
                 .Include(occ => occ.TwitterProfile)
                 .Include(occ => occ.Word)
                 .Include(occ => occ.NextWordOccurrences)
-                .ThenInclude(nwo => nwo.FollowedBy)
+                .ThenInclude(nwo => nwo.Parent)
                 .SingleOrDefault(occ => predicate(occ));
         }
 

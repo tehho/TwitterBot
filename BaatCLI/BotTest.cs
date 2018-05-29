@@ -36,7 +36,7 @@ namespace BaatDesktopClient
             model.Entity<WordOccurrence>().HasOne(w => w.Word);
             model.Entity<WordOccurrence>().HasMany(w => w.NextWordOccurrences).WithOne(n => n.Word).OnDelete(DeleteBehavior.Restrict);
             //model.Entity<NextWordOccurrence>().HasOne(w => w.Word);
-            model.Entity<NextWordOccurrence>().HasOne(w => w.FollowedBy);
+            model.Entity<NextWordOccurrence>().HasOne(w => w.Parent);
             //model.Entity<WordOccurrence>().HasMany(w => w.NextWords);
             //model.Entity<NextWordOccurrence>().HasKey(w => new { w.WordId, w.FollowedById });
             //model.Entity<WordOccurrence>().HasMany(w => w.NextWords).WithOne(n => n.Word);

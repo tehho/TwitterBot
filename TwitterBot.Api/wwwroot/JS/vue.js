@@ -23,7 +23,7 @@ const botApp = new Vue({
         profileName: ""
     },
     methods: {
-        addProfile: function() {
+        addProfile: function () {
             let profile = {};
             profile.name = this.profileName;
 
@@ -36,33 +36,33 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.loadProfiles();
-                } else {
-                    if (result.status === 404) {
-                        alert("Could not find twitterhandle");
+                    if (result.status === 200) {
+                        this.loadProfiles();
                     } else {
-                        console.error("Error: ", result);
+                        if (result.status === 404) {
+                            alert("Could not find twitterhandle");
+                        } else {
+                            console.error("Error: ", result);
+                        }
                     }
-                }
-            });
+                });
 
         },
-        removeProfile: function() {
+        removeProfile: function () {
             for (let profile of this.selectedProfiles) {
 
                 console.log("Remove profile id " + profile.id);
 
                 fetch("api/twitter/handle",
-                        {
-                            body: JSON.stringify(this.profiles),
-                            method: "DELETE",
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
+                    {
+                        body: JSON.stringify(this.profiles),
+                        method: "DELETE",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
 
-                        }).then(result => {
+                    }).then(result => {
                         if (result.status === 200) {
                             return result.json();
                         }
@@ -77,13 +77,24 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProfile: function() {
-            for (let profile of this.selected) {
-                console.log("Train profile id " + profile.id);
-            }
-        },
+        trainProfile: (async function () {
+            let result = await fetch("api/twitter/train/",
+                {
+                    body: JSON.stringify(this.selectedProfiles),
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-        saveBot: function() {
+            if (result.status === 200)
+                alert("Training complete");
+            else
+                errorLogger(result);
+        }),
+
+        saveBot: function () {
 
             let bot = {};
 
@@ -99,31 +110,30 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.loadBots();
-                } else {
-                    errorLogger(result);
-                }
-            });
+                    if (result.status === 200) {
+                        this.updateLists();
+                        tweetApp.updateLists();
+                    } else {
+                        errorLogger(result);
+                    }
+                });
+        },
+        
+        updateLists: function () {
+            this.loadProfiles();
+            this.loadBots();
         },
 
-        generateTweet: function() {
-
-        },
-        postTweet: function() {
-
-        },
-
-        loadProfiles: (async function() {
+        loadProfiles: (async function () {
             this.profiles = await loadProfiles();
         }),
-        loadBots: (async function() {
+        loadBots: (async function () {
             this.bots = await loadBots();
         }),
 
     },
-    created: function() {
-        this.profiles =  loadProfiles();
+    created: function () {
+        this.profiles = loadProfiles();
         this.bots = loadBots();
     }
 });
@@ -138,15 +148,14 @@ const tweetApp = new Vue({
         bots: []
     },
     methods: {
-        generateTweet: (async function() {
+        generateTweet: (async function () {
             let url = "api/bot/" + this.selectedBot.id;
             let result = await fetch(url);
-                
             if (result.status === 200)
                 this.tweet = await result.json();
         }),
 
-        postTweet: (async function() {
+        postTweet: (async function () {
             var result = await fetch("api/twitter/PostToTwitter",
                 {
                     body: JSON.stringify(this.tweet),
@@ -160,8 +169,11 @@ const tweetApp = new Vue({
                 alert("Tweet posted");
         }),
 
-        loadBots: (async function() {
-            this.bots = loadBots();
+        updateLists: function () {
+            this.loadBots();
+        },
+        loadBots: (async function () {
+            this.bots = await loadBots();
         }),
     }
 })
@@ -169,7 +181,6 @@ const tweetApp = new Vue({
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");
-
     if (result.status === 200) {
         return await result.json();
     } else {
@@ -178,11 +189,13 @@ async function loadProfiles() {
 }
 
 async function loadBots() {
-    let result = await fetch("api/bot/");
-
+    let result = await fetch("api/bot");
     if (result.status === 200) {
         return await result.json();
     } else {
         errorLogger(result);
     }
 }
+
+tweetApp.updateLists();
+botApp.updateLists();

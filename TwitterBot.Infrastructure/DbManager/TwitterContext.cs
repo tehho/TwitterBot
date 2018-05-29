@@ -19,16 +19,20 @@ namespace TwitterBot.Infrastructure
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasKey(occ => new {BotOptionId = occ.BotOptionsId, occ.ProfileId});
 
-            modelBuilder.Entity<WordOccurrence>()
-                .HasOne(w => w.Word);
+            modelBuilder.Entity<ProfileOccurrance>()
+                .HasOne(occ => occ.BotOptions)
+                .WithMany(bo => bo.ProfileOccurances)
+                .HasForeignKey(occ => occ.BotOptionsId);
 
-            modelBuilder.Entity<WordOccurrence>()
-                .HasMany(w => w.NextWordOccurrences)
-                .WithOne(n => n.Word)
-                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<NextWordOccurrence>()
-                .HasOne(w => w.FollowedBy);
+                .HasKey(nwo => new {nwo.WordId, nwo.ParentId});
+
+            modelBuilder.Entity<NextWordOccurrence>()
+                .HasOne(nwo => nwo.Parent)
+                .WithMany(wo => wo.NextWordOccurrences)
+                .HasForeignKey(nwo => nwo.ParentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }
