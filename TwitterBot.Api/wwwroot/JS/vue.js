@@ -15,7 +15,7 @@ Array.prototype.Remove = function (obj) {
 const botApp = new Vue({
     el: "#botApp",
     data: {
-        name: "Test",
+        name: "",
         selectedBot: "",
         bots: [],
         selectedProfiles: [],
@@ -23,9 +23,8 @@ const botApp = new Vue({
         message: "",
         profileName: "",
         tweet: {
-            text: "Test"
+            text: ""
         },
-        selectedBot: "",
     },
     methods: {
         addProfile: function () {
@@ -83,6 +82,7 @@ const botApp = new Vue({
             }
         },
         trainProfile: (async function () {
+            this.message = "Training in progress...";
             let result = await fetch("api/twitter/train/",
                 {
                     body: JSON.stringify(this.selectedProfiles),
@@ -94,9 +94,11 @@ const botApp = new Vue({
                 });
 
             if (result.status === 200)
-                alert("Training complete");
-            else
+                this.message = "";
+            else {
+                this.message = "Sum ting went wong";
                 errorLogger(result);
+            }
         }),
 
         saveBot: function () {
@@ -143,14 +145,23 @@ const botApp = new Vue({
             if (result.status === 200)
                 alert("Tweet posted");
         }),
-        
+
+        simpleToggle: function() {
+
+        },
+        advancedToggle: function() {
+
+        },
+
         updateLists: function () {
             this.loadProfiles();
             this.loadBots();
         },
 
         loadProfiles: (async function () {
-            this.profiles = await loadProfiles();
+            let list = await loadProfiles();
+            this.profiles = list;
+            console.log(list[0].name);
         }),
         loadBots: (async function () {
             this.bots = await loadBots();
@@ -166,6 +177,7 @@ const botApp = new Vue({
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");
+    console.log(result);
     if (result.status === 200) {
         return await result.json();
     } else {
