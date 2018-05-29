@@ -21,6 +21,9 @@ namespace TwitterBot.Infrastructure
                 .WithOne(p => p.BotOptions);
 
             modelBuilder.Entity<ProfileOccurrance>()
+                .HasKey(occ => new {occ.BotOptionsId, occ.ProfileId});
+
+            modelBuilder.Entity<ProfileOccurrance>()
                 .HasOne(occ => occ.BotOptions)
                 .WithMany(bo => bo.ProfileOccurances)
                 .HasForeignKey(occ => occ.BotOptionsId);

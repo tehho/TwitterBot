@@ -24,7 +24,7 @@ namespace TwitterBot.Domain
         public AlgorithmType PickAlgorithm(Random random)
         {
             if (Sum <= 0)
-                throw new InvalidOperationException("Algorithms not configured");
+                return AlgorithmType.Random;
 
             var index = PickIndexWeighted(new List<int> {
                 Random,

@@ -22,7 +22,7 @@ namespace TwitterBot.Infrastructure
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
-            var regexExtended = new Regex("(^@|^ $|^http|^HTTP)");
+            var regexExtended = new Regex("(^@|^ $|^http|^HTTP|^#)");
             var words = regex.Split(content.Text)
                 .Where(word => !string.IsNullOrWhiteSpace(word))
                 .Where(word => !regexExtended.IsMatch(word))
@@ -30,7 +30,6 @@ namespace TwitterBot.Infrastructure
 
             WordOccurrence lastWordOccurrence = null;
             Word tempWord = null;
-            WordOccurrence currentWordOccurrence = null;
             foreach (var word in words)
             {
                 try
@@ -48,7 +47,7 @@ namespace TwitterBot.Infrastructure
                     if (tempWord == null)
                         continue;
 
-                    currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Id == tempWord.Id);
+                    var currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Id == tempWord.Id);
 
                     if (currentWordOccurrence == null)
                     {
