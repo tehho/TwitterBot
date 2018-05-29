@@ -227,7 +227,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet("TSV")]
-        public IActionResult GetTweetsToCsv(string twitterUser, int numberOfTweets)
+        public IActionResult GetTweetsToTsv(string twitterUser, int numberOfTweets)
         {
             _twitterService.tweetCount = numberOfTweets;
 
@@ -235,7 +235,7 @@ namespace TwitterBot.Api.Controllers
             {
                 var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
 
-                var tweetString = "";
+                var tweetString = $"TwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
 
                 for (var index = 0; index < tweets.Count; index++)
                 {
