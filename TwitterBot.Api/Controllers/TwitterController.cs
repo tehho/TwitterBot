@@ -29,7 +29,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetExistingsProfiles() 
+        public IActionResult GetExistingsProfiles()
         {
             _logger.Log("Accessing all profiles");
             try
@@ -48,7 +48,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile) 
+        public IActionResult Post([FromBody]TwitterProfileApi profile)
         {
             _logger.Log("Adding profile to list");
             if (profile == null)
@@ -101,6 +101,52 @@ namespace TwitterBot.Api.Controllers
             return Ok(prolife);
         }
 
+        [HttpPost("trainwithtweet")]
+        public IActionResult TrainProfileWithTweet([FromBody](TwitterProfileApi profile, TweetApi tweet) data)
+        {
+            if (data.profile == null)
+                return BadRequest();
+
+            if (data.tweet == null)
+                return BadRequest();
+
+            var profile = _repository.Get(data.profile);
+
+            if (profile == null)
+                return NotFound();
+
+            profile = _trainer.Train(profile, data.tweet);
+
+            if (profile == null)
+                return StatusCode(500);
+
+            _repository.Update(profile);
+
+            return Ok();
+        }
+
+        [HttpPost("TrainData")]
+        public IActionResult GetTrainData([FromBody]TwitterProfileApi apiprofile)
+        {
+            if (apiprofile == null)
+                return BadRequest();
+
+            if (apiprofile.Name == null)
+                return BadRequest();
+
+            var profile = _repository.Get(apiprofile);
+
+            if (profile == null)
+                return NotFound();
+
+            var tweets = _twitterService.ListAllTweetsFromProfile(profile);
+
+            if (tweets == null)
+                return BadRequest();
+
+            return Ok(tweets);
+        }
+
         [HttpPost("train")]
         public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profiles)
         {
@@ -137,20 +183,20 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpDelete("handle")]
-        public IActionResult Delete([FromBody] List<TwitterProfileApi> profiles)
+        public IActionResult Delete([FromBody] TwitterProfileApi profile)
         {
-            if (profiles == null || profiles.Count == 0)
+            if (profile == null)
             {
                 return BadRequest("No profile was given");
             }
 
-            foreach (var profile in profiles)
-            {
-                if (!_repository.Exists(profile))
-                    return BadRequest($"Profile does not exist: {profile.Name}");
-            }
+            if (!_repository.Exists(profile))
+                return BadRequest($"Profile does not exist: {profile.Name}");
+            
+            var prolife = _repository.Remove(profile);
 
-            profiles.ForEach(profile => _repository.Remove(profile));
+            if (prolife == null)
+                return BadRequest();
 
             return Ok("Remove complete");
         }

@@ -33,18 +33,39 @@ const botApp = new Vue({
             expires: new Date(2018, 05, 28),
             message: "test",
         },
+        progressProfile: "",
+        progressProfileMax: "",
+        progressTweets: "",
+        progressTweetsMax: "",
+
+
     },
     computed:
-    {
-        errorMessage: function() {
-            return {
-                showError: (Date.now() < this.message.expires),
-                message: this.message.message
-            };
-        }
-    },
+        {
+            errorMessage: function () {
+                return {
+                    showError: (Date.now() < this.message.expires),
+                    message: this.message.message
+                };
+            },
+            progressProfileCounter: function () {
+                if (this.progressProfileMax == 0)
+                    return 0;
+                else
+                    return Math.round((
+                        (this.progressProfile + (this.progressTweetsCounter / 100))
+                        / this.progressProfileMax)
+                        * 100);
+            },
+            progressTweetsCounter: function () {
+                if (this.progressTweetsMax == 0)
+                    return 0;
+                else
+                    return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
+            },
+        },
     methods: {
-        addProfile: function() {
+        addProfile: function () {
             let profile = {};
             profile.name = this.profileName;
 
@@ -57,33 +78,33 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.loadProfiles();
-                } else {
-                    if (result.status === 404) {
-                        alert("Could not find twitterhandle");
+                    if (result.status === 200) {
+                        this.loadProfiles();
                     } else {
-                        console.error("Error: ", result);
+                        if (result.status === 404) {
+                            alert("Could not find twitterhandle");
+                        } else {
+                            console.error("Error: ", result);
+                        }
                     }
-                }
-            });
+                });
 
         },
-        removeProfile: function() {
+        removeProfile: function () {
             for (let profile of this.selectedProfiles) {
 
                 console.log("Remove profile id " + profile.id);
 
                 fetch("api/twitter/handle",
-                        {
-                            body: JSON.stringify(this.profiles),
-                            method: "DELETE",
-                            headers: {
-                                'Accept': 'application/json',
-                                'Content-Type': 'application/json'
-                            }
+                    {
+                        body: JSON.stringify(profile),
+                        method: "DELETE",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
 
-                        }).then(result => {
+                    }).then(result => {
                         if (result.status === 200) {
                             return result.json();
                         }
@@ -98,7 +119,7 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProfile: (async function() {
+        trainProfile: (async function () {
             this.message = "Training in progress...";
             let result = await fetch("api/twitter/train/",
                 {
@@ -117,9 +138,68 @@ const botApp = new Vue({
                 errorLogger(result);
             }
         }),
+        trainProgress: (async function () {
+            let list = this.selectedProfiles;
 
-        saveBot: function() {
-            
+            this.progressProfile = 0;
+            this.progressProfileMax = list.length;
+
+            for (let i = 0; i < list.length; i++) {
+                profile = list[i];
+
+                //TODO Loading tweets
+
+                this.progressTweetsMax = 0;
+
+                this.setErrormessage("Loading tweets");
+
+                let result = await fetch("api/twitter/traindata",
+                    {
+                        body: JSON.stringify(profile),
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                
+                this.setErrormessage("Training profile");
+
+                if (result.status === 200) {
+                    let tweets = await result.json();
+
+                    this.progressTweets = 0;
+                    this.progressTweetsMax = tweets.length;
+
+                    for (let j = 0; j < tweets.length; j++) {
+                        tweet = tweets[j];
+                        result = await fetch("api/twitter/trainwithtweet",
+                            {
+                                body: JSON.stringify({
+                                    profile: profile,
+                                    tweet: tweet
+                                }),
+                                method: "POST",
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                }
+                            });
+                        if (result.status === 200) {
+
+                        }
+                        this.progressTweets++;
+                    }
+                }
+                this.progressProfile++;
+            }
+
+            this.progressProfileMax = 0;
+
+        }),
+
+        saveBot: function () {
+
             if (this.botName === "") {
                 console.log("No botname assigned");
                 this.setErrormessage("No botname assigned");
@@ -127,7 +207,7 @@ const botApp = new Vue({
             }
             let bot = {};
 
-            bot.name = this.name;
+            bot.name = this.botName;
             bot.profiles = this.profiles;
 
             if (this.profileAlgorithm === "") {
@@ -151,14 +231,14 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                if (result.status === 200) {
-                    this.updateLists();
-                } else {
-                    errorLogger(result);
-                }
-            });
+                    if (result.status === 200) {
+                        this.updateLists();
+                    } else {
+                        errorLogger(result);
+                    }
+                });
         },
-        removeBot: (async function() {
+        removeBot: (async function () {
             let result = await fetch("api/bot",
                 {
                     body: JSON.stringify(this.selectedBot),
@@ -171,7 +251,7 @@ const botApp = new Vue({
             if (result.status === 200) {
                 this.updateLists();
             } else {
-                
+
             }
 
         }),
@@ -207,11 +287,12 @@ const botApp = new Vue({
             this.loadProfiles();
             this.loadBots();
         },
-        setErrormessage: function (message) {
+        setErrormessage: function (str) {
             let time = new Date(Date.now());
-            
-            time.setSeconds(time.getSeconds() + 10);
-            this.message = { message: message, expires: time };
+
+            time.setSeconds(time.getSeconds() + 2);
+            this.message.message = str;
+            this.message.expires = time;
             console.log(this.message);
         },
 

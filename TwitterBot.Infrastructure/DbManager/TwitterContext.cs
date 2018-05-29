@@ -34,7 +34,7 @@ namespace TwitterBot.Infrastructure
                 .HasOne(nwo => nwo.Parent)
                 .WithMany(wo => wo.NextWordOccurrences)
                 .HasForeignKey(nwo => nwo.ParentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }
