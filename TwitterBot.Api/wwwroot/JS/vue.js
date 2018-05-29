@@ -15,8 +15,7 @@ Array.prototype.Remove = function (obj) {
 const botApp = new Vue({
     el: "#botApp",
     data: {
-        name: "",
-        selectedBot: "",
+        selectedBot: { name: "" },
         bots: [],
         selectedProfiles: [],
         profiles: [],
