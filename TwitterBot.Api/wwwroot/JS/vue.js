@@ -138,6 +138,8 @@ const botApp = new Vue({
                 });
         },
 
+        removeBot: function () {},
+
         generateTweet: (async function () {
             let url = "api/bot/" + this.selectedBot.id;
             let result = await fetch(url);
