@@ -7,6 +7,7 @@ using Tweetinvi.Core.Extensions;
 using TwitterBot.Api.Model;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure;
+using TwitterBot.Infrastructure.Logging;
 using TwitterBot.Infrastructure.Repository;
 
 namespace TwitterBot.Api.Controllers
@@ -17,23 +18,27 @@ namespace TwitterBot.Api.Controllers
         private readonly IRepository<TwitterProfile> _repository;
         private readonly TwitterService _twitterService;
         private readonly TwitterProfileTrainer _trainer;
+        private readonly ILogger _logger;
 
-        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService, TwitterProfileTrainer trainer)
+        public TwitterController(IRepository<TwitterProfile> repository, TwitterService twitterService, TwitterProfileTrainer trainer, ILogger logger)
         {
             _repository = repository;
             _twitterService = twitterService;
             _trainer = trainer;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult GetExistingsProfiles() 
         {
+            _logger.Log("Accessing all profiles");
             try
             {
                 var list = _repository.GetAll();
 
                 list.ForEach(p => p.Words = null);
 
+                _logger.Separator();
                 return Ok(list);
             }
             catch (Exception e)
@@ -42,45 +47,35 @@ namespace TwitterBot.Api.Controllers
             }
         }
 
-        [HttpPost("tweet")]
-        public IActionResult GetTweet([FromQuery] List<TwitterProfileApi> profiles)
-        {
-            List<TwitterProfile> list = null;
-            if (profiles == null || profiles.Count == 0)
-                list = _repository.GetAll().ToList();
-            else
-                list = _repository.SearchList(profile =>
-                {
-                    foreach (var p in profiles)
-                    {
-                        if (p.Name == profile.Name)
-                            return true;
-                    }
-
-                    return false;
-                }).ToList();
-
-            //TODO GenerateTweet()
-
-            return Ok();
-        }
-
         [HttpPost]
         public IActionResult Post([FromBody]TwitterProfileApi profile) 
         {
+            _logger.Log("Adding profile to list");
             if (profile == null)
+            {
+                _logger.Error("No profile recieved");
+                _logger.Separator();
                 return BadRequest("Sum ting wong");
+            }
 
             if (profile.Name == null)
+            {
+                _logger.Error("No profilename");
+                _logger.Separator();
                 return BadRequest("Name not given");
+            }
 
             if (_twitterService.DoesTwitterUserExist(profile) == false)
             {
+                _logger.Error("Profile doesn't match a twitter profile");
+                _logger.Separator();
                 return NotFound("Twitter user does not exist");
             }
 
             if (_twitterService.ProfileTimeLineHasTweets(profile) == false)
             {
+                _logger.Error("Profile doesn't have any tweets");
+                _logger.Separator();
                 return BadRequest("Twitter user does not have any tweets.");
             }
 
@@ -89,15 +84,20 @@ namespace TwitterBot.Api.Controllers
             try
             {
                 prolife = _repository.Add(profile);
+                _logger.Log($"Profile {profile.Name} added to database");
+
             }
             catch (Exception e)
             {
                 if (prolife != null)
                     _repository.Remove(prolife);
-
+                _logger.Error("Something went wrong adding to db");
+                _logger.Error(e.Message);
+                _logger.Separator();
                 return BadRequest();
             }
 
+            _logger.Separator();
             return Ok(prolife);
         }
 

@@ -22,7 +22,9 @@ namespace TwitterBot.Infrastructure
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
             var regex = new Regex(@"(\.|,| |!|\?)");
+
             var regexExtended = new Regex("(^@|^ $|^http|^HTTP|^#)");
+
             var words = regex.Split(content.Text)
                 .Where(word => !string.IsNullOrWhiteSpace(word))
                 .Where(word => !regexExtended.IsMatch(word))

@@ -20,7 +20,11 @@ const botApp = new Vue({
         bots: [],
         selectedProfiles: [],
         profiles: [],
-        profileName: ""
+        profileName: "",
+        tweet: {
+            text: "Test"
+        },
+        selectedBot: "",
     },
     methods: {
         addProfile: function () {
@@ -118,6 +122,26 @@ const botApp = new Vue({
                     }
                 });
         },
+
+        generateTweet: (async function () {
+            let url = "api/bot/" + this.selectedBot.id;
+            let result = await fetch(url);
+            if (result.status === 200)
+                this.tweet = await result.json();
+        }),
+        postTweet: (async function () {
+            var result = await fetch("api/twitter/PostToTwitter",
+                {
+                    body: JSON.stringify(this.tweet),
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+            if (result.status === 200)
+                alert("Tweet posted");
+        }),
         
         updateLists: function () {
             this.loadProfiles();
@@ -138,46 +162,6 @@ const botApp = new Vue({
     }
 });
 
-const tweetApp = new Vue({
-    el: "#tweetApp",
-    data: {
-        tweet: {
-            text: "Test"
-        },
-        selectedBot: "",
-        bots: []
-    },
-    methods: {
-        generateTweet: (async function () {
-            let url = "api/bot/" + this.selectedBot.id;
-            let result = await fetch(url);
-            if (result.status === 200)
-                this.tweet = await result.json();
-        }),
-
-        postTweet: (async function () {
-            var result = await fetch("api/twitter/PostToTwitter",
-                {
-                    body: JSON.stringify(this.tweet),
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-            if (result.status === 200)
-                alert("Tweet posted");
-        }),
-
-        updateLists: function () {
-            this.loadBots();
-        },
-        loadBots: (async function () {
-            this.bots = await loadBots();
-        }),
-    }
-})
-
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");
@@ -197,5 +181,4 @@ async function loadBots() {
     }
 }
 
-tweetApp.updateLists();
 botApp.updateLists();
