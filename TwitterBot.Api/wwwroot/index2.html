@@ -228,6 +228,10 @@
                                             {{profile.name}}
                                         </option>
                                     </select>
+                                    
+                                    <div class="progress my-3" v-if="progressProfileMax != 0" >
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%">{{progressProfile}} / {{progressProfileMax}}</div>
+                                    </div>
 
                                     <button class="btn btn-light my-3" @click="removeProfile">Remove</button>
                                     <button class="btn btn-light my-3" @click="trainProfile">Train</button>
