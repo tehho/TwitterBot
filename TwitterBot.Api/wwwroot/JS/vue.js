@@ -21,7 +21,7 @@ const botApp = new Vue({
         selectedProfiles: [],
         profiles: [],
         message: {
-            expires: new Date(2018,05,30),
+            expires: new Date(2018, 05, 28),
             message: "test",
         },
         profileName: "",
@@ -30,16 +30,16 @@ const botApp = new Vue({
         },
     },
     computed:
-        {
-            errorMessage: function() {
-                return {
-                    showError: (Date.now() < this.message.expires),
-                    message: this.message.message
-                };
-            }
-        },
+    {
+        errorMessage: function() {
+            return {
+                showError: (Date.now() < this.message.expires),
+                message: this.message.message
+            };
+        }
+    },
     methods: {
-        addProfile: function () {
+        addProfile: function() {
             let profile = {};
             profile.name = this.profileName;
 
@@ -52,33 +52,33 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                    if (result.status === 200) {
-                        this.loadProfiles();
+                if (result.status === 200) {
+                    this.loadProfiles();
+                } else {
+                    if (result.status === 404) {
+                        alert("Could not find twitterhandle");
                     } else {
-                        if (result.status === 404) {
-                            alert("Could not find twitterhandle");
-                        } else {
-                            console.error("Error: ", result);
-                        }
+                        console.error("Error: ", result);
                     }
-                });
+                }
+            });
 
         },
-        removeProfile: function () {
+        removeProfile: function() {
             for (let profile of this.selectedProfiles) {
 
                 console.log("Remove profile id " + profile.id);
 
                 fetch("api/twitter/handle",
-                    {
-                        body: JSON.stringify(this.profiles),
-                        method: "DELETE",
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
+                        {
+                            body: JSON.stringify(this.profiles),
+                            method: "DELETE",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
 
-                    }).then(result => {
+                        }).then(result => {
                         if (result.status === 200) {
                             return result.json();
                         }
@@ -93,7 +93,7 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProfile: (async function () {
+        trainProfile: (async function() {
             this.message = "Training in progress...";
             let result = await fetch("api/twitter/train/",
                 {
@@ -113,8 +113,13 @@ const botApp = new Vue({
             }
         }),
 
-        saveBot: function () {
-
+        saveBot: function() {
+            
+            if (this.name === "") {
+                console.log("No botname assigned");
+                this.setErrormessage("No botname assigned");
+                return;
+            }
             let bot = {};
 
             bot.name = this.name;
@@ -129,16 +134,30 @@ const botApp = new Vue({
                         'Content-Type': 'application/json'
                     }
                 }).then(result => {
-                    if (result.status === 200) {
-                        this.updateLists();
-                        tweetApp.updateLists();
-                    } else {
-                        errorLogger(result);
+                if (result.status === 200) {
+                    this.updateLists();
+                } else {
+                    errorLogger(result);
+                }
+            });
+        },
+        removeBot: (async function() {
+            let result = await fetch("api/bot",
+                {
+                    body: JSON.stringify(this.selectedBot),
+                    method: "DELETE",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     }
                 });
-        },
+            if (result.status === 200) {
+                this.updateLists();
+            } else {
+                
+            }
 
-        removeBot: function () {},
+        }),
 
         generateTweet: (async function () {
             let url = "api/bot/" + this.selectedBot.id;
@@ -171,6 +190,13 @@ const botApp = new Vue({
             this.loadProfiles();
             this.loadBots();
         },
+        setErrormessage: function (message) {
+            let time = new Date(Date.now());
+            
+            time.setSeconds(time.getSeconds() + 10);
+            this.message = { message: message, expires: time };
+            console.log(this.message);
+        },
 
         loadProfiles: (async function () {
             let list = await loadProfiles();
@@ -191,7 +217,6 @@ const botApp = new Vue({
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");
-    console.log(result);
     if (result.status === 200) {
         return await result.json();
     } else {
