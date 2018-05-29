@@ -202,7 +202,7 @@
 
                                     <div class="form-group">
                                         <label>Name:</label>
-                                        <input class="form-control" v-model="name" />
+                                        <input class="form-control" v-model="botName"/>
                                         <select class="form-control" v-model="selectedBot" size="10">
                                             <option v-for="boten in bots" v-bind:value="boten">
                                                 {{boten.name}}
@@ -216,7 +216,6 @@
 
                             </div>
                             <!-- Botcreator end -->
-
 
                             <div id="twitterProfiles" class="card">
 
@@ -236,7 +235,9 @@
 
                                 </div>
                             </div>
-
+                            <!-- Twitter profiles end-->
+                            
+                            
                             <div id="botProfilesRatio" class="card">
                                 <h3 class="card-header">User ratio</h3>
                                 <div class="card-body">
@@ -251,9 +252,9 @@
 z
                                 </div>
                             </div>
+                            <!-- bot Profiles ratio end-->
 
-
-                            <div class="card">
+                            <div id="botAlgorithms" class="card">
                                 <h3 class="card-header">Settings</h3>
 
                                 <div class="card-body mx-2">
@@ -263,28 +264,28 @@ z
                                     <h4>Profile</h4>
                                     <div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="1" value="1">
-                                            <label class="form-check-label" for="profile1">1</label>
+                                            <input class="form-check-input" type="radio" name="profile" id="profile1" value="1" v-model="profileAlgorithm">
+                                            <label class="form-check-label" for="profile1">Random</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="2" value="2">
-                                            <label class="form-check-label" for="profile2">2</label>
+                                            <input class="form-check-input" type="radio" name="profile" id="profile 2" value="2" v-model="profileAlgorithm">
+                                            <label class="form-check-label" for="profile2">Weighted</label>
                                         </div>
                                     </div>
                                     <hr />
                                     <h4>Word</h4>
                                     <div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="1" value="1">
-                                            <label class="form-check-label" for="word1">1</label>
+                                            <input class="form-check-input" type="radio" name="word"id="word1" value="1" v-model="wordAlgorithm">
+                                            <label class="form-check-label" for="word1">Random</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="2" value="2">
-                                            <label class="form-check-label" for="word2">2</label>
+                                            <input class="form-check-input" type="radio" name="word" id="word2" value="2" v-model="wordAlgorithm">
+                                            <label class="form-check-label" for="word2">Weighted</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="3" value="3">
-                                            <label class="form-check-label" for="word3">3</label>
+                                            <input class="form-check-input" type="radio" name="word" id="word3" value="3" v-model="wordAlgorithm">
+                                            <label class="form-check-label" for="word3">Predictiv</label>
                                         </div>
                                     </div>
 

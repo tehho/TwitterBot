@@ -10,7 +10,7 @@ namespace TwitterBot.Infrastructure.Repository
 {
     public class BotOptionRepository : IRepository<BotOptions>
     {
-        private TwitterContext _context;
+        private readonly TwitterContext _context;
 
         public BotOptionRepository(TwitterContext context)
         {

@@ -15,17 +15,23 @@ Array.prototype.Remove = function (obj) {
 const botApp = new Vue({
     el: "#botApp",
     data: {
-        selectedBot: { name: "" },
-        bots: [],
+        botName: "",
+        profileAlgorithm: "",
+        wordAlgorithm: "",
         selectedProfiles: [],
+
+        selectedBot: "",
+        bots: [],
+
+        profileName: "",
         profiles: [],
+        tweet: {
+            text: ""
+        },
+
         message: {
             expires: new Date(2018, 05, 28),
             message: "test",
-        },
-        profileName: "",
-        tweet: {
-            text: ""
         },
     },
     computed:
@@ -114,7 +120,7 @@ const botApp = new Vue({
 
         saveBot: function() {
             
-            if (this.name === "") {
+            if (this.botName === "") {
                 console.log("No botname assigned");
                 this.setErrormessage("No botname assigned");
                 return;
@@ -123,6 +129,18 @@ const botApp = new Vue({
 
             bot.name = this.name;
             bot.profiles = this.profiles;
+
+            if (this.profileAlgorithm === "") {
+                bot.profileAlgorithm = 1;
+            } else {
+                bot.profileAlgorithm = this.profileAlgorithm;
+            }
+
+            if (this.wordAlgorithm === "") {
+                bot.wordAlgorithm = 1;
+            } else {
+                bot.wordAlgorithm = this.wordAlgorithm;
+            }
 
             fetch("api/bot",
                 {
@@ -198,9 +216,7 @@ const botApp = new Vue({
         },
 
         loadProfiles: (async function () {
-            let list = await loadProfiles();
-            this.profiles = list;
-            console.log(list[0].name);
+            this.profiles = await loadProfiles();
         }),
         loadBots: (async function () {
             this.bots = await loadBots();

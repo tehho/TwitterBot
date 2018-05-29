@@ -13,8 +13,8 @@ namespace TwitterBot.Api.Controllers
     [Route("api/[controller]")]
     public class BotController : Controller
     {
-        private IRepository<BotOptions> _options;
-        private IRepository<TwitterProfile> _profiles;
+        private readonly IRepository<BotOptions> _options;
+        private readonly IRepository<TwitterProfile> _profiles;
         public BotController(IRepository<BotOptions> options, IRepository<TwitterProfile> profiles)
         {
             _options = options;
@@ -50,6 +50,9 @@ namespace TwitterBot.Api.Controllers
         public IActionResult SetProfiles([FromBody] BotOptionApi option)
         {
             if (option == null)
+                return BadRequest();
+
+            if (option.Name == null)
                 return BadRequest();
 
             var tempOption = _options.Add(option);
