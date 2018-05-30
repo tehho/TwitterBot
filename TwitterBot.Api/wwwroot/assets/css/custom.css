@@ -2,20 +2,16 @@ body {
     background-color: #60D8F4;
 }
 
-.birds {
-    
-}
-
-.jumbotron{
-    height: 85vh;
+.jumbotron {
     background-image: url("../img/SVG/skyandwater.svg");
+    background-size: cover;
     background-color: #c3e9fc;
     margin-bottom: 0;
+    padding-bottom: 0;
+    padding-top: 32px;
     min-height: 50%;
     background-repeat: repeat-x;
     background-position: center;
-    background-size: cover;
-
 }
 
 .type-to-start {

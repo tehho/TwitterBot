@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using TwitterBot.Api.Model;
 
-namespace TwitterBot.Api.Controllers
+namespace TwitterBot.Api.Model
 {
     public class TwitterTrainDataApi
     {

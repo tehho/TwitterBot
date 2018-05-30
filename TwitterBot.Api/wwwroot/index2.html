@@ -21,6 +21,7 @@
 <body>
     <div id="botApp" class="container-fluid">
         <div class="jumbotron text-center">
+
             <!--Header-->
             <div class="row">
                 <div class="col-lg-2 d-none d-lg-block">
@@ -67,6 +68,8 @@
 
             </div>
 
+            <div class="container my=10"></div>
+
         </div>
         <!--Jumpotron end-->
 
@@ -103,10 +106,9 @@
                                         </div>
 
                                     </div>
-
-                                    <!--Tweet content-->
                                 </div>
-                                <div class="row my-3">
+                                <div class="row">
+                                    <!--Tweet content-->
                                     <div class="col-6">
                                         <select v-model="selectedBot" class="form-control">
                                             <option value="" disabled selected>Select a bot</option>
@@ -118,210 +120,210 @@
                                     <div class="col-6">
                                         <button class="btn btn-outline-primary mx-3" @click="generateTweet">New tweet</button>
                                         <button class="btn btn-primary" @click="postTweet">Tweet this!</button>
-
                                     </div>
-
-
                                 </div>
                             </div>
-
                         </div>
-                    </div>
-                </div>
 
-            </div>
-
-            <div class="col-lg-2 hidden-md my-4">
-
-            </div>
-        </div>
-        <!-- Twitter generator end-->
-
-        <div id="settingsController" class="container">
-
-            <div class="row justify-content-end text-center">
-                <div class="col-12">
-                    <label>Select mode</label><br>
-                    <div class="btn-group" role="group">
-
-                        <button @click="simpleToggle" class="btn btn-outline-primary">Simple</button>
-                        <button @click="advancedToggle" class="btn btn-outline-primary">Advanced</button>
                     </div>
                 </div>
             </div>
 
         </div>
-        <!-- Settingscontroller end -->
 
-        <div id="settings" class="container">
+        <div class="col-lg-2 hidden-md my-4">
 
-            <div class="col-lg-2 hidden-md my-4"></div>
+        </div>
+    </div>
+    <!-- Twitter generator end-->
 
-            <div id="ProfileName" class="container my-10">
-                <div class="row">
+    <div id="settingsController" class="container">
 
-                    <div class="col-lg-2 hidden-md my-4"></div>
+        <div class="row justify-content-end text-center">
+            <div class="col-12">
+                <label>Select mode</label><br>
+                <div class="btn-group" role="group">
+                    <button @click="simpleToggle" class="btn btn-outline-primary">Simple</button>
+                    <button @click="advancedToggle" class="btn btn-outline-primary">Advanced</button>
+                </div>
+            </div>
+        </div>
 
-                    <div class="col-lg-8 text-center">
+    </div>
+    <!-- Settingscontroller end -->
 
-                        <h4 class="sub-header">Add more Twitter users</h4>
+    <div id="settings" class="container">
 
-                        <div class="input-group-lg">
+        <div class="col-lg-2 hidden-md my-4"></div>
 
-                            <div class="input-group-prepend" id="bot-generator">
-                                <span class="input-group-text" id="basic-addon1">@</span>
+        <div id="ProfileName" class="container my-10">
+            <div class="row">
 
-                                <input class="form-control input-lg" type="text" v-model="profileName">
-                                <a class="btn btn-light mx-3" @click="addProfile">Add</a>
-                            </div>
+                <div class="col-lg-2 hidden-md my-4"></div>
 
+                <div class="col-lg-8 text-center">
+
+                    <h4 class="sub-header">Add more Twitter users</h4>
+
+                    <div class="input-group-lg">
+
+                        <div class="input-group-prepend" id="bot-generator">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+
+                            <input class="form-control input-lg" type="text" v-model="profileName">
+                            <a class="btn btn-light mx-3" @click="addProfile">Add</a>
                         </div>
-
-                        <div v-model="message"></div>
 
                     </div>
 
-                    <div class="col-lg-2 hidden-md my-4"></div>
+                    <div v-model="message"></div>
 
                 </div>
 
+                <div class="col-lg-2 hidden-md my-4"></div>
+
             </div>
 
+        </div>
 
-            <div id="botSettings" class="container my-5">
 
-                <div class="row d-flex mx-auto">
+        <div id="botSettings" class="container my-5">
 
-                    <div class="col-lg-12">
+            <div class="row d-flex mx-auto">
 
-                        <div class="card-columns">
+                <div class="col-lg-12">
 
-                            <div id="botCreator" class="card">
+                    <div class="card-columns">
 
-                                <h3 class="card-header">Create Bot</h3>
+                        <div id="botCreator" class="card">
 
-                                <div class="card-body">
+                            <h3 class="card-header">Create Bot</h3>
 
-                                    <div class="form-group">
-                                        <label>Name:</label>
-                                        <input class="form-control" v-model="botName" />
-                                        <select class="form-control" v-model="selectedBot" size="10">
-                                            <option v-for="boten in bots" v-bind:value="boten">
-                                                {{boten.name}}
-                                            </option>
-                                        </select><br />
-                                        <button class="btn btn-light my-3" @click="saveBot">Save</button>
-                                        <button class="btn btn-light my-3" @click="removeBot">Remove</button>
-                                    </div>
+                            <div class="card-body">
 
-                                </div>
-
-                            </div>
-                            <!-- Botcreator end -->
-
-                            <div id="twitterProfiles" class="card">
-
-                                <h3 class="card-header">Twitter handles</h3>
-
-                                <div class="card-body">
-
-                                    <select v-model="selectedProfiles" size="10" multiple="multiple" class="form-control">
-                                        <option v-for="profile in profiles" v-bind:value="profile">
-                                            {{profile.name}}
+                                <div class="form-group">
+                                    <label>Name:</label>
+                                    <input class="form-control" v-model="botName" />
+                                    <select class="form-control" v-model="selectedBot" size="10">
+                                        <option v-for="boten in bots" v-bind:value="boten">
+                                            {{boten.name}}
                                         </option>
-                                    </select>
-
-                                    <div v-if="progressProfileMax != 0">
-                                        <div class="progress my-3">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressProfileCounter+'%'}">{{progressProfileCounter}}</div>
-                                        </div>
-                                        <div class="progress my-3">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressTweetsCounter+'%'}">{{progressTweetsCounter}}</div>
-                                        </div>
-
-                                    </div>
-
-                                    <button class="btn btn-light my-3" @click="removeProfile">Remove</button>
-                                    <button class="btn btn-light my-3" @click="trainProgress">Train</button>
-
-                                </div>
-                            </div>
-                            <!-- Twitter profiles end-->
-
-                            <div id="botAlgorithms" class="card">
-                                <h3 class="card-header">Settings</h3>
-
-                                <div class="card-body mx-2">
-
-                                    <label>Selected bot: <strong>{{selectedBot.name}}</strong></label>
-                                    <hr />
-                                    <h4>Profile</h4>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="profile1" value="1" v-model="profileAlgorithm">
-                                            <label class="form-check-label" for="profile1">Random</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="profile 2" value="2" v-model="profileAlgorithm">
-                                            <label class="form-check-label" for="profile2">Weighted</label>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                    <h4>Word</h4>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="word1" value="1" v-model="wordAlgorithm">
-                                            <label class="form-check-label" for="word1">Random</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="word2" value="2" v-model="wordAlgorithm">
-                                            <label class="form-check-label" for="word2">Weighted</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word" id="word3" value="3" v-model="wordAlgorithm">
-                                            <label class="form-check-label" for="word3">Predictiv</label>
-                                        </div>
-                                    </div>
-
+                                    </select><br />
+                                    <button class="btn btn-light my-3" @click="saveBot">Save</button>
+                                    <button class="btn btn-light my-3" @click="removeBot">Remove</button>
                                 </div>
 
                             </div>
-                            
-
-                            <div id="botProfilesRatio" class="card" v-if="selectedProfiles.length > 0">
-                                <h3 class="card-header">User ratio</h3>
-                                <div class="card-body">
-
-                                    <div class="range-slider" v-for="profile in  selectedProfiles">
-
-                                        <label class="text-info">@{{profile.name}}</label><br />
-                                        <input class="input-range" type="range" step="5" value="5" min="0" max="100">
-                                        <span class="range-value"></span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <!-- bot Profiles ratio end-->
 
                         </div>
+                        <!-- Botcreator end -->
+
+                        <div id="botAlgorithms" class="card">
+                            <h3 class="card-header">Settings</h3>
+
+                            <div class="card-body mx-2">
+
+                                <label>Selected bot: <strong>{{selectedBot.name}}</strong></label>
+                                <hr />
+                                <h4>Profile</h4>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="profile" id="profile1" value="1" v-model="profileAlgorithm">
+                                        <label class="form-check-label" for="profile1">Random</label>
+                                    </div>
+                                    <br />
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="profile" id="profile 2" value="2" v-model="profileAlgorithm">
+                                        <label class="form-check-label" for="profile2">Weighted</label>
+                                    </div>
+                                </div>
+                                <hr />
+                                <h4>Word</h4>
+                                <div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="word" id="word1" value="1" v-model="wordAlgorithm">
+                                        <label class="form-check-label" for="word1">Random</label>
+                                    </div>
+                                    <br />
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="word" id="word2" value="2" v-model="wordAlgorithm">
+                                        <label class="form-check-label" for="word2">Weighted</label>
+                                    </div>
+                                    <br />
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="word" id="word3" value="3" v-model="wordAlgorithm">
+                                        <label class="form-check-label" for="word3">Predictiv</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!-- Algorithms settings end-->
+
+                        <div id="twitterProfiles" class="card">
+
+                            <h3 class="card-header">Twitter handles</h3>
+
+                            <div class="card-body">
+
+                                <select v-model="selectedProfiles" size="10" multiple="multiple" class="form-control">
+                                    <option v-for="profile in profiles" v-bind:value="profile">
+                                        {{profile.name}}
+                                    </option>
+                                </select>
+
+                                <div v-if="progressProfileMax != 0">
+                                    <div class="progress my-3">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressProfileCounter+'%'}">{{progressProfileCounter}}</div>
+                                    </div>
+                                    <div class="progress my-3">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressTweetsCounter+'%'}">{{progressTweetsCounter}}</div>
+                                    </div>
+
+                                </div>
+
+                                <button class="btn btn-light my-3" @click="removeProfile">Remove</button>
+                                <button class="btn btn-light my-3" @click="trainProgress">Train</button>
+
+                            </div>
+                        </div>
+                        <!-- Twitter profiles end-->
+
+                        <div id="botProfilesRatio" class="card" v-if="selectedProfiles.length > 0">
+                            <h3 class="card-header">User ratio</h3>
+                            <div class="card-body">
+
+                                <div class="range-slider" v-for="profile in  selectedProfiles">
+
+                                    <label class="text-info">@{{profile.name}}</label><br />
+                                    <input class="input-range" type="range" step="5" value="5" min="0" max="100">
+                                    <span class="range-value"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- bot Profiles ratio end-->
 
                     </div>
 
                 </div>
+
             </div>
         </div>
+    </div>
 
-        <div class="modal"><!-- Loading screen --></div>
+    <div class="modal"><!-- Loading screen --></div>
 
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
 
-        <script src="/JS/vue.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="/JS/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
-        <!--<script src="assets/js/main.js" type="text/javascript"></script>-->
+    <!--<script src="assets/js/main.js" type="text/javascript"></script>-->
     </div>
 </body>
 </html>
