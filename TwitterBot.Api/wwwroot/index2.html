@@ -19,53 +19,43 @@
 </head>
 
 <body>
-    <div id="botApp" class="container-fluid">
+    <div id="botApp" class="container-fluid" style="margin:0 auto;">
+        
         <div class="jumbotron text-center">
+          <!--  parallax-window" data-parallax="scroll" data-image-src="assets/img/SVG/skyandwater.svg" -->
 
             <!--Header-->
             <div class="row">
                 <div class="col-lg-2 d-none d-lg-block">
                     <img src="assets/img/svg/birdsleft.svg" />
                 </div>
-
                 <div class="col-lg-8">
                     <h1 class="display-2">Ultimate<br>Twitterboat<br>2018</h1>
                 </div>
-
                 <div class="col-lg-2 d-none d-lg-block">
                     <img src="assets/img/svg/birdsright.svg" />
                 </div>
             </div>
-
             <!--profileName top input-->
             <div class="row my-10">
                 <div class="col-lg-2 hidden-md my-4"></div>
-
                 <div class="col-lg-8">
-
                     <h4 class="sub-header">Enter a Twitter profile to start:</h4>
                     <div class="input-group-lg">
-
                         <div class="input-group-prepend">
                             <span class="input-group-text" v-bind:style="{backgroundColor:isProfileNameTwitterHandle}">@</span>
                             <input class="form-control input-lg" v-model="profileName" type="text">
                             <button @click="addProfile" class="btn btn-light mx-3">Go!</button>
                         </div>
-
                     </div>
-
                     <div v-if="errorMessage.showError">
                         {{errorMessage.message}}
                     </div>
                 </div>
-
-                <div class="col-lg-2 hidden-md my-4"></div>
-
+                <div class="col-lg-2 my-4 hidden-xs hidden-sm hidden-md"><img src="assets/img/svg/floatingboat.svg"></div>
 
             </div>
-
             <div class="container my=10"></div>
-
         </div>
         <!--Jumpotron end-->
 
@@ -77,9 +67,9 @@
 
                 <div class="col-lg-8 ">
 
-                    <div class="card">
+                    <div class="card generated-tweet-box">
 
-                        <h3 class="card-header tweet-box-card-header">Generated tweet <a href="#twitter-generator" class="tweet-box-card-header" data-toggle="tooltip" title="You can edit the text before tweeting">🛈</a></h3>
+                        <h3 class="card-header tweet-box-card-header">Generated tweet</h3>
                         <div class="card-body">
 
                             <div class="container">
@@ -132,14 +122,12 @@
         </div>
         <!-- Twitter generator end-->
 
-        <div id="settingsController" class="container" hidden="true">
+        <div id="settingsController" class="container">
 
             <div class="row justify-content-end text-center">
                 <div class="col-12">
-                    <label>Select mode</label><br>
                     <div class="btn-group" role="group">
-                        <button @click="simpleToggle" class="btn btn-outline-primary">Simple</button>
-                        <button @click="advancedToggle" class="btn btn-outline-primary">Advanced</button>
+                        <button @click="simpleToggle" class="btn btn-lg btn-primary" data-toggle="collapse" data-target="#settings">Settings</button>
                     </div>
                 </div>
             </div>
@@ -147,7 +135,7 @@
         </div>
         <!-- Settingscontroller end -->
 
-        <div id="settings" class="container">
+        <div id="settings" class="container collapse">
 
             <div class="col-lg-2 hidden-md my-4"></div>
 
@@ -307,9 +295,17 @@
             </div>
 
             <div class="col-lg-2 hidden-md my-4"></div>
+
+
         </div>
 
-        <div class="modal"><!-- Loading screen --></div>
+        <div class="container py-5">
+                <div class="row mx-auto" style="min-width: 200px;">
+                Ultimate Twiterbot 2018 
+            </div>
+            </div>
+
+
 
     </div>
     <!-- Bootstrap core JavaScript
@@ -321,7 +317,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
+    <script src="assets/js/parallax.min.js"></script>
 
     <!--<script src="assets/js/main.js" type="text/javascript"></script>-->
 
