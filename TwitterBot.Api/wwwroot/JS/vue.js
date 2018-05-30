@@ -242,9 +242,9 @@ const botApp = new Vue({
             let bot = {};
 
             bot.name = this.botName;
-            bot.profiles = this.selectedProfiles.select(profile => {
-                return { profile };
-            });
+            bot.profiles = this.selectedProfiles;
+
+            console.log(bot.profiles[0].name);
 
             this.setErrormessage("Saving bot " + bot.name);
 

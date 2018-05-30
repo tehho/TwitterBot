@@ -63,12 +63,15 @@ namespace TwitterBot.Api.Controllers
 
             option.Profiles.ForEach(profile =>
             {
+                if (profile.Occurrence == null)
+                    profile.Occurrence = 1;
+
                 if (profile.Occurrence > 0)
                 {
                     var p = _profiles.Get(profile);
 
                     if (p != null)
-                        tempOption.AddProfile(p, profile.Occurrence);
+                        tempOption.AddProfile(p, profile.Occurrence.Value);
                 }
             });
 

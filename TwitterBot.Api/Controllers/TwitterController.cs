@@ -194,8 +194,17 @@ namespace TwitterBot.Api.Controllers
 
             if (!_repository.Exists(profile))
                 return BadRequest($"Profile does not exist: {profile.Name}");
-            
-            var prolife = _repository.Remove(profile);
+
+            TwitterProfile prolife = null;
+
+            try
+            {
+                prolife = _repository.Remove(profile);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
 
             if (prolife == null)
                 return BadRequest();

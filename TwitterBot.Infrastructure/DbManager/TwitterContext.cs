@@ -9,6 +9,7 @@ namespace TwitterBot.Infrastructure
         public DbSet<Word> Words { get; set; }
         public DbSet<WordOccurrence> WordOccurrences { get; set; }
         public DbSet<BotOptions> BotOptions { get; set; }
+        public DbSet<NextWordOccurrence> NextWordOccurrences { get; set; }
 
         public TwitterContext(DbContextOptions<TwitterContext> context) : base(context)
         {
@@ -25,7 +26,8 @@ namespace TwitterBot.Infrastructure
 
             modelBuilder.Entity<ProfileOccurrance>()
                 .HasOne(occ => occ.BotOptions)
-                .WithMany(bo => bo.ProfileOccurances);
+                .WithMany(po => po.ProfileOccurances)
+                .HasForeignKey(occ => occ.BotOptionsId);
 
             modelBuilder.Entity<NextWordOccurrence>()
                 .HasKey(nwo => new {nwo.WordId, nwo.ParentId});
@@ -34,7 +36,8 @@ namespace TwitterBot.Infrastructure
                 .HasOne(nwo => nwo.Parent)
                 .WithMany(wo => wo.NextWordOccurrences)
                 .HasForeignKey(nwo => nwo.ParentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            
 
             base.OnModelCreating(modelBuilder);
         }
