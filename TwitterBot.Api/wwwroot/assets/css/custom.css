@@ -2,8 +2,20 @@ body {
     background-color: #60D8F4;
 }
 
-.birds {
-    
+@media (min-width: 34em) {
+    .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
 }
 
 .jumbotron{
@@ -42,6 +54,12 @@ body {
     font-weight: bold;
     text-transform: uppercase;
     text-shadow: 0 3px 10px #4d9dc5;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    -o-hyphens: auto;
+    hyphens: auto;
 }
 
 /* Start by setting display:none to make this hidden.
