@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Tweetinvi.Core.Extensions;
@@ -243,7 +244,7 @@ namespace TwitterBot.Api.Controllers
                     tweetString += counter++ + "\t";
                     tweetString += tweets[index].TwitterId + "\t";
                     tweetString += $"{tweets[index].CreatedAt.ToShortDateString()} {tweets[index].CreatedAt.ToShortTimeString()}\t";
-                    tweetString += tweets[index].Text + "\t";
+                    tweetString += Regex.Replace(tweets[index].Text, @"(\t|\n|\r)", "") + "\t";
                     tweetString += tweets[index].FavoriteCount + "\t";
                     tweetString += tweets[index].RetweetCount;
 
