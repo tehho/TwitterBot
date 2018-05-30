@@ -204,7 +204,7 @@
 
                                     <div class="form-group">
                                         <label>Name:</label>
-                                        <input class="form-control" v-model="botName"/>
+                                        <input class="form-control" v-model="botName" />
                                         <select class="form-control" v-model="selectedBot" size="10">
                                             <option v-for="boten in bots" v-bind:value="boten">
                                                 {{boten.name}}
@@ -230,12 +230,12 @@
                                             {{profile.name}}
                                         </option>
                                     </select>
-                                    
+
                                     <div v-if="progressProfileMax != 0">
-                                        <div class="progress my-3" >
+                                        <div class="progress my-3">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressProfileCounter+'%'}">{{progressProfileCounter}}</div>
                                         </div>
-                                        <div class="progress my-3" >
+                                        <div class="progress my-3">
                                             <div class="progress-bar progress-bar-striped progress-bar-animated" label="Training in progress" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" v-bind:style="{width:progressTweetsCounter+'%'}">{{progressTweetsCounter}}</div>
                                         </div>
 
@@ -243,28 +243,10 @@
 
                                     <button class="btn btn-light my-3" @click="removeProfile">Remove</button>
                                     <button class="btn btn-light my-3" @click="trainProgress">Train</button>
-                                    <button class="btn btn-light my-3" @click="updateLists">Update</button>
 
                                 </div>
                             </div>
                             <!-- Twitter profiles end-->
-                            
-                            
-                            <div id="botProfilesRatio" class="card">
-                                <h3 class="card-header">User ratio</h3>
-                                <div class="card-body">
-
-                                    <div class="range-slider" v-for="profile in  selectedProfiles">
-
-                                        <label class="text-info">@{{profile.name}}</label><br />
-                                        <input class="input-range" type="range" step="5" value="5" min="0" max="100">
-                                        <span class="range-value"></span>
-                                    </div>
-
-z
-                                </div>
-                            </div>
-                            <!-- bot Profiles ratio end-->
 
                             <div id="botAlgorithms" class="card">
                                 <h3 class="card-header">Settings</h3>
@@ -288,7 +270,7 @@ z
                                     <h4>Word</h4>
                                     <div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="word"id="word1" value="1" v-model="wordAlgorithm">
+                                            <input class="form-check-input" type="radio" name="word" id="word1" value="1" v-model="wordAlgorithm">
                                             <label class="form-check-label" for="word1">Random</label>
                                         </div>
                                         <div class="form-check form-check-inline">
@@ -304,6 +286,22 @@ z
                                 </div>
 
                             </div>
+                            
+
+                            <div id="botProfilesRatio" class="card" v-if="selectedProfiles.length > 0">
+                                <h3 class="card-header">User ratio</h3>
+                                <div class="card-body">
+
+                                    <div class="range-slider" v-for="profile in  selectedProfiles">
+
+                                        <label class="text-info">@{{profile.name}}</label><br />
+                                        <input class="input-range" type="range" step="5" value="5" min="0" max="100">
+                                        <span class="range-value"></span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- bot Profiles ratio end-->
 
                         </div>
 
@@ -320,7 +318,6 @@ z
         <!-- Placed at the end of the document so the pages load faster -->
 
         <script src="/JS/vue.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 

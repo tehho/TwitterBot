@@ -79,9 +79,17 @@ namespace TwitterBot.Domain
         }
 
         public bool ProfileTimeLineHasTweets(TwitterProfile profile)
-
         {
+            if (profile == null)
+                return false;
+
+            if (profile.Name == null)
+                return false;
+
             var user = User.GetUserFromScreenName(profile.Name);
+
+            if (user == null)
+                return false;
 
             var timelineParameter = Timeline.CreateHomeTimelineParameter();
             timelineParameter.ExcludeReplies = true;
@@ -90,12 +98,7 @@ namespace TwitterBot.Domain
 
             var timeLine = Timeline.GetUserTimeline(user);
 
-            if (timeLine == null)
-            { return false; }
-
-            return true;
-
-
+            return timeLine != null;
         }
 
         public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)

@@ -201,12 +201,23 @@ namespace TwitterBot.Api.Controllers
             return Ok("Remove complete");
         }
 
-        [HttpPost("GenerateTweet")]
-        private Tweet GenerateTweet(BotOptions options)
+        [HttpGet("{id}")]
+        public IActionResult GetProfile(Guid? id)
         {
-            var bot = new Bot(options);
+            if (id == null)
+                return BadRequest();
 
-            return bot.GenerateTweet();
+            var profile = _repository.Get(new TwitterProfile() {Id = id});
+
+            if (profile == null)
+                return NotFound();
+            else
+            {
+                profile.Words.ForEach(wo => wo.NextWordOccurrences = null);
+                return Ok(profile);
+            }
+                
+
         }
 
         [HttpPost("PostToTwitter")]

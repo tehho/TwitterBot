@@ -10,15 +10,15 @@ namespace TwitterBot.Domain
 {
     public class Bot : Entity
     {
-        private readonly BotOptions options;
-        private readonly Random random;
+        private readonly BotOptions _options;
+        private readonly Random _random;
 
         public string Name { get; set; }
 
         public Bot(BotOptions options)
         {
-            this.options = options;
-            random = new Random();
+            this._options = options;
+            _random = new Random();
         }
         
         public Tweet GenerateTweet()
@@ -28,9 +28,9 @@ namespace TwitterBot.Domain
 
             while (true)
             {
-                var profile = PickProfile(options);
+                var profile = PickProfile();
 
-                var word = PickWord(profile, previousWord, options);
+                var word = PickWord(profile, previousWord);
 
                 if (tweetText.Length + word.Value.Length > 140)
                     return new Tweet(tweetText);
@@ -41,9 +41,9 @@ namespace TwitterBot.Domain
             }
         }
 
-        private Word PickWord(TwitterProfile profile, Word previousWord, BotOptions options)
+        private Word PickWord(TwitterProfile profile, Word previousWord)
         {
-            var algorithm = options.WordAlgorithms.PickAlgorithm(random);
+            var algorithm = _options.WordAlgorithms.PickAlgorithm(_random);
             Word word = null;
 
             switch (algorithm)
@@ -70,7 +70,7 @@ namespace TwitterBot.Domain
                 return PickWordByProbability(profile);
 
             var weights = word.NextWordOccurrences.Select(n => n.Occurrence).ToList();
-            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
+            var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 
             return word.NextWordOccurrences[index].Word;
 
@@ -80,33 +80,33 @@ namespace TwitterBot.Domain
         {
             var weights = profile.Words.Select(w => w.Occurrence).ToList();
 
-            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
+            var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 
             return profile.Words[index].Word;
         }
 
         private Word PickWordRandom(TwitterProfile profile)
         {
-            var index = random.Next(profile.Words.Count);
+            var index = _random.Next(profile.Words.Count);
 
             return profile.Words[index].Word;
         }
 
-        private TwitterProfile PickProfile(BotOptions options)
+        private TwitterProfile PickProfile()
         {
-            var algorithm = options.ProfileAlgorithms.PickAlgorithm(random);
+            var algorithm = _options.ProfileAlgorithms.PickAlgorithm(_random);
             TwitterProfile profile = null;
 
             switch (algorithm)
             {
                 case AlgorithmType.Random:
-                    profile = PickProfileTrueRandom(options.Profiles);
+                    profile = PickProfileTrueRandom(_options.Profiles);
                     break;
                 case AlgorithmType.ByProbability:
-                    profile = PickProfileWeighted(options.ProfileOccurances);
+                    profile = PickProfileWeighted(_options.ProfileOccurances);
                     break;
                 default:
-                    profile = PickProfileTrueRandom(options.Profiles);
+                    profile = PickProfileTrueRandom(_options.Profiles);
                     break;
             }
 
@@ -117,7 +117,7 @@ namespace TwitterBot.Domain
         {
             var weights = optionsProfileOccurances.Select(occ => occ.Occurrance).ToList();
 
-            var index = AlgorithmSelector.PickIndexWeighted(weights, random);
+            var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 
             var profile = optionsProfileOccurances[index].Profile;
 
@@ -126,7 +126,7 @@ namespace TwitterBot.Domain
 
         private TwitterProfile PickProfileTrueRandom(IReadOnlyList<TwitterProfile> profiles)
         {
-            var index = random.Next(profiles.Count);
+            var index = _random.Next(profiles.Count);
             var profile = profiles[index];
 
             return profile;

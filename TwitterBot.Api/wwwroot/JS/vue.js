@@ -145,10 +145,8 @@ const botApp = new Vue({
             this.progressProfileMax = list.length;
 
             for (let i = 0; i < list.length; i++) {
-                profile = list[i];
-
-                //TODO Loading tweets
-
+                let profile = list[i];
+                console.log(profile);
                 this.progressTweetsMax = 0;
 
                 this.setErrormessage("Loading tweets");
@@ -162,11 +160,12 @@ const botApp = new Vue({
                             'Content-Type': 'application/json'
                         }
                     });
-                
-                this.setErrormessage("Training profile");
 
                 if (result.status === 200) {
+
                     let tweets = await result.json();
+
+                    this.setErrormessage("Training profile");
 
                     this.progressTweets = 0;
                     this.progressTweetsMax = tweets.length;
@@ -176,8 +175,8 @@ const botApp = new Vue({
                         result = await fetch("api/twitter/trainwithtweet",
                             {
                                 body: JSON.stringify({
-                                    profile: profile,
-                                    tweet: tweet
+                                    profile,
+                                    tweet
                                 }),
                                 method: "POST",
                                 headers: {

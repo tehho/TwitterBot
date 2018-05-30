@@ -37,20 +37,16 @@ namespace TwitterBot.Infrastructure.Repository
         {
             if (obj == null)
                 return null;
-
-            if (obj.Name != null)
+            if (obj.Id != null)
+            {
+                return Search(profile => profile.Id == obj.Id);
+            }
+            else if (obj.Name != null)
             {
                 return Search(profile => profile.Name == obj.Name);
             }
-
-            //if (obj.Id != null)
-            //{
-            //    return Search(profile => profile.Id == obj.Id);
-            //}
-
-            
-
-            return null;
+            else
+                return null;
         }
 
         public IEnumerable<TwitterProfile> GetList(TwitterProfile obj)
