@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Tweetinvi;
+using Tweetinvi.Core.Exceptions;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 
@@ -26,9 +27,19 @@ namespace TwitterBot.Domain
         {
             tweetCount = options.TweetCount;
 
-            Auth.SetUserCredentials(options.Customer.Key, options.Customer.Secret, 
+            Auth.SetUserCredentials(options.Customer.Key, options.Customer.Secret,
                 options.Access.Key, options.Access.Secret);
 
+        }
+
+        public ITwitterException IsTwitterUp()
+        {
+            if (!DoesTwitterUserExist(new TwitterProfile("RowBoat2018")))
+            {
+                return ExceptionHandler.GetLastException();
+            }
+            else
+                return null;
         }
 
         public bool PublishTweet(Tweet tweet)
@@ -46,12 +57,10 @@ namespace TwitterBot.Domain
 
         }
 
-
         public void UpdateProfileImage(byte[] image)
         {
             Tweetinvi.Account.UpdateProfileImage(image);
         }
-
 
         public byte[] SaveProfileImageToServer(TwitterProfile profile)
         {
