@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -25,6 +26,7 @@ namespace TwitterBot.Domain
         {
             var tweetText = "";
             Word previousWord = null;
+            var lastWordWasStop = true;
 
             while (true)
             {
@@ -33,9 +35,25 @@ namespace TwitterBot.Domain
                 var word = PickWord(profile, previousWord);
 
                 if (tweetText.Length + word.Value.Length > 140)
-                    return new Tweet(tweetText);
+                    return new Tweet(tweetText.TrimEnd());
 
-                tweetText += word.Value + " ";
+                if (IsStop(word.Value) && lastWordWasStop)
+                {
+                    previousWord = null;
+                    continue;
+                }
+
+                if (IsSeparator(word.Value) || IsStop(word.Value))
+                {
+                    tweetText = tweetText.TrimEnd();
+                    lastWordWasStop = IsStop(word.Value);
+                }
+
+                tweetText += lastWordWasStop ? FirstCharacterToUppercase(word.Value) : word.Value;
+
+                lastWordWasStop = IsStop(word.Value);
+
+                tweetText += " ";
 
                 previousWord = word;
             }
@@ -131,6 +149,21 @@ namespace TwitterBot.Domain
             var profile = profiles[index];
 
             return profile;
+        }
+
+        private bool IsStop(string word)
+        {
+            return Regex.IsMatch(word.Last().ToString(), @"(\.|!|\?)");
+        }
+
+        private bool IsSeparator(string word)
+        {
+            return Regex.IsMatch(word.Last().ToString(), @"(,|;|:)");
+        }
+
+        private string FirstCharacterToUppercase(string word)
+        {
+            return word[0].ToString().ToUpper() + word.Substring(1);
         }
     }
 }

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TwitterBot.Infrastructure
 {
-    public static class StringExtentions
+    public static class StringExtensions
     {
         public static bool BeginsWith(this string str, string other)
         {
@@ -23,7 +24,6 @@ namespace TwitterBot.Infrastructure
             }
 
             return true;
-
         }
     }
 }

@@ -25,9 +25,9 @@ namespace TwitterBot.Infrastructure
             if (profile == null || content?.Text == null)
                 throw new ArgumentNullException();
 
-            var regex = new Regex(@"(\.|,| |!|\?)");
+            var regex = new Regex(@"(\.|,| |!|\?|;|:)");
 
-            var excluded = new Regex(@"(^@|^http|^HTTP|^#|/|\\|…$)");
+            var excluded = new Regex(@"(^@|^#|;|:|^http|^HTTP|/|\\|…$|&\S*|^"".*[^""]$|^[^""].*""$|^RT$)");
             //TODO move remove @ and # to tweet generator instead of trainer
 
             var words = regex.Split(content.Text)
