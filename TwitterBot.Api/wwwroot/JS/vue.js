@@ -16,8 +16,8 @@ const botApp = new Vue({
     el: "#botApp",
     data: {
         botName: "",
-        profileAlgorithm: "",
-        wordAlgorithm: "",
+        profileAlgorithm: 1,
+        wordAlgorithm: 1,
         selectedProfiles: [],
 
         selectedBot: "",
@@ -26,12 +26,13 @@ const botApp = new Vue({
         profileName: "",
         profiles: [],
         tweet: {
-            text: ""
+            "text": ""
         },
+        isProfileNameTwitterHandle: "#2222FF",
 
         message: {
-            expires: new Date(2018, 05, 28),
-            message: "test",
+            "expires": new Date(2018, 05, 28),
+            "message": "test",
         },
         progressProfile: "",
         progressProfileMax: "",
@@ -40,36 +41,47 @@ const botApp = new Vue({
 
 
     },
-    computed:
-        {
-            errorMessage: function () {
-                return {
-                    showError: (Date.now() < this.message.expires),
-                    message: this.message.message
-                };
-            },
-            progressProfileCounter: function () {
-                if (this.progressProfileMax == 0)
-                    return 0;
-                else
-                    return Math.round((
-                        (this.progressProfile + (this.progressTweetsCounter / 100))
-                        / this.progressProfileMax)
-                        * 100);
-            },
-            progressTweetsCounter: function () {
-                if (this.progressTweetsMax == 0)
-                    return 0;
-                else
-                    return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
-            },
+    computed: {
+        errorMessage: function () {
+            return {
+                showError: (Date.now() < this.message.expires),
+                message: this.message.message
+            };
         },
+        progressProfileCounter: function () {
+            if (this.progressProfileMax == 0)
+                return 0;
+            else
+                return Math.round((
+                    (this.progressProfile + (this.progressTweetsCounter / 100))
+                    / this.progressProfileMax)
+                    * 100);
+        },
+        progressTweetsCounter: function () {
+            if (this.progressTweetsMax == 0)
+                return 0;
+            else
+                return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
+        },
+    },
+    created: function () {
+        this.profiles = loadProfiles();
+        this.bots = loadBots();
+        this.debounceIsProfileNameTwitterHandle = _.debounce(this.IsProfileNameTwitterHandle, 500);
+    },
+    watch: {
+        profileName: function (newProfileName, oldProfileName) {
+            console.log(newProfileName);
+            this.isProfileNameTwitterHandle = "#2222FF";
+            this.debounceIsProfileNameTwitterHandle();
+        }
+    },
     methods: {
-        addProfile: function () {
+        addProfile: (async function () {
             let profile = {};
             profile.name = this.profileName;
 
-            fetch("api/twitter",
+            let result = await fetch("api/twitter",
                 {
                     body: JSON.stringify(profile),
                     method: "POST",
@@ -77,19 +89,32 @@ const botApp = new Vue({
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
-                }).then(result => {
-                    if (result.status === 200) {
-                        this.loadProfiles();
-                    } else {
-                        if (result.status === 404) {
-                            alert("Could not find twitterhandle");
-                        } else {
-                            console.error("Error: ", result);
-                        }
-                    }
                 });
 
-        },
+            if (result.status === 200) {
+                await this.loadProfiles();
+                
+                if (this.profiles.length === 1) {
+                    this.selectedProfiles = this.profiles;
+
+                    await this.trainProgress();
+
+                    if (this.bots.length === 0) {
+                        if (this.botName === "")
+                            this.botName = "First bot";
+
+                        this.saveBot();
+                    }
+                }
+
+            } else {
+                if (result.status === 404) {
+                    this.setErrormessage("Could not find twitter handle");
+                } else {
+                    console.error("Error: ", result);
+                }
+            }
+        }),
         removeProfile: function () {
             for (let profile of this.selectedProfiles) {
 
@@ -190,11 +215,12 @@ const botApp = new Vue({
                 this.progressProfile++;
             }
 
+            this.setErrormessage("training complete");
             this.progressProfileMax = 0;
 
         }),
 
-        saveBot: function () {
+        saveBot: (async function () {
 
             if (this.botName === "") {
                 this.setErrormessage("No botname assigned");
@@ -203,7 +229,9 @@ const botApp = new Vue({
             let bot = {};
 
             bot.name = this.botName;
-            bot.profiles = this.profiles;
+            bot.profiles = this.selectedProfiles;
+
+            this.setErrormessage("Saving bot " + bot.name);
 
             if (this.profileAlgorithm === "") {
                 bot.profileAlgorithm = 1;
@@ -217,7 +245,7 @@ const botApp = new Vue({
                 bot.wordAlgorithm = this.wordAlgorithm;
             }
 
-            fetch("api/bot",
+            let result = await fetch("api/bot",
                 {
                     body: JSON.stringify(bot),
                     method: "POST",
@@ -225,14 +253,18 @@ const botApp = new Vue({
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
-                }).then(result => {
-                    if (result.status === 200) {
-                        this.updateLists();
-                    } else {
-                        errorLogger(result);
-                    }
                 });
-        },
+
+            if (result.status === 200) {
+                await this.loadBots();
+                this.setErrormessage("Bot added");
+                this.selectedBot = this.bots.find(tempBot => tempBot.name === bot.name);
+
+                this.generateTweet();
+            } else {
+                errorLogger(result);
+            }
+        }),
         removeBot: (async function () {
             let result = await fetch("api/bot",
                 {
@@ -278,6 +310,36 @@ const botApp = new Vue({
 
         },
 
+        IsProfileNameTwitterHandle: (async function () {
+            let handle = this.profileName;
+            if (handle !== "") {
+                let result = await fetch("api/hearthbeat/twitterhandle",
+                    {
+                        body: JSON.stringify(handle),
+                        method: "POST",
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                if (result.status === 200) {
+                    console.log(result.status);
+                    this.isProfileNameTwitterHandle = "#00FF00";
+                }
+                else if (result.status === 404) {
+                    console.log(result.status);
+                    this.isProfileNameTwitterHandle = "#FFFF00";
+                }
+                else {
+                    console.log(result.status);
+                    this.isProfileNameTwitterHandle = "#FF0000";
+                }
+            } else
+                this.isProfileNameTwitterHandle = "#000000";
+
+        }),
+
+
         updateLists: function () {
             this.loadProfiles();
             this.loadBots();
@@ -297,10 +359,6 @@ const botApp = new Vue({
             this.bots = await loadBots();
         }),
 
-    },
-    created: function () {
-        this.profiles = loadProfiles();
-        this.bots = loadBots();
     }
 });
 

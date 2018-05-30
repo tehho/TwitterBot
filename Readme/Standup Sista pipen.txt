@@ -1,6 +1,26 @@
 Sista pipen:
  - Collapsable cards
- - twitterhandle hearth
- - autoadd bot on first go * if (profiles.length == 0) new BotOption (this.profile, random, random) train(this.profile)
  - notifications i vue/bootstrap
  - Tests
+ 
+ * twitterhandle heart 
+ * autoadd bot on first go * if (profiles.length == 0) new BotOption (this.profile, random, random) train(this.profile)
+ 
+ 
+ Sista standup:
+ - Collapsable cards - MJ
+ - notifications i vue/bootstrap - MJ
+ - Grammatik för tweets * ta bort extra spaces innan punkt osv - Anton
+ - Fixa include för botOptions - Anton
+ - Fixa autoUpdate för botOptions på select i vue - Andreas
+ - Fixa Userratio att den skickas in. - Andreas
+
+ 
+Presentation:
+ - DbDiagram
+ - Dataflöde för hela skiten
+ - Whiteboardbilder
+ - Förkastade lösningar (ef kopplingar)
+ - Refined wip
+ - Idé till produkt, hur gick det så fel?
+ - Algoritmerna, Hur dem fungrar och varför det finns så många.
