@@ -17,7 +17,7 @@ namespace TwitterBot.Domain
 
         public Bot(BotOptions options)
         {
-            this._options = options;
+            _options = options;
             _random = new Random();
         }
         
@@ -75,7 +75,6 @@ namespace TwitterBot.Domain
             var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 
             return word.NextWordOccurrences[index].Word;
-
         }
 
         private Word PickWordByProbability(TwitterProfile profile)
@@ -97,18 +96,18 @@ namespace TwitterBot.Domain
         private TwitterProfile PickProfile()
         {
             var algorithm = _options.ProfileAlgorithms.PickAlgorithm(_random);
-            TwitterProfile profile = null;
+            TwitterProfile profile;
 
             switch (algorithm)
             {
                 case AlgorithmType.Random:
-                    profile = PickProfileTrueRandom(_options.Profiles);
+                    profile = PickProfileRandom(_options.Profiles);
                     break;
                 case AlgorithmType.ByProbability:
                     profile = PickProfileWeighted(_options.ProfileOccurances);
                     break;
                 default:
-                    profile = PickProfileTrueRandom(_options.Profiles);
+                    profile = PickProfileRandom(_options.Profiles);
                     break;
             }
 
@@ -126,13 +125,12 @@ namespace TwitterBot.Domain
             return profile;
         }
 
-        private TwitterProfile PickProfileTrueRandom(IReadOnlyList<TwitterProfile> profiles)
+        private TwitterProfile PickProfileRandom(IReadOnlyList<TwitterProfile> profiles)
         {
             var index = _random.Next(profiles.Count);
             var profile = profiles[index];
 
             return profile;
         }
-
     }
 }
