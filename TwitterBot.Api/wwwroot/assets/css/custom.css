@@ -2,71 +2,89 @@ body {
     background-color: #60D8F4;
 }
 
-.jumbotron {
+
+@media (max-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+
+    .display-2 {
+        font-size: 200%;
+        min-width: 250px;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 74em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+#botApp {
+    min-width: 400px;
     background-image: url("../img/SVG/skyandwater.svg");
-    background-size: cover;
-    background-color: #c3e9fc;
-    margin-bottom: 0;
-    padding-bottom: 0;
-    padding-top: 32px;
-    min-height: 50%;
     background-repeat: repeat-x;
-    background-position: center;
+    background-position: top;
+    background-size: fit;
 }
+    .jumbotron {
+        height: 85vh;
+        background: none;
+        margin-bottom: 0;
+    }
 
-.type-to-start {
-    text-transform: uppercase;
-    color: whitesmoke;
-}
-.push-to-start{
-    background-color:none;
+    .type-to-start {
+        text-transform: uppercase;
+        color: whitesmoke;
+    }
 
-}
+    .push-to-start {
+        background-color: none;
+    }
 
-.generated-tweet-box {
-    box-shadow: 0 3px 5px #4d9dc5;
-}
+    .generated-tweet-box {
+        box-shadow: 0 3px 5px #4d9dc5;
+    }
 
-.tweet-box-card-header {
-    background-color: #4d9dc5;
-    color: whitesmoke;
-}
+    .tweet-box-card-header {
+        background-color: #4d9dc5;
+        color: whitesmoke;
+    }
 
-.display-2 {
-    color: whitesmoke;
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: bold;
-    text-transform: uppercase;
-    text-shadow: 0 3px 10px #4d9dc5;
-}
+    .display-2 {
+        color: whitesmoke;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-shadow: 0 3px 10px #4d9dc5;
+        word-wrap: break-word;
+        -webkit-hyphens: auto;
+        -moz-hyphens: auto;
+        -ms-hyphens: auto;
+        -o-hyphens: auto;
+        hyphens: auto;
+    }
 
-/* Start by setting display:none to make this hidden.
-   Then we position it in relation to the viewport window
-   with position:fixed. Width, height, top and left speak
-   for themselves. Background we set to 80% white with
+    /* Start by setting display:none to make this hidden. 
+   Then we position it in relation to the viewport window 
+   with position:fixed. Width, height, top and left speak 
+   for themselves. Background we set to 80% white with 
    our animation centered, and no-repeating */
-   .modal {
-    display:    none;
-    position:   fixed;
-    z-index:    1000;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('http://toprated.co.uk/walsall/img/loading-gif.gif') 
-                50% 50% 
-                no-repeat;
-}
-
-/* When the body has the loading class, we turn
-   the scrollbar off with overflow:hidden */
-body.loading .modal {
-    overflow: hidden;   
-}
-
-/* Anytime the body has the loading class, our
-   modal element will be visible */
-body.loading .modal {
-    display: block;
-}
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+    }

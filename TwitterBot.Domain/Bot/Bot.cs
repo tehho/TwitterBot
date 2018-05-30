@@ -116,7 +116,7 @@ namespace TwitterBot.Domain
 
         private TwitterProfile PickProfileWeighted(IReadOnlyList<ProfileOccurrance> optionsProfileOccurances)
         {
-            var weights = optionsProfileOccurances.Select(occ => occ.Occurrance).ToList();
+            var weights = optionsProfileOccurances.Select(occ => occ.Occurrence).ToList();
 
             var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 

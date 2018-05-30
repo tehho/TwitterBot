@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-lg-8">
-                    <h1 class="display-2">Ultimate<br> Twitterboat <br>2018</h1>
+                    <h1 class="display-2">Ultimate<br>Twitterboat<br>2018</h1>
                 </div>
 
                 <div class="col-lg-2 d-none d-lg-block">
@@ -284,15 +284,15 @@
                             </div>
                             <!-- Twitter profiles end-->
 
-                            <div id="botProfilesRatio" class="card" v-if="selectedProfiles.length > 0">
+                            <div id="botProfilesRatio" class="card" v-if="selectedProfiles.length > 1 && profileAlgorithm == 2">
                                 <h3 class="card-header">User ratio</h3>
                                 <div class="card-body">
 
                                     <div class="range-slider" v-for="profile in  selectedProfiles">
 
                                         <label class="text-info">@{{profile.name}}</label><br />
-                                        <input class="input-range" type="range" step="5" value="5" min="0" max="100">
-                                        <span class="range-value"></span>
+                                        <input class="input-range" type="range" v-model.number="profile.occurrence" min="0" max="100">
+                                        <span class="range-value">{{profile.occurrence}}</span>
                                     </div>
 
                                 </div>

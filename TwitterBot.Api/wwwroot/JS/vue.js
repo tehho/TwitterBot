@@ -11,6 +11,13 @@ Array.prototype.Remove = function (obj) {
 
     return arr;
 }
+Array.prototype.select = function (method) {
+    let arr = [];
+    for (let i = 0; i < this.length; i++) {
+        arr.push(method(this[i]));
+    }
+    return arr;
+}
 
 const botApp = new Vue({
     el: "#botApp",
@@ -71,9 +78,15 @@ const botApp = new Vue({
     },
     watch: {
         profileName: function (newProfileName, oldProfileName) {
-            console.log(newProfileName);
             this.isProfileNameTwitterHandle = "#2222FF";
             this.debounceIsProfileNameTwitterHandle();
+        },
+        selectedProfiles: function (newProfileList, oldProfileList) {
+            for (let profile of newProfileList) {
+                profile.occurrence = (1 / newProfileList.length) * 100;
+                console.log(profile);
+            }
+            console.log(newProfileList);
         }
     },
     methods: {
@@ -93,13 +106,13 @@ const botApp = new Vue({
 
             if (result.status === 200) {
                 await this.loadProfiles();
-                
+
                 if (this.profiles.length === 1) {
                     this.selectedProfiles = this.profiles;
 
                     await this.trainProgress();
 
-                    if (this.bots.length === 0) {
+                    if (this.bots === undefined || this.bots.length === 0) {
                         if (this.botName === "")
                             this.botName = "First bot";
 
@@ -136,7 +149,7 @@ const botApp = new Vue({
                     }).then(result => {
                         if (result !== null && result !== undefined) {
                             this.loadProfiles();
-                            alert("Remove complete");
+                            this.setErrormessage("Remove complete");
                         }
                     })
                     .catch(errorLogger);
@@ -229,21 +242,16 @@ const botApp = new Vue({
             let bot = {};
 
             bot.name = this.botName;
-            bot.profiles = this.selectedProfiles;
+            bot.profiles = this.selectedProfiles.select(profile => {
+                return { profile };
+            });
 
             this.setErrormessage("Saving bot " + bot.name);
 
-            if (this.profileAlgorithm === "") {
-                bot.profileAlgorithm = 1;
-            } else {
-                bot.profileAlgorithm = this.profileAlgorithm;
-            }
+            bot.profileAlgorithm = this.profileAlgorithm;
 
-            if (this.wordAlgorithm === "") {
-                bot.wordAlgorithm = 1;
-            } else {
-                bot.wordAlgorithm = this.wordAlgorithm;
-            }
+            bot.wordAlgorithm = this.wordAlgorithm;
+
 
             let result = await fetch("api/bot",
                 {

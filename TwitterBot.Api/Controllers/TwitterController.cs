@@ -84,6 +84,7 @@ namespace TwitterBot.Api.Controllers
 
             try
             {
+                profile.Name = _twitterService.GetTwitterUserName(profile);
                 prolife = _repository.Add(profile);
                 _logger.Log($"Profile {profile.Name} added to database");
 
@@ -100,7 +101,7 @@ namespace TwitterBot.Api.Controllers
 
             _logger.Separator();
             return Ok(prolife);
-        }
+         }
 
         [HttpPost("trainwithtweet")]
         public IActionResult TrainProfileWithTweet([FromBody]TwitterTrainDataApi data)

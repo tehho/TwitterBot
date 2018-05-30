@@ -26,7 +26,11 @@ namespace TwitterBot.Api.Controllers
         {
             var list = _options.GetAll().ToList();
 
-            list.ForEach(option => option.ProfileOccurances = new List<ProfileOccurrance>());
+            list.ForEach(option => option.ProfileOccurances.ForEach(occ =>
+            {
+                occ.BotOptions = null;
+                occ.Profile.Words = null;
+            }));
 
             return Ok(list);
         }
@@ -59,10 +63,13 @@ namespace TwitterBot.Api.Controllers
 
             option.Profiles.ForEach(profile =>
             {
-                var p = _profiles.Get(profile);
+                if (profile.Occurrence > 0)
+                {
+                    var p = _profiles.Get(profile);
 
-                if (p != null)
-                    tempOption.AddProfile(p);
+                    if (p != null)
+                        tempOption.AddProfile(p, profile.Occurrence);
+                }
             });
 
             _options.Update(tempOption);
@@ -94,11 +101,6 @@ namespace TwitterBot.Api.Controllers
             }
 
             return Ok();
-        }
-
-        private Tweet GenerateTweet()
-        {
-            return new Tweet();
         }
     }
 }
