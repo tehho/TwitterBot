@@ -8,14 +8,14 @@ namespace TwitterBot.Domain
 {
     public class Tweet : TextContent
     {
-        public long TwitterId { get; }
-        public DateTime CreatedAt { get; }
-        public int UserId { get; }
+        public long TwitterId { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int UserId { get; set; }
         public TwitterProfile User { get; }
         public int QuoteCount { get; }
         public int ReplyCount { get; }
-        public int RetweetCount { get; }
-        public int FavoriteCount { get; }
+        public int RetweetCount { get; set; }
+        public int FavoriteCount { get; set; }
 
         public Tweet()
         {
@@ -43,7 +43,12 @@ namespace TwitterBot.Domain
         {
             return new Tweet
             {
-                Text = tweet.FullText
+                Text = tweet.FullText,
+
+                CreatedAt = tweet.CreatedAt,
+                TwitterId = tweet.CreatedBy.Id,
+                FavoriteCount = tweet.FavoriteCount,
+                RetweetCount = tweet.RetweetCount
             };
         }
     }

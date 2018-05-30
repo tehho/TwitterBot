@@ -109,7 +109,7 @@ namespace TwitterBot.Domain
 
             var allTweets = new List<ITweet>(lastTweets);
 
-            while (lastTweets.Length > 0 && allTweets.Count <= tweetCount)
+            while (lastTweets.Length > 0 && allTweets.Count < tweetCount)
             {
                 var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
 

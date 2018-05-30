@@ -236,5 +236,38 @@ namespace TwitterBot.Api.Controllers
 
             return Ok();
         }
+
+        [HttpGet("TSV")]
+        public IActionResult GetTweetsToTsv(string twitterUser, int numberOfTweets)
+        {
+            _twitterService.tweetCount = numberOfTweets;
+
+            try
+            {
+                var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
+
+                var tweetString = $"Sequence\tTwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
+                var counter = 1;
+
+                for (var index = 0; index < tweets.Count; index++)
+                {
+                    tweetString += counter++ + "\t";
+                    tweetString += tweets[index].TwitterId + "\t";
+                    tweetString += $"{tweets[index].CreatedAt.ToShortDateString()} {tweets[index].CreatedAt.ToShortTimeString()}\t";
+                    tweetString += tweets[index].Text + "\t";
+                    tweetString += tweets[index].FavoriteCount + "\t";
+                    tweetString += tweets[index].RetweetCount;
+
+                    if (index != tweets.Count - 1)
+                        tweetString += Environment.NewLine;
+                }
+
+                return Ok(tweetString);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
