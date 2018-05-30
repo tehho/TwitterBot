@@ -93,8 +93,6 @@ const botApp = new Vue({
         removeProfile: function () {
             for (let profile of this.selectedProfiles) {
 
-                console.log("Remove profile id " + profile.id);
-
                 fetch("api/twitter/handle",
                     {
                         body: JSON.stringify(profile),
@@ -146,7 +144,6 @@ const botApp = new Vue({
 
             for (let i = 0; i < list.length; i++) {
                 let profile = list[i];
-                console.log(profile);
                 this.progressTweetsMax = 0;
 
                 this.setErrormessage("Loading tweets");
@@ -200,7 +197,6 @@ const botApp = new Vue({
         saveBot: function () {
 
             if (this.botName === "") {
-                console.log("No botname assigned");
                 this.setErrormessage("No botname assigned");
                 return;
             }
@@ -292,7 +288,6 @@ const botApp = new Vue({
             time.setSeconds(time.getSeconds() + 2);
             this.message.message = str;
             this.message.expires = time;
-            console.log(this.message);
         },
 
         loadProfiles: (async function () {

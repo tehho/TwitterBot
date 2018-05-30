@@ -43,7 +43,7 @@ namespace TwitterBot.Infrastructure.Repository
             }
             else if (obj.Name != null)
             {
-                return Search(profile => profile.Name == obj.Name);
+                return Search(profile => profile.Name.ToLower() == obj.Name.ToLower());
             }
             else
                 return null;

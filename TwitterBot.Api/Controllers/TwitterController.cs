@@ -102,7 +102,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("trainwithtweet")]
-        public IActionResult TrainProfileWithTweet([FromBody](TwitterProfileApi profile, TweetApi tweet) data)
+        public IActionResult TrainProfileWithTweet([FromBody]TwitterTrainDataApi data)
         {
             if (data.profile == null)
                 return BadRequest();
@@ -213,11 +213,12 @@ namespace TwitterBot.Api.Controllers
                 return NotFound();
             else
             {
-                profile.Words.ForEach(wo => wo.NextWordOccurrences = null);
-                return Ok(profile);
-            }
+                var data = new TwitterProfileApi();
+                data.Name = profile.Name;
+                data.Words = profile.Vocabulary.ToList();
                 
-
+                return Ok(data);
+            }
         }
 
         [HttpPost("PostToTwitter")]
