@@ -105,9 +105,6 @@ namespace TwitterBot.Infrastructure.Repository
 
         public IEnumerable<BotOptions> SearchList(Predicate<BotOptions> predicate)
         {
-            //.Include(option => option.ProfileAlgorithms)
-            //.Include(option => option.WordAlgorithms)
-
             return _context.BotOptions
                 .Include(option => option.ProfileOccurances)
                 .ThenInclude(occ => occ.Profile)
@@ -119,14 +116,15 @@ namespace TwitterBot.Infrastructure.Repository
                 .ThenInclude(p => p.Words)
                 .ThenInclude(w => w.NextWordOccurrences)
                 .ThenInclude(wno => wno.Word)
+
+                .Include(option => option.ProfileAlgorithms)
+                .Include(option => option.WordAlgorithms)
 
                 .Where(option => predicate(option)).ToList();
         }
 
         public BotOptions Search(Predicate<BotOptions> predicate)
         {
-            //.Include(option => option.ProfileAlgorithms)
-            //.Include(option => option.WordAlgorithms)
             return _context.BotOptions
                 .Include(option => option.ProfileOccurances)
                 .ThenInclude(occ => occ.Profile)
@@ -138,7 +136,10 @@ namespace TwitterBot.Infrastructure.Repository
                 .ThenInclude(p => p.Words)
                 .ThenInclude(w => w.NextWordOccurrences)
                 .ThenInclude(wno => wno.Word)
-                
+
+                .Include(option => option.ProfileAlgorithms)
+                .Include(option => option.WordAlgorithms)
+
                 .SingleOrDefault(option => predicate(option));
         }
 
