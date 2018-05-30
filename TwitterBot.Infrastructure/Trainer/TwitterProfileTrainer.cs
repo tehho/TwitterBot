@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure.Repository;
 
@@ -28,8 +29,9 @@ namespace TwitterBot.Infrastructure
                 return null;
 
             var regex = new Regex(@"(\.|,| |!|\?)");
-
-            var regexExtended = new Regex("(^@|^ $|^http|^HTTP|^#)");
+            
+            var regexExtended = new Regex(@"(^@|^ $|^http|^HTTP|^#|/|\\)");
+            //TODO move remove @ and # to tweet generator instead of trainer;
 
             var words = regex.Split(content.Text)
                 .Where(word => !string.IsNullOrWhiteSpace(word))

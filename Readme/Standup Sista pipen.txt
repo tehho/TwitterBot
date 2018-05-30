@@ -1,0 +1,6 @@
+Sista pipen:
+ - Collapsable cards
+ - twitterhandle hearth
+ - autoadd bot on first go * if (profiles.length == 0) new BotOption (this.profile, random, random) train(this.profile)
+ - notifications i vue/bootstrap
+ - Tests

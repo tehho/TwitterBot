@@ -103,7 +103,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("trainwithtweet")]
-        public IActionResult TrainProfileWithTweet([FromBody](TwitterProfileApi profile, TweetApi tweet) data)
+        public IActionResult TrainProfileWithTweet([FromBody]TwitterTrainDataApi data)
         {
             if (data.profile == null)
                 return BadRequest();
@@ -202,12 +202,24 @@ namespace TwitterBot.Api.Controllers
             return Ok("Remove complete");
         }
 
-        [HttpPost("GenerateTweet")]
-        private Tweet GenerateTweet(BotOptions options)
+        [HttpGet("{id}")]
+        public IActionResult GetProfile(Guid? id)
         {
-            var bot = new Bot(options);
+            if (id == null)
+                return BadRequest();
 
-            return bot.GenerateTweet();
+            var profile = _repository.Get(new TwitterProfile() {Id = id});
+
+            if (profile == null)
+                return NotFound();
+            else
+            {
+                var data = new TwitterProfileApi();
+                data.Name = profile.Name;
+                data.Words = profile.Vocabulary.ToList();
+                
+                return Ok(data);
+            }
         }
 
         [HttpPost("PostToTwitter")]
