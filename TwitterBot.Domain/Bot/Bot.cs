@@ -55,7 +55,9 @@ namespace TwitterBot.Domain
                     word = PickWordByProbability(profile);
                     break;
                 case AlgorithmType.ByProbabilityWithPrediction:
-                    word = PickWordByProbabilityWithPrediction(profile, previousWord);
+                    word = previousWord == null ?
+                        PickWordByProbability(profile) :
+                        PickWordByProbabilityWithPrediction(profile, previousWord);
                     break;
             }
 
@@ -65,8 +67,8 @@ namespace TwitterBot.Domain
         private Word PickWordByProbabilityWithPrediction(TwitterProfile profile, Word previousWord)
         {
             var word = profile.Words.SingleOrDefault(w => w.Word.Equals(previousWord));
-
-            if (word == null)
+            
+            if (word?.NextWordOccurrences == null || word.NextWordOccurrences.Count == 0)
                 return PickWordByProbability(profile);
 
             var weights = word.NextWordOccurrences.Select(n => n.Occurrence).ToList();

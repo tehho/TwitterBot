@@ -101,7 +101,7 @@ namespace TwitterBot.Api.Controllers
 
             _logger.Separator();
             return Ok(prolife);
-        }
+         }
 
         [HttpPost("trainwithtweet")]
         public IActionResult TrainProfileWithTweet([FromBody]TwitterTrainDataApi data)
