@@ -12,10 +12,21 @@ namespace TwitterBot.Domain
         public Guid BotOptionsId { get; set; }
         [Required]
         public BotOptions BotOptions { get; set; }
-        public int Occurrance { get; set; }
+        public int Occurrence { get; set; }
         
         public ProfileOccurrance()
         {
+        }
+
+        public ProfileOccurrance(TwitterProfile profile, BotOptions options, int occurrence)
+        {
+            Profile = profile;
+            ProfileId = profile.Id.Value;
+
+            BotOptions = options;
+            BotOptionsId = options.Id.Value;
+
+            Occurrence = occurrence;
         }
 
         public ProfileOccurrance(TwitterProfile profile, BotOptions options)
@@ -26,7 +37,7 @@ namespace TwitterBot.Domain
             BotOptions = options;
             BotOptionsId = options.Id.Value;
 
-            Occurrance = 1;
+            Occurrence = 1;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace TwitterBot.Api.Model
     {
         public Guid? Id { get; set; }
         public string Name { get; set; }
-        public List<TwitterProfile> Profiles { get; set; }
+        public List<TwitterProfileApi> Profiles { get; set; }
 
         public AlgorithmType? WordAlgorithm { get; set; }
         public AlgorithmType? ProfileAlgorithm { get; set; }
@@ -20,7 +20,7 @@ namespace TwitterBot.Api.Model
         {
             Id = null;
             Name = "";
-            Profiles = new List<TwitterProfile>();
+            Profiles = new List<TwitterProfileApi>();
         }
 
         public static implicit operator BotOptions(BotOptionApi value)

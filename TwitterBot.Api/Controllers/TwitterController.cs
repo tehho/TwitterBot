@@ -84,6 +84,7 @@ namespace TwitterBot.Api.Controllers
 
             try
             {
+                profile.Name = _twitterService.GetTwitterUserName(profile);
                 prolife = _repository.Add(profile);
                 _logger.Log($"Profile {profile.Name} added to database");
 

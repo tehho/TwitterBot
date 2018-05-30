@@ -24,12 +24,12 @@ namespace TwitterBot.Domain
             WordAlgorithms = new AlgorithmSelector();
         }
 
-        public void AddProfile(TwitterProfile profile)
+        public void AddProfile(TwitterProfile profile, int occurrence)
         {
             if (Profiles.Any(p => p.Name == profile.Name))
                 return;
 
-            ProfileOccurances.Add(new ProfileOccurrance(profile, this));
+            ProfileOccurances.Add(new ProfileOccurrance(profile, this, occurrence));
         }
     }
 }

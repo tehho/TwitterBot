@@ -13,6 +13,7 @@ namespace TwitterBot.Api.Model
         public string Name { get; set; }
         public List<TextContent> _tweets { get; set; }
         public List<Word> Words { get; set; }
+        public int Occurrence { get; set; }
 
         public TwitterProfileApi()
         {

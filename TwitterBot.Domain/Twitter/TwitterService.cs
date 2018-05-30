@@ -77,15 +77,9 @@ namespace TwitterBot.Domain
 
         }
 
-        public bool DoesTwitterUserExist(TwitterProfile profile)
-        {
-            if (Tweetinvi.User.GetUserFromScreenName(profile.Name) != null)
-            {
-                return true;
-            }
+        public bool DoesTwitterUserExist(TwitterProfile profile) => Tweetinvi.User.GetUserFromScreenName(profile.Name) != null;
 
-            return false;
-        }
+        public string GetTwitterUserName(TwitterProfile profile) => Tweetinvi.User.GetUserFromScreenName(profile.Name)?.ScreenName;
 
         public bool ProfileTimeLineHasTweets(TwitterProfile profile)
         {
