@@ -235,10 +235,12 @@ namespace TwitterBot.Api.Controllers
             {
                 var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
 
-                var tweetString = $"TwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
+                var tweetString = $"Sequence\tTwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
+                var counter = 1;
 
                 for (var index = 0; index < tweets.Count; index++)
                 {
+                    tweetString += counter++ + "\t";
                     tweetString += tweets[index].TwitterId + "\t";
                     tweetString += $"{tweets[index].CreatedAt.ToShortDateString()} {tweets[index].CreatedAt.ToShortTimeString()}\t";
                     tweetString += tweets[index].Text + "\t";
