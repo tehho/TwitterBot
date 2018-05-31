@@ -46,40 +46,39 @@ const botApp = new Vue({
 
     },
     computed: {
-        progressProfileCounter: function () {
+        progressProfileCounter: function() {
             if (this.progressProfileMax === 0)
                 return 0;
             else
                 return Math.round((
-                    (this.progressProfile + (this.progressTweetsCounter / 100))
-                    / this.progressProfileMax)
-                    * 100);
+                        (this.progressProfile + (this.progressTweetsCounter / 100)) / this.progressProfileMax) *
+                    100);
         },
-        progressTweetsCounter: function () {
+        progressTweetsCounter: function() {
             if (this.progressTweetsMax === 0)
                 return 0;
             else
                 return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
         },
     },
-    created: function () {
+    created: function() {
         this.profiles = loadProfiles();
         this.bots = loadBots();
         this.debounceIsProfileNameTwitterHandle = _.debounce(this.IsProfileNameTwitterHandle, 500);
     },
     watch: {
-        profileName: function (newProfileName, oldProfileName) {
+        profileName: function(newProfileName, oldProfileName) {
             this.isProfileNameTwitterHandle = "#fdf99e";
             this.debounceIsProfileNameTwitterHandle();
         },
-        selectedProfiles: function (newProfileList, oldProfileList) {
+        selectedProfiles: function(newProfileList, oldProfileList) {
             for (let profile of newProfileList) {
                 profile.occurrence = (1 / newProfileList.length) * 100;
             }
         }
     },
     methods: {
-        addProfile: (async function () {
+        addProfile: (async function() {
             let profile = {};
             profile.name = this.profileName;
 
@@ -120,19 +119,19 @@ const botApp = new Vue({
                 }
             }
         }),
-        removeProfile: function () {
+        removeProfile: function() {
             for (let profile of this.selectedProfiles) {
 
                 fetch("api/twitter/handle",
-                    {
-                        body: JSON.stringify(profile),
-                        method: "DELETE",
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        }
+                        {
+                            body: JSON.stringify(profile),
+                            method: "DELETE",
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
 
-                    }).then(result => {
+                        }).then(result => {
                         if (result.status === 200) {
                             return result.json();
                         }
@@ -147,7 +146,7 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProgress: (async function () {
+        trainProgress: (async function() {
             let list = this.selectedProfiles;
 
             this.progressProfile = 0;
@@ -212,7 +211,7 @@ const botApp = new Vue({
 
         }),
 
-        saveBot: (async function () {
+        saveBot: (async function() {
 
             if (this.botName === "") {
                 this.setErrormessage("No botname assigned");
@@ -250,7 +249,7 @@ const botApp = new Vue({
                 errorLogger(result);
             }
         }),
-        removeBot: (async function () {
+        removeBot: (async function() {
             let result = await fetch("api/bot",
                 {
                     body: JSON.stringify(this.selectedBot),
@@ -268,13 +267,13 @@ const botApp = new Vue({
 
         }),
 
-        generateTweet: (async function () {
+        generateTweet: (async function() {
             let url = "api/bot/" + this.selectedBot.id;
             let result = await fetch(url);
             if (result.status === 200)
                 this.tweet = await result.json();
         }),
-        postTweet: (async function () {
+        postTweet: (async function() {
             var result = await fetch("api/twitter/PostToTwitter",
                 {
                     body: JSON.stringify(this.tweet),
@@ -288,14 +287,14 @@ const botApp = new Vue({
                 alert("Tweet posted");
         }),
 
-        simpleToggle: function () {
+        simpleToggle: function() {
 
         },
-        advancedToggle: function () {
+        advancedToggle: function() {
 
         },
 
-        IsProfileNameTwitterHandle: (async function () {
+        IsProfileNameTwitterHandle: (async function() {
             let handle = this.profileName;
             if (handle !== "") {
                 let result = await fetch("api/heartbeat/twitterhandle",
@@ -309,11 +308,9 @@ const botApp = new Vue({
                     });
                 if (result.status === 200) {
                     this.isProfileNameTwitterHandle = "#9efda2";
-                }
-                else if (result.status === 404) {
+                } else if (result.status === 404) {
                     this.isProfileNameTwitterHandle = "#FF0000";
-                }
-                else {
+                } else {
                     this.isProfileNameTwitterHandle = "#e74949";
                 }
             } else
@@ -322,14 +319,21 @@ const botApp = new Vue({
         }),
 
 
-        updateLists: function () {
+        updateLists: function() {
             this.loadProfiles();
             this.loadBots();
         },
-        setErrormessage: function (str) {
+        setErrormessage: function(str) {
             let message = {};
             message.text = str;
             this.messages.push(message);
+        },
+        removeMessage: function(message) {
+            let index = this.messages.findIndex(element => {
+                return element.text == message.text;
+            });
+
+            this.messages = this.messages.splice(index, 0);
         },
 
         loadProfiles: (async function () {
