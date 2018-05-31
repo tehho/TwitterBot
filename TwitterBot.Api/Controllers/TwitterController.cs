@@ -140,13 +140,20 @@ namespace TwitterBot.Api.Controllers
 
             if (profile == null)
                 return NotFound();
+            try
+            {
 
-            var tweets = _twitterService.ListAllTweetsFromProfile(profile);
+                var tweets = _twitterService.GetAllTweetsFromProfile(profile);
+                if (tweets == null)
+                    return BadRequest();
+                return Ok(tweets);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
 
-            if (tweets == null)
-                return BadRequest();
 
-            return Ok(tweets);
         }
 
         [HttpPost("train")]
@@ -171,7 +178,7 @@ namespace TwitterBot.Api.Controllers
 
         private void Train(TwitterProfile profile)
         {
-            var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
+            var tweets = _twitterService.GetAllTweetsFromProfile(profile).ToList();
 
             tweets.ForEach(tweet =>
             {
@@ -256,7 +263,7 @@ namespace TwitterBot.Api.Controllers
 
             try
             {
-                var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
+                var tweets = _twitterService.GetAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
 
                 var tweetString = $"Sequence\tTwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
                 var counter = 1;

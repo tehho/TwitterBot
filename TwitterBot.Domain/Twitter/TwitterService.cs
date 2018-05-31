@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Tweetinvi;
 using Tweetinvi.Core.Exceptions;
+using Tweetinvi.Core.Models;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 
@@ -104,10 +105,12 @@ namespace TwitterBot.Domain
             return timeLine != null;
         }
 
-        public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
+        public IEnumerable<Tweet> GetAllTweetsFromProfile(TwitterProfile profile)
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
-            
+
+            var test = RateLimit.GetCurrentCredentialsRateLimits(true);
+
             var lastTweets = Timeline.GetUserTimeline(profile.Name, tweetCount)?.ToArray();
 
             var allTweets = new List<ITweet>(lastTweets);
