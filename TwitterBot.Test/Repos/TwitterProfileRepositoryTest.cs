@@ -32,7 +32,7 @@ namespace TwitterBot.Test
 
         public TwitterProfile Update(TwitterProfile obj)
         {
-            if (obj?.WordList == null)
+            if (obj?.Words == null)
                 return null;
 
             var profile = Get(obj);
@@ -40,7 +40,7 @@ namespace TwitterBot.Test
             if (profile == null)
                 return null;
 
-            profile.WordList = obj.WordList;
+            profile.Words = obj.Words;
 
             return profile;
         }

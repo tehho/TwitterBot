@@ -13,7 +13,7 @@ namespace TwitterBot.Api.Model
         public string Name { get; set; }
         public List<TextContent> _tweets { get; set; }
         public List<Word> Words { get; set; }
-        public int Occurrence { get; set; }
+        public int? Occurrence { get; set; }
 
         public TwitterProfileApi()
         {
@@ -23,7 +23,7 @@ namespace TwitterBot.Api.Model
 
         public static implicit operator TwitterProfile(TwitterProfileApi value)
         {
-            return new TwitterProfile{Name = value.Name};
+            return new TwitterProfile{Name = value.Name, Id = null};
         }
     }
 }
