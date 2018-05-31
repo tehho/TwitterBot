@@ -107,8 +107,8 @@ namespace TwitterBot.Domain
         public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
         {
             RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
-
-            var lastTweets = Timeline.GetUserTimeline(profile.Name, tweetCount).ToArray();
+            
+            var lastTweets = Timeline.GetUserTimeline(profile.Name, tweetCount)?.ToArray();
 
             var allTweets = new List<ITweet>(lastTweets);
 

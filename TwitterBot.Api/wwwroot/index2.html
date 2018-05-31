@@ -20,10 +20,9 @@
 
 <body>
     <div id="botApp" class="container-fluid" style="margin:0 auto;">
-        
-        <div class="jumbotron text-center">
-          <!--  parallax-window" data-parallax="scroll" data-image-src="assets/img/SVG/skyandwater.svg" -->
 
+        <div class="jumbotron text-center">
+            <!--  parallax-window" data-parallax="scroll" data-image-src="assets/img/SVG/skyandwater.svg" -->
             <!--Header-->
             <div class="row">
                 <div class="col-lg-2 d-none d-lg-block">
@@ -48,9 +47,6 @@
                             <button @click="addProfile" class="btn btn-light mx-3">Go!</button>
                         </div>
                     </div>
-                    <div v-if="errorMessage.showError">
-                        {{errorMessage.message}}
-                    </div>
                 </div>
                 <div class="col-lg-2 my-4 hidden-xs hidden-sm hidden-md"><img src="assets/img/svg/floatingboat.svg"></div>
 
@@ -59,6 +55,11 @@
         </div>
         <!--Jumpotron end-->
 
+        <div id="messages" class="containter" v-if="messages.length > 0">
+            <div v-for="message in messages">
+                {{message.text}}
+            </div>
+        </div>
         <div id="twitter-generator" class="container">
 
             <div class="row">
@@ -300,10 +301,10 @@
         </div>
 
         <div class="container py-5">
-                <div class="row mx-auto" style="min-width: 200px;">
-                Ultimate Twiterbot 2018 
+            <div class="row mx-auto" style="min-width: 200px;">
+                Ultimate Twiterbot 2018
             </div>
-            </div>
+        </div>
 
 
 
