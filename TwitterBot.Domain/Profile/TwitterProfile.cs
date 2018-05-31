@@ -28,7 +28,7 @@ namespace TwitterBot.Domain
             Words = new List<WordOccurrence>();
         }
 
-        public WordOccurrence AddOccurrence(Word tempWord)
+        public WordOccurrence AddWord(Word tempWord)
         {
             var ret = new WordOccurrence(tempWord, this);
             Words.Add(ret);

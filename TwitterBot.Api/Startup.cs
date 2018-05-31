@@ -42,10 +42,10 @@ namespace TwitterBot.Api
             services.AddTransient(x => new TwitterServiceOptions(appsettings));
             services.AddScoped<TwitterService>();
 
-            services.AddTransient<IRepository<TwitterProfile>, TwitterProfileRepository>();
-            services.AddTransient<IRepository<Word>, WordRepository>();
-            services.AddTransient<IRepository<WordOccurrence>, WordOccurrenceRepository>();
-            services.AddTransient<IRepository<BotOptions>, BotOptionRepository>();
+            services.AddScoped<IRepository<TwitterProfile>, TwitterProfileRepository>();
+            services.AddScoped<IRepository<Word>, WordRepository>();
+            services.AddScoped<IRepository<WordOccurrence>, WordOccurrenceRepository>();
+            services.AddScoped<IRepository<BotOptions>, BotOptionRepository>();
 
             services.AddScoped<TwitterProfileTrainer>();
 

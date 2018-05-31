@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -17,7 +18,7 @@ namespace TwitterBot.Domain
 
         public Bot(BotOptions options)
         {
-            this._options = options;
+            _options = options;
             _random = new Random();
         }
         
@@ -25,6 +26,7 @@ namespace TwitterBot.Domain
         {
             var tweetText = "";
             Word previousWord = null;
+            var lastWordWasStop = true;
 
             while (true)
             {
@@ -33,9 +35,25 @@ namespace TwitterBot.Domain
                 var word = PickWord(profile, previousWord);
 
                 if (tweetText.Length + word.Value.Length > 140)
-                    return new Tweet(tweetText);
+                    return new Tweet(tweetText.TrimEnd());
 
-                tweetText += word.Value + " ";
+                if (IsStop(word.Value) && lastWordWasStop)
+                {
+                    previousWord = null;
+                    continue;
+                }
+
+                if (IsSeparator(word.Value) || IsStop(word.Value))
+                {
+                    tweetText = tweetText.TrimEnd();
+                    lastWordWasStop = IsStop(word.Value);
+                }
+
+                tweetText += lastWordWasStop ? FirstCharacterToUppercase(word.Value) : word.Value;
+
+                lastWordWasStop = IsStop(word.Value);
+
+                tweetText += " ";
 
                 previousWord = word;
             }
@@ -75,7 +93,6 @@ namespace TwitterBot.Domain
             var index = AlgorithmSelector.PickIndexWeighted(weights, _random);
 
             return word.NextWordOccurrences[index].Word;
-
         }
 
         private Word PickWordByProbability(TwitterProfile profile)
@@ -97,18 +114,18 @@ namespace TwitterBot.Domain
         private TwitterProfile PickProfile()
         {
             var algorithm = _options.ProfileAlgorithms.PickAlgorithm(_random);
-            TwitterProfile profile = null;
+            TwitterProfile profile;
 
             switch (algorithm)
             {
                 case AlgorithmType.Random:
-                    profile = PickProfileTrueRandom(_options.Profiles);
+                    profile = PickProfileRandom(_options.Profiles);
                     break;
                 case AlgorithmType.ByProbability:
                     profile = PickProfileWeighted(_options.ProfileOccurances);
                     break;
                 default:
-                    profile = PickProfileTrueRandom(_options.Profiles);
+                    profile = PickProfileRandom(_options.Profiles);
                     break;
             }
 
@@ -126,7 +143,7 @@ namespace TwitterBot.Domain
             return profile;
         }
 
-        private TwitterProfile PickProfileTrueRandom(IReadOnlyList<TwitterProfile> profiles)
+        private TwitterProfile PickProfileRandom(IReadOnlyList<TwitterProfile> profiles)
         {
             var index = _random.Next(profiles.Count);
             var profile = profiles[index];
@@ -134,5 +151,19 @@ namespace TwitterBot.Domain
             return profile;
         }
 
+        private bool IsStop(string word)
+        {
+            return Regex.IsMatch(word.Last().ToString(), @"(\.|!|\?)");
+        }
+
+        private bool IsSeparator(string word)
+        {
+            return Regex.IsMatch(word.Last().ToString(), @"(,|;|:)");
+        }
+
+        private string FirstCharacterToUppercase(string word)
+        {
+            return word[0].ToString().ToUpper() + word.Substring(1);
+        }
     }
 }

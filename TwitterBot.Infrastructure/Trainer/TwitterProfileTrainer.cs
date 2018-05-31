@@ -22,64 +22,49 @@ namespace TwitterBot.Infrastructure
 
         public TwitterProfile Train(TwitterProfile profile, TextContent content)
         {
-            if (content == null)
-                return null;
+            if (profile == null || content?.Text == null)
+                throw new ArgumentNullException();
 
-            if (content.Text == null)
-                return null;
+            var regex = new Regex(@"(\.|,| |!|\?|;|:)");
 
-            var regex = new Regex(@"(\.|,| |!|\?)");
-            
-            var regexExtended = new Regex(@"(^@|^ $|^http|^HTTP|^#|/|\\)");
-            //TODO move remove @ and # to tweet generator instead of trainer;
+            var excluded = new Regex(@"(^@|^#|;|:|^http|^HTTP|/|\\|…$|&\S*|^"".*[^""]$|^[^""].*""$|^RT$)");
+            //TODO move remove @ and # to tweet generator instead of trainer
 
             var words = regex.Split(content.Text)
                 .Where(word => !string.IsNullOrWhiteSpace(word))
-                .Where(word => !regexExtended.IsMatch(word))
+                .Where(word => !excluded.IsMatch(word))
                 .Select(word => new Word(word)).ToList();
 
             WordOccurrence lastWordOccurrence = null;
-            Word tempWord = null;
+            Word temporaryWord;
+
             foreach (var word in words)
             {
-                try
-                {
-                    if (word.Value == "be")
-                        tempWord = null;
+                if (profile.Vocabulary.Any(w => w.Equals(word)))
+                    temporaryWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word));
 
-                    if (profile.Vocabulary.SingleOrDefault(w => w.Equals(word)) != null)
-                        tempWord = profile.Vocabulary.SingleOrDefault(w => w.Equals(word));
-                    else if (_wordRepository.Get(word) != null)
-                        tempWord = _wordRepository.Get(word);
-                    else
-                        tempWord = _wordRepository.Add(word);
+                else if (_wordRepository.Get(word) != null)
+                    temporaryWord = _wordRepository.Get(word);
 
-                    if (tempWord == null)
-                        continue;
+                else
+                    temporaryWord = _wordRepository.Add(word);
 
-                    var currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word.Id == tempWord.Id);
+                if (temporaryWord == null)
+                    continue;
 
-                    if (currentWordOccurrence == null)
-                    {
-                        currentWordOccurrence = profile.AddOccurrence(tempWord);
-                    }
-                    else
-                    {
-                        currentWordOccurrence.Occurrence++;
-                    }
+                var currentWordOccurrence = profile.Words.SingleOrDefault(wo => wo.Word == temporaryWord);
 
-                    lastWordOccurrence?.AddOccurrence(currentWordOccurrence.Word);
+                if (currentWordOccurrence == null)
+                    currentWordOccurrence = profile.AddWord(temporaryWord);
+                else
+                    currentWordOccurrence.Occurrence++;
 
-                    lastWordOccurrence = currentWordOccurrence;
-                }
-                catch (Exception e)
-                {
-                    throw (e);
-                }
+                lastWordOccurrence?.AddOccurrence(currentWordOccurrence.Word);
+
+                lastWordOccurrence = currentWordOccurrence;
             }
 
             return profile;
-
         }
     }
 }

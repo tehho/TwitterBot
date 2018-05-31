@@ -12,11 +12,12 @@ namespace TwitterBot.Api.Controllers
 {
 
     [Route("api/[controller]")]
-    public class HearthbeatController : Controller
+    public class HeartbeatController : Controller
     {
         private readonly TwitterContext _dbMananger;
         private readonly TwitterService _twitterService;
-        public HearthbeatController(TwitterContext dbMananger, TwitterService twitterService)
+
+        public HeartbeatController(TwitterContext dbMananger, TwitterService twitterService)
         {
             _dbMananger = dbMananger;
             _twitterService = twitterService;

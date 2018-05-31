@@ -35,11 +35,11 @@ const botApp = new Vue({
         tweet: {
             "text": ""
         },
-        isProfileNameTwitterHandle: "#2222FF",
+        isProfileNameTwitterHandle: "#EAEAEA",
 
         message: {
             "expires": new Date(2018, 05, 28),
-            "message": "test",
+            "message": "", /* Test was here */
         },
         progressProfile: "",
         progressProfileMax: "",
@@ -78,7 +78,7 @@ const botApp = new Vue({
     },
     watch: {
         profileName: function (newProfileName, oldProfileName) {
-            this.isProfileNameTwitterHandle = "#2222FF";
+            this.isProfileNameTwitterHandle = "#fdf99e";
             this.debounceIsProfileNameTwitterHandle();
         },
         selectedProfiles: function (newProfileList, oldProfileList) {
@@ -332,18 +332,18 @@ const botApp = new Vue({
                     });
                 if (result.status === 200) {
                     console.log(result.status);
-                    this.isProfileNameTwitterHandle = "#00FF00";
+                    this.isProfileNameTwitterHandle = "#9efda2";
                 }
                 else if (result.status === 404) {
                     console.log(result.status);
-                    this.isProfileNameTwitterHandle = "#FFFF00";
+                    this.isProfileNameTwitterHandle = "#fdfb9e";
                 }
                 else {
                     console.log(result.status);
-                    this.isProfileNameTwitterHandle = "#FF0000";
+                    this.isProfileNameTwitterHandle = "#e74949";
                 }
             } else
-                this.isProfileNameTwitterHandle = "#000000";
+                this.isProfileNameTwitterHandle = "#EAEAEA";
 
         }),
 
