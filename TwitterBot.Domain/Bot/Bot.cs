@@ -22,11 +22,11 @@ namespace TwitterBot.Domain
             _random = new Random();
         }
         
-        public Tweet GenerateTweet()
+        public Tweet GenerateTweet(int tweetLength = 140)
         {
-            var tweetText = "";
             Word previousWord = null;
             var lastWordWasStop = true;
+            var tweetText = "";
 
             while (true)
             {
@@ -34,10 +34,10 @@ namespace TwitterBot.Domain
 
                 var word = PickWord(profile, previousWord);
 
-                if (tweetText.Length + word.Value.Length > 140)
+                if (tweetText.Length + word.Value.Length > tweetLength)
                     return new Tweet(tweetText.TrimEnd());
 
-                if (IsStop(word.Value) && lastWordWasStop)
+                if (IsStop(word.Value) && lastWordWasStop || IsSeparator(word.Value) && lastWordWasStop)
                 {
                     previousWord = null;
                     continue;
