@@ -317,8 +317,7 @@ const botApp = new Vue({
                 this.isProfileNameTwitterHandle = "#EAEAEA";
 
         }),
-
-
+        
         updateLists: function() {
             this.loadProfiles();
             this.loadBots();
@@ -330,7 +329,7 @@ const botApp = new Vue({
         },
         removeMessage: function(message) {
             let index = this.messages.findIndex(element => {
-                return element.text == message.text;
+                return element.text === message.text;
             });
 
             this.messages = this.messages.splice(index, 0);
@@ -345,7 +344,6 @@ const botApp = new Vue({
 
     }
 });
-
 
 async function loadProfiles() {
     let result = await fetch("api/twitter");

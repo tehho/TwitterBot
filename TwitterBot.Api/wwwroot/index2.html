@@ -118,18 +118,18 @@
 
         </div>
         <!-- Twitter generator end-->
-        
-    
-    <div id="messages" class="containter" v-if="messages.length > 0">
-        <div v-for="message in messages">
-            {{message.text}}
-            <button @click="removeMessage(message)">Ok</button>
+
+
+        <div id="messages" class="containter" v-if="messages.length > 0">
+            <div v-for="message in messages">
+                {{message.text}}
+                <button @click="removeMessage(message)">Ok</button>
+            </div>
         </div>
-    </div>
-    <!-- Messages end -->
+        <!-- Messages end -->
 
 
-    <div id="settingsController" class="container">
+        <div id="settingsController" class="container">
 
             <div class="row justify-content-end text-center">
                 <div class="col-12">

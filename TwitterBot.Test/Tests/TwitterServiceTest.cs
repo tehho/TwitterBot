@@ -41,7 +41,7 @@ namespace TwitterBot.Test.Tests
         [Test]
         public void TestGetList()
         {
-            Assert.DoesNotThrow(() => _service.GetAllTweetsFromProfile(new TwitterProfile("UBoat2018")));
+            Assert.DoesNotThrow(() => Task.Run( () => _service.GetAllTweetsFromProfile(new TwitterProfile("UBoat2018"))));
         }
     }
 }

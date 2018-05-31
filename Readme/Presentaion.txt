@@ -1,0 +1,56 @@
+TwitterBot 2018
+ 
+Agenda
+ - Gå igenom vad vi ska prata om
+ 
+Vilka är vi?
+ - Vem är jag?
+ - Vart kommer jag ifrån?
+ - Varför detta projektet?
+ 
+Vad har vi byggt? Varför? Till vem?
+ - TwitterBot
+ - Intresserade av textanalysering och maskinlearning
+ - Till den som vill automatisera sitt sociala medier flöde
+
+Projektets Historia
+ - Process
+    - DailyStandups
+    - Whiteboard 2 st
+ - Whiteboard bilder
+ - hemsidor från tidigare master
+ - Hur det ser ut nu
+ 
+Liten Demo
+ - Bilder via live demo - Mattias
+ - Trainern - Anton 
+ - Algoritmer - Anton
+ - Skapa ny bot
+ - DbSchema - Anton
+
+Vad har varit kul
+ - Frontend: 
+    - Roterande båt
+	- Auto add bot vid första profile
+ - Middleend:
+    - Vue
+	- Async Fetch
+	- Debounce
+ - Backend:
+    - Generering
+
+Vad har varit motgångar
+ - Få kopplingarna i EF att koppla rätt
+ - Sista minuten error
+    - Twitterwappern slutade fungera
+
+Idéer vi inte hann med
+ - Spegla profilbilder
+    - Autogenerera baserat på profillistans bilder
+ - Machinelearning via Azure
+ - Grammatisktavning
+ 
+Demo
+
+Slutord
+ 
