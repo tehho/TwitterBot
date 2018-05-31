@@ -49,7 +49,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]TwitterProfileApi profile)
+        public async Task<IActionResult> Post([FromBody]TwitterProfileApi profile)
         {
             _logger.Log("Adding profile to list");
             if (profile == null)
@@ -66,7 +66,7 @@ namespace TwitterBot.Api.Controllers
                 return BadRequest("Name not given");
             }
 
-            if (_twitterService.DoesTwitterUserExist(profile) == false)
+            if (await _twitterService.DoesTwitterUserExist(profile) == false)
             {
                 _logger.Error("Profile doesn't match a twitter profile");
                 _logger.Separator();
@@ -84,7 +84,7 @@ namespace TwitterBot.Api.Controllers
 
             try
             {
-                profile.Name = _twitterService.GetTwitterUserName(profile);
+                profile.Name = await _twitterService.GetTwitterUserName(profile);
                 prolife = _repository.Add(profile);
                 _logger.Log($"Profile {profile.Name} added to database");
 
@@ -128,7 +128,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("TrainData")]
-        public IActionResult GetTrainData([FromBody]TwitterProfileApi apiprofile)
+        public async Task<IActionResult> GetTrainData([FromBody]TwitterProfileApi apiprofile)
         {
             if (apiprofile == null)
                 return BadRequest();
@@ -140,47 +140,19 @@ namespace TwitterBot.Api.Controllers
 
             if (profile == null)
                 return NotFound();
-
-            var tweets = _twitterService.ListAllTweetsFromProfile(profile);
-
-            if (tweets == null)
-                return BadRequest();
-
-            return Ok(tweets);
-        }
-
-        [HttpPost("train")]
-        public IActionResult TrainProfile([FromBody] List<TwitterProfileApi> profiles)
-        {
-            if (profiles?.Count == 0)
-                return BadRequest("Sum ting wong");
             try
             {
 
-                var targetProfiles = _repository.SearchList((p => profiles.Any(profile => profile.Name == p.Name))).ToList();
-
-                targetProfiles.ForEach(Train);
+                var tweets = await _twitterService.GetAllTweetsFromProfile(profile);
+                if (tweets == null)
+                    return BadRequest();
+                return Ok(tweets);
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e);
             }
 
-            return Ok();
-        }
-
-        private void Train(TwitterProfile profile)
-        {
-            var tweets = _twitterService.ListAllTweetsFromProfile(profile).ToList();
-
-            tweets.ForEach(tweet =>
-            {
-                profile = _repository.Get(profile);
-
-                profile = _trainer.Train(profile, tweet);
-
-                _repository.Update(profile);
-            });
 
         }
 
@@ -194,8 +166,17 @@ namespace TwitterBot.Api.Controllers
 
             if (!_repository.Exists(profile))
                 return BadRequest($"Profile does not exist: {profile.Name}");
-            
-            var prolife = _repository.Remove(profile);
+
+            TwitterProfile prolife = null;
+
+            try
+            {
+                prolife = _repository.Remove(profile);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
 
             if (prolife == null)
                 return BadRequest();
@@ -224,7 +205,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("PostToTwitter")]
-        public IActionResult PostToTwitter([FromBody] Tweet tweet)
+        public async Task<IActionResult> PostToTwitter([FromBody] Tweet tweet)
         {
             if (tweet == null)
                 return BadRequest("Sum ting wong");
@@ -232,7 +213,7 @@ namespace TwitterBot.Api.Controllers
             if (tweet.Text == null)
                 return BadRequest("No body in tweet");
 
-            if (!_twitterService.PublishTweet(tweet))
+            if (await _twitterService.PublishTweet(tweet))
             {
                 return StatusCode(500);
             }
@@ -241,13 +222,13 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpGet("TSV")]
-        public IActionResult GetTweetsToTsv(string twitterUser, int numberOfTweets)
+        public async Task<IActionResult> GetTweetsToTsv(string twitterUser, int numberOfTweets)
         {
             _twitterService.tweetCount = numberOfTweets;
 
             try
             {
-                var tweets = _twitterService.ListAllTweetsFromProfile(new TwitterProfile {Name = twitterUser}).ToList();
+                var tweets = (await _twitterService.GetAllTweetsFromProfile(new TwitterProfile {Name = twitterUser})).ToList();
 
                 var tweetString = $"Sequence\tTwitterId\tCreatedAt\tText\tFavoriteCount\tRetweetCount{Environment.NewLine}";
                 var counter = 1;

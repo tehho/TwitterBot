@@ -1,5 +1,8 @@
 body {
     background-color: #60D8F4;
+    background-image: url(../img/svg/fishies.svg);
+    background-position: bottom;
+    background-repeat: no-repeat;
 }
 
 
@@ -8,6 +11,11 @@ body {
         -webkit-column-count: 1;
         -moz-column-count: 1;
         column-count: 1;
+
+    }
+
+    #iamaboat {
+        display: none;
     }
 
     .display-2 {
@@ -22,6 +30,8 @@ body {
         -moz-column-count: 2;
         column-count: 2;
     }
+
+
 }
 
 @media (min-width: 74em) {
@@ -34,15 +44,22 @@ body {
 
 #botApp {
     min-width: 400px;
-    background-image: url("../img/SVG/skyandwater.svg");
-    background-repeat: repeat-x;
+    background-image: url(../img/svg/skyandwater.svg);
+    background-repeat: no-repeat;
     background-position: top;
     background-size: fit;
+
 }
     .jumbotron {
         height: 85vh;
         background: none;
         margin-bottom: 0;
+
+    }
+
+.card:hover {
+    box-shadow: 0 5px 15px #4d9dc5;
+        cursor: pointer;
     }
 
     .type-to-start {
@@ -55,13 +72,14 @@ body {
     }
 
     .generated-tweet-box {
-        box-shadow: 0 3px 5px #4d9dc5;
+        box-shadow: 0 3px 10px #387391;
     }
 
     .tweet-box-card-header {
         background-color: #4d9dc5;
         color: whitesmoke;
     }
+    
 
     .display-2 {
         color: whitesmoke;
@@ -75,6 +93,14 @@ body {
         -ms-hyphens: auto;
         -o-hyphens: auto;
         hyphens: auto;
+    }
+
+.sub-header {
+        color: whitesmoke;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-shadow: 0 3px 10px #4d9dc5;
     }
 
     /* Start by setting display:none to make this hidden. 

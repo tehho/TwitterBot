@@ -35,12 +35,9 @@ const botApp = new Vue({
         tweet: {
             "text": ""
         },
-        isProfileNameTwitterHandle: "#2222FF",
+        isProfileNameTwitterHandle: "#EAEAEA",
 
-        message: {
-            "expires": new Date(2018, 05, 28),
-            "message": "test",
-        },
+        messages: [],
         progressProfile: "",
         progressProfileMax: "",
         progressTweets: "",
@@ -49,14 +46,8 @@ const botApp = new Vue({
 
     },
     computed: {
-        errorMessage: function () {
-            return {
-                showError: (Date.now() < this.message.expires),
-                message: this.message.message
-            };
-        },
         progressProfileCounter: function () {
-            if (this.progressProfileMax == 0)
+            if (this.progressProfileMax === 0)
                 return 0;
             else
                 return Math.round((
@@ -65,7 +56,7 @@ const botApp = new Vue({
                     * 100);
         },
         progressTweetsCounter: function () {
-            if (this.progressTweetsMax == 0)
+            if (this.progressTweetsMax === 0)
                 return 0;
             else
                 return Math.round((this.progressTweets / this.progressTweetsMax) * 100);
@@ -78,15 +69,13 @@ const botApp = new Vue({
     },
     watch: {
         profileName: function (newProfileName, oldProfileName) {
-            this.isProfileNameTwitterHandle = "#2222FF";
+            this.isProfileNameTwitterHandle = "#fdf99e";
             this.debounceIsProfileNameTwitterHandle();
         },
         selectedProfiles: function (newProfileList, oldProfileList) {
             for (let profile of newProfileList) {
                 profile.occurrence = (1 / newProfileList.length) * 100;
-                console.log(profile);
             }
-            console.log(newProfileList);
         }
     },
     methods: {
@@ -105,9 +94,12 @@ const botApp = new Vue({
                 });
 
             if (result.status === 200) {
+                this.setErrormessage("Added profile " + profile.name);
                 await this.loadProfiles();
 
                 if (this.profiles.length === 1) {
+                    this.setErrormessage("First profile added");
+
                     this.selectedProfiles = this.profiles;
 
                     await this.trainProgress();
@@ -124,7 +116,7 @@ const botApp = new Vue({
                 if (result.status === 404) {
                     this.setErrormessage("Could not find twitter handle");
                 } else {
-                    console.error("Error: ", result);
+                    errorLogger(result);
                 }
             }
         }),
@@ -155,25 +147,6 @@ const botApp = new Vue({
                     .catch(errorLogger);
             }
         },
-        trainProfile: (async function () {
-            this.message = "Training in progress...";
-            let result = await fetch("api/twitter/train/",
-                {
-                    body: JSON.stringify(this.selectedProfiles),
-                    method: "POST",
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-            if (result.status === 200)
-                this.message = "";
-            else {
-                this.message = "Sum ting went wong";
-                errorLogger(result);
-            }
-        }),
         trainProgress: (async function () {
             let list = this.selectedProfiles;
 
@@ -182,8 +155,9 @@ const botApp = new Vue({
 
             for (let i = 0; i < list.length; i++) {
                 let profile = list[i];
-                this.progressTweetsMax = 0;
+                this.setErrormessage("Starting training of " + profile.name);
 
+                this.progressTweetsMax = 0;
                 this.setErrormessage("Loading tweets");
 
                 let result = await fetch("api/twitter/traindata",
@@ -197,10 +171,8 @@ const botApp = new Vue({
                     });
 
                 if (result.status === 200) {
-
+                    this.setErrormessage("Loading complete");
                     let tweets = await result.json();
-
-                    this.setErrormessage("Training profile");
 
                     this.progressTweets = 0;
                     this.progressTweetsMax = tweets.length;
@@ -221,14 +193,21 @@ const botApp = new Vue({
                             });
                         if (result.status === 200) {
 
+                        } else {
+                            this.setErrormessage(
+                                "Something went wrong with the training. Please contact the systemadministrator");
                         }
                         this.progressTweets++;
                     }
+                    this.setErrormessage(`Profile ${profile.name} trained`);
+                } else {
+                    this.setErrormessage("Loading tweets failed");
                 }
+
                 this.progressProfile++;
             }
 
-            this.setErrormessage("training complete");
+            this.setErrormessage("Training complete");
             this.progressProfileMax = 0;
 
         }),
@@ -242,9 +221,7 @@ const botApp = new Vue({
             let bot = {};
 
             bot.name = this.botName;
-            bot.profiles = this.selectedProfiles.select(profile => {
-                return { profile };
-            });
+            bot.profiles = this.selectedProfiles;
 
             this.setErrormessage("Saving bot " + bot.name);
 
@@ -321,7 +298,7 @@ const botApp = new Vue({
         IsProfileNameTwitterHandle: (async function () {
             let handle = this.profileName;
             if (handle !== "") {
-                let result = await fetch("api/hearthbeat/twitterhandle",
+                let result = await fetch("api/heartbeat/twitterhandle",
                     {
                         body: JSON.stringify(handle),
                         method: "POST",
@@ -331,19 +308,16 @@ const botApp = new Vue({
                         }
                     });
                 if (result.status === 200) {
-                    console.log(result.status);
-                    this.isProfileNameTwitterHandle = "#00FF00";
+                    this.isProfileNameTwitterHandle = "#9efda2";
                 }
                 else if (result.status === 404) {
-                    console.log(result.status);
-                    this.isProfileNameTwitterHandle = "#FFFF00";
-                }
-                else {
-                    console.log(result.status);
                     this.isProfileNameTwitterHandle = "#FF0000";
                 }
+                else {
+                    this.isProfileNameTwitterHandle = "#e74949";
+                }
             } else
-                this.isProfileNameTwitterHandle = "#000000";
+                this.isProfileNameTwitterHandle = "#EAEAEA";
 
         }),
 
@@ -353,11 +327,9 @@ const botApp = new Vue({
             this.loadBots();
         },
         setErrormessage: function (str) {
-            let time = new Date(Date.now());
-
-            time.setSeconds(time.getSeconds() + 2);
-            this.message.message = str;
-            this.message.expires = time;
+            let message = {};
+            message.text = str;
+            this.messages.push(message);
         },
 
         loadProfiles: (async function () {

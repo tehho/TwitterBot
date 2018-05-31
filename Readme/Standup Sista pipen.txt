@@ -24,3 +24,6 @@ Presentation:
  - Refined wip
  - Idé till produkt, hur gick det så fel?
  - Algoritmerna, Hur dem fungrar och varför det finns så många.
+ 
+ - Leta upp roliga twitterhandles
+ - Mergea olika personer.

@@ -122,6 +122,17 @@ namespace TwitterBot.Infrastructure.Repository
 
             if (profile != null)
             {
+                var list = profile.Words;
+
+                list.ForEach(wo =>
+                {
+                    wo.NextWordOccurrences.ToList().ForEach(nwo =>
+                    {
+                        _context.NextWordOccurrences.Remove(nwo);
+                    });
+                    _context.WordOccurrences.Remove(wo);
+                });
+
                 _context.TwitterProfiles.Remove(profile);
                 _context.SaveChanges();
             }

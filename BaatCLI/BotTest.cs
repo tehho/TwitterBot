@@ -34,7 +34,7 @@ namespace BaatDesktopClient
             model.Entity<TwitterProfile>();
             //model.Entity<Word>();
             model.Entity<WordOccurrence>().HasOne(w => w.Word);
-            model.Entity<WordOccurrence>().HasMany(w => w.NextWordOccurrences).WithOne(n => n.Word).OnDelete(DeleteBehavior.Restrict);
+            model.Entity<WordOccurrence>().HasMany(w => w.NextWordOccurrences).WithOne(n => n.Parent).OnDelete(DeleteBehavior.Restrict);
             //model.Entity<NextWordOccurrence>().HasOne(w => w.Word);
             model.Entity<NextWordOccurrence>().HasOne(w => w.Parent);
             //model.Entity<WordOccurrence>().HasMany(w => w.NextWords);

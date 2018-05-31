@@ -3,10 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using LinqToTwitter;
+using Microsoft.EntityFrameworkCore;
 using Tweetinvi;
 using Tweetinvi.Core.Exceptions;
+using Tweetinvi.Core.Models;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using TwitterBot.Infrastructure.Logging;
+using User = Tweetinvi.User;
 
 namespace TwitterBot.Domain
 {
@@ -14,6 +20,9 @@ namespace TwitterBot.Domain
     {
 
         public int tweetCount;
+
+        private readonly ILogger _logger;
+        private readonly TwitterContext _context;
 
         // private readonly TwitterProfile _profile;
         //public TwitterService(TwitterProfile profile, Token customer, Token access)
@@ -23,18 +32,32 @@ namespace TwitterBot.Domain
         //    Auth.SetUserCredentials(customer.Key, customer.Secret, access.Key, access.Secret);
         //}
 
-        public TwitterService(TwitterServiceOptions options)
+        public TwitterService(TwitterServiceOptions options, ILogger logger)
         {
             tweetCount = options.TweetCount;
 
             Auth.SetUserCredentials(options.Customer.Key, options.Customer.Secret,
                 options.Access.Key, options.Access.Secret);
 
+            var auth = new SingleUserAuthorizer()
+            {
+                CredentialStore = new SingleUserInMemoryCredentialStore()
+                {
+                    ConsumerKey = options.Customer.Key,
+                    ConsumerSecret = options.Customer.Secret,
+                    AccessToken = options.Access.Key,
+                    AccessTokenSecret = options.Access.Secret
+                }
+            };
+
+            _context = new TwitterContext(auth);
+
+            _logger = logger;
         }
 
-        public ITwitterException IsTwitterUp()
+        public async Task<ITwitterException> IsTwitterUp()
         {
-            if (!DoesTwitterUserExist(new TwitterProfile("RowBoat2018")))
+            if (! await DoesTwitterUserExist(new TwitterProfile("RowBoat2018")))
             {
                 return ExceptionHandler.GetLastException();
             }
@@ -42,13 +65,15 @@ namespace TwitterBot.Domain
                 return null;
         }
 
-        public bool PublishTweet(Tweet tweet)
+        public async Task<bool> PublishTweet(Tweet tweet)
         {
             try
             {
-                Tweetinvi.Tweet.PublishTweet(tweet.Text);
+                await _context.TweetAsync(tweet.Text);
+
+                //Tweetinvi.Tweet.PublishTweet(tweet.Text);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -77,9 +102,17 @@ namespace TwitterBot.Domain
 
         }
 
-        public bool DoesTwitterUserExist(TwitterProfile profile) => Tweetinvi.User.GetUserFromScreenName(profile.Name) != null;
+        public async Task<bool> DoesTwitterUserExist(TwitterProfile profile)
+        {
+            var user = await GetTwitterProfile(profile.Name);
 
-        public string GetTwitterUserName(TwitterProfile profile) => Tweetinvi.User.GetUserFromScreenName(profile.Name)?.ScreenName;
+            return user != null;
+        }
+
+        public async Task<string> GetTwitterUserName(TwitterProfile profile)
+        {
+            return  (await GetTwitterProfile(profile.Name)).Name;
+        }
 
         public bool ProfileTimeLineHasTweets(TwitterProfile profile)
         {
@@ -104,34 +137,24 @@ namespace TwitterBot.Domain
             return timeLine != null;
         }
 
-        public IEnumerable<Tweet> ListAllTweetsFromProfile(TwitterProfile profile)
+        public async Task<IEnumerable<Tweet>> GetAllTweetsFromProfile(TwitterProfile profile)
         {
-            RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
+            var tweets = await (from tweet in _context.Status
+                where tweet.Type == StatusType.User &&
+                      tweet.ScreenName == profile.Name
+                select tweet).ToListAsync();
 
-            var lastTweets = Timeline.GetUserTimeline(profile.Name, tweetCount).ToArray();
-
-            var allTweets = new List<ITweet>(lastTweets);
-
-            while (lastTweets.Length > 0 && allTweets.Count < tweetCount)
-            {
-                var idOfOldestTweet = lastTweets.Select(x => x.Id).Min();
-
-                var numberOfTweetsToRetrieve = allTweets.Count > 3000 ? 3200 - allTweets.Count : tweetCount;
-                var timelineRequestParameters = new UserTimelineParameters
-                {
-                    MaxId = idOfOldestTweet - 1,
-                    MaximumNumberOfTweetsToRetrieve = numberOfTweetsToRetrieve
-                };
-
-                lastTweets = Timeline.GetUserTimeline(profile.Name, timelineRequestParameters).ToArray();
-                allTweets.AddRange(lastTweets);
-            }
-
-            return allTweets.Select(Tweet.Parse);
-
-
+            return tweets.Select(tweet => new Tweet(tweet.Text));
         }
 
+        private async Task<TwitterProfile> GetTwitterProfile(string name)
+        {
+            var user = await (from tweet in _context.User
+                where tweet.Type == UserType.Show &&
+                      tweet.ScreenName.ToLower() == name.ToLower()
+                select tweet).SingleOrDefaultAsync();
 
+            return user == null ? null : new TwitterProfile(user.ScreenName);
+        }
     }
 }
