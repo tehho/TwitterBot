@@ -40,7 +40,7 @@ namespace BaatDesktopClient
 
             //Console.WriteLine(result);
 
-  
+            PostATweet();
 
             ReadKey();
 
