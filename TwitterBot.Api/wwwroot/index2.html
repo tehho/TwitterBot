@@ -55,11 +55,12 @@
         </div>
         <!--Jumpotron end-->
 
-        <div id="messages" class="containter" v-if="messages.length > 0">
-            <div v-for="message in messages">
-                {{message.text}}
-            </div>
+    <div id="messages" class="containter" v-if="messages.length > 0">
+        <div v-for="message in messages">
+            {{message.text}}
         </div>
+    </div>
+
         <div id="twitter-generator" class="container">
 
             <div class="row">
@@ -206,18 +207,20 @@
 
                                 <div class="card-body mx-2">
 
-                                    <label>Selected bot: <strong>{{selectedBot}}</strong></label>
-                                    <hr />
-                                    <h4>Profile</h4>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="profile1" value="1" v-model="profileAlgorithm">
-                                            <label class="form-check-label" for="profile1">Random</label>
-                                        </div>
-                                        <br />
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="profile" id="profile2" value="2" v-model="profileAlgorithm">
-                                            <label class="form-check-label" for="profile2">Weighted</label>
+                                    <label>Selected bot: <strong>{{selectedBot.name}}</strong></label>
+                                    <div v-if="selectedProfiles.length > 1">
+                                        <hr />
+                                        <h4>Profile</h4>
+                                        <div >
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="profile" id="profile1" value="1" v-model="profileAlgorithm">
+                                                <label class="form-check-label" for="profile1">Random</label>
+                                            </div>
+                                            <br />
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="profile" id="profile2" value="2" v-model="profileAlgorithm">
+                                                <label class="form-check-label" for="profile2">Weighted</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <hr />

@@ -149,12 +149,22 @@ namespace TwitterBot.Domain
 
         private async Task<TwitterProfile> GetTwitterProfile(string name)
         {
-            var user = await (from tweet in _context.User
-                where tweet.Type == UserType.Show &&
-                      tweet.ScreenName.ToLower() == name.ToLower()
-                select tweet).SingleOrDefaultAsync();
+            try
+            {
 
-            return user == null ? null : new TwitterProfile(user.ScreenName);
+                var user = await (from tweet in _context.User
+                    where tweet.Type == UserType.Show &&
+                          tweet.ScreenName == name
+                    select tweet).SingleOrDefaultAsync();
+
+                return user == null ? null : new TwitterProfile(user.ScreenName);
+
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
         }
     }
 }

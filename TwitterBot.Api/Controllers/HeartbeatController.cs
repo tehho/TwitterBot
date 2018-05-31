@@ -57,7 +57,7 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("TwitterHandle")]
-        public async  Task<IActionResult> CheckTwitterHandel([FromBody]string handle)
+        public async  Task<IActionResult> CheckTwitterHandle([FromBody]string handle)
         {
             if (handle == null)
                 return BadRequest();
@@ -65,7 +65,9 @@ namespace TwitterBot.Api.Controllers
             if (string.IsNullOrWhiteSpace(handle))
                 return BadRequest();
 
-            if ( await _twitterService.DoesTwitterUserExist(new TwitterProfile(handle)))
+            var result = await _twitterService.DoesTwitterUserExist(new TwitterProfile(handle));
+
+            if (result)
             {
                 return Ok();
             }
