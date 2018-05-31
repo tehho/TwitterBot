@@ -36,14 +36,16 @@ const botApp = new Vue({
             "text": ""
         },
         isProfileNameTwitterHandle: "#EAEAEA",
-
-        messages: [],
+        
         progressProfile: "",
         progressProfileMax: "",
         progressTweets: "",
         progressTweetsMax: "",
 
-
+        message: {
+            text: "",
+            show: false
+        }
     },
     computed: {
         progressProfileCounter: function() {
@@ -170,7 +172,7 @@ const botApp = new Vue({
                     });
 
                 if (result.status === 200) {
-                    this.setErrormessage("Loading complete");
+                    this.setErrormessage("Loading complete. Begining training");
                     let tweets = await result.json();
 
                     this.progressTweets = 0;
@@ -287,8 +289,7 @@ const botApp = new Vue({
                 alert("Tweet posted");
         }),
 
-        simpleToggle: function() {
-
+        simpleToggle: function () {
         },
         advancedToggle: function() {
 
@@ -323,16 +324,11 @@ const botApp = new Vue({
             this.loadBots();
         },
         setErrormessage: function(str) {
-            let message = {};
-            message.text = str;
-            this.messages.push(message);
+            this.message.show = true;
+            this.message.text=str;
         },
-        removeMessage: function(message) {
-            let index = this.messages.findIndex(element => {
-                return element.text === message.text;
-            });
-
-            this.messages = this.messages.splice(index, 0);
+        removeMessage: function() {
+            this.message.show = false;
         },
 
         loadProfiles: (async function () {

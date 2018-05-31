@@ -38,25 +38,30 @@
             </div>
             <!--profileName top input-->
             <div class="row my-10">
-                <div class="col-lg-2 hidden-md my-4"></div>
+                <div class="col-lg-2"></div>
                 <div class="col-lg-8">
                     <h4 class="sub-header">Enter a Twitter profile to start:</h4>
-                    <div class="input-group-lg">
+                    <div class="input-group-lg col-6 offset-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" v-bind:style="{backgroundColor:isProfileNameTwitterHandle}">@</span>
                             <input class="form-control input-lg" v-model="profileName" type="text">
                             <button @click="addProfile" class="btn btn-light mx-3">Go!</button>
+                        </div>
+                        <div id="messages" class="alert alert-info my-3" v-if="message.show">
+                    
+                                {{message.text}}
+                                <button class="close" @click="removeMessage()">x</button>
+                      
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2 my-4 hidden-xs hidden-sm hidden-md"><img src="assets/img/svg/floatingboat.svg"></div>
 
             </div>
-            <div class="container my=10"></div>
         </div>
         <!--Jumpotron end-->
 
-        <div id="twitter-generator" class="container">
+        <div id="twitter-generator" class="container mt-5">
 
             <div class="row">
 
@@ -119,14 +124,7 @@
         </div>
         <!-- Twitter generator end-->
 
-
-        <div id="messages" class="containter" v-if="messages.length > 0">
-            <div v-for="message in messages">
-                {{message.text}}
-                <button @click="removeMessage(message)">Ok</button>
-            </div>
-        </div>
-        <!-- Messages end -->
+   <!--  <div class=\"alert alert-info my-2\">Allt gick fint <a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\"><\/a> <\/div> -->
 
 
         <div id="settingsController" class="container">
@@ -163,7 +161,6 @@
                                 <input class="form-control input-lg" type="text" v-model="profileName">
                                 <a class="btn btn-light mx-3" @click="addProfile">Add</a>
                             </div>
-
                         </div>
 
                         <div v-model="message"></div>
@@ -309,10 +306,10 @@
         </div>
         <!-- Settings end-->
 
-        <div id="footer" class="container py-5">
-            <div class="row mx-auto" style="min-width: 200px;">
-                Ultimate Twiterbot 2018
-            </div>
+        <div id="footer" class="container py-5 align-content-center">
+           
+            <center style="color: #069;">  Ultimate Twiterbot 2018 © </center>
+
         </div>
         <!-- Footer end-->
 
