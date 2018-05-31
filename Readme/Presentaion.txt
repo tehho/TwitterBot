@@ -23,6 +23,8 @@ Projektets Historia
  
 Liten Demo
  - Bilder via live demo - Mattias
+ 
+Komplexitet i kod
  - Trainern - Anton 
  - Algoritmer - Anton
  - Skapa ny bot

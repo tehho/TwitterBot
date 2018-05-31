@@ -24,7 +24,7 @@ const botApp = new Vue({
     data: {
         botName: "",
         profileAlgorithm: 1,
-        wordAlgorithm: 1,
+        wordAlgorithm: 3,
         selectedProfiles: [],
 
         selectedBot: "",
