@@ -13,5 +13,11 @@
             Customer = Appsettings.Customer;
             Access = Appsettings.Access;
         }
+        public TwitterServiceOptions(int tweetCount, Token customer, Token access)
+        {
+            TweetCount = tweetCount;
+            Customer = customer;
+            Access = access;
+        }
     }
 }
