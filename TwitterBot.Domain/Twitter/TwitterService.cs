@@ -5,12 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using LinqToTwitter;
-using Microsoft.EntityFrameworkCore;
 using Tweetinvi;
 using Tweetinvi.Core.Exceptions;
-using Tweetinvi.Core.Models;
-using Tweetinvi.Models;
-using Tweetinvi.Parameters;
 using TwitterBot.Infrastructure.Logging;
 using User = Tweetinvi.User;
 
