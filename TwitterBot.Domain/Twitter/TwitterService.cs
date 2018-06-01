@@ -104,7 +104,7 @@ namespace TwitterBot.Domain
 
         public async Task<bool> DoesTwitterUserExist(TwitterProfile profile)
         {
-            var user = await GetTwitterProfile(profile.Name);
+            var user = (await GetTwitterProfile(profile.Name));
 
             return user != null;
         }
@@ -151,17 +151,16 @@ namespace TwitterBot.Domain
         {
             try
             {
-
                 var user = await (from tweet in _context.User
                     where tweet.Type == UserType.Show &&
                           tweet.ScreenName == name
                     select tweet).SingleOrDefaultAsync();
 
                 return user == null ? null : new TwitterProfile(user.ScreenName);
-
             }
             catch (Exception e)
             {
+                _logger.Log(e.ToString());
                 return null;
             }
 

@@ -44,7 +44,7 @@ namespace TwitterBot.Api.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e);
             }
         }
 

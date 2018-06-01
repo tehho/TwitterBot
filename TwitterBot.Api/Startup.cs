@@ -58,14 +58,14 @@ namespace TwitterBot.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDirectoryBrowser();
             }
-            app.UseStaticFiles();
             app.UseMvc();
 
-            app.UseDirectoryBrowser();
             app.UseDefaultFiles(new DefaultFilesOptions { DefaultFileNames = 
-                new List<string> { "index.html" } });
+                new List<string> { "index2.html" } });
 
+            app.UseStaticFiles();
         }
     }
 }

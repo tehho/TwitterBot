@@ -31,9 +31,15 @@ namespace TwitterBot.Infrastructure.Logging
 
         public void WriteToFile(string message)
         {
-            using (var output = File.AppendText(_target))
+            try
             {
-                output.WriteLine(message);
+                using (var output = File.AppendText(_target))
+                {
+                    output.WriteLine(message);
+                }
+            }
+            catch (Exception e)
+            {
             }
         }
     }

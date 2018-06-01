@@ -295,7 +295,9 @@ const botApp = new Vue({
         },
 
         IsProfileNameTwitterHandle: (async function() {
-            let handle = this.profileName;
+            let handle = {};
+            handle.name = this.profileName;
+
             if (handle !== "") {
                 let result = await fetch("api/heartbeat/twitterhandle",
                     {

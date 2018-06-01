@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TwitterBot.Api.Model;
 using TwitterBot.Domain;
 using TwitterBot.Infrastructure;
 
@@ -57,23 +58,23 @@ namespace TwitterBot.Api.Controllers
         }
 
         [HttpPost("TwitterHandle")]
-        public async  Task<IActionResult> CheckTwitterHandle([FromBody]string handle)
+        public async Task<IActionResult> CheckTwitterHandle([FromBody]TwitterProfileApi handle)
         {
             if (handle == null)
-                return BadRequest();
+                return BadRequest("No handle given");
 
-            if (string.IsNullOrWhiteSpace(handle))
-                return BadRequest();
+            if (string.IsNullOrWhiteSpace(handle.Name))
+                return BadRequest("Handle is empty");
 
-            var result = await _twitterService.DoesTwitterUserExist(new TwitterProfile(handle));
+            var result = (await _twitterService.DoesTwitterUserExist(handle));
 
             if (result)
             {
-                return Ok();
+                return Ok("Twitterhandle found");
             }
             else
             {
-                return NotFound();
+                return NotFound($"Twitterhandle not found");
             }
         }
     }

@@ -16,7 +16,7 @@ namespace TwitterBot.Infrastructure.Repository
         {
             _context = context;
             //_context.Database.EnsureDeleted();
-            _context.Database.EnsureCreated();
+            //_context.Database.EnsureCreated();
         }
 
         public TwitterProfile Add(TwitterProfile obj)
